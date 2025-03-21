@@ -1,0 +1,10 @@
+{
+    "clients": {
+      "meesho": {
+        "url": "https://meesho.kapturecrm.com",
+        "username": "testkap",
+        "password": "Test@123",
+        "modules": ["authentication", "ticketing"]
+      }
+    }
+  }
