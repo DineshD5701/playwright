@@ -229,7 +229,7 @@ test('Meesho CX', async ({ page }) => {
     await page.waitForTimeout(500)
 
     // Click on the Text Button
-    await page.getByText('116840453Product Id').click();
+    await page.getByRole('textbox').click();
     await page.waitForTimeout(1000)
 
     // Fill the text
