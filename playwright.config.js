@@ -21,7 +21,10 @@ export default defineConfig({
       use: { 
         ...devices['Desktop Chrome'],
         screenshot: "on",
-        timeout: 60000, // Ensure timeout applies here too
+        timeout: 90000, // Ensure timeout applies here too
+        // launchOptions: {
+        //   args: ['--start-maximized'], // Maximizes the window on launch
+        // },
       },
     },
   ],
