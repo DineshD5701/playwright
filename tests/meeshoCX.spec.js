@@ -255,7 +255,7 @@ test('Meesho CX', async ({ page }) => {
     await page.waitForTimeout(1000)
 
    
-    await page.pause
+    // await page.pause
     
   });
 });
