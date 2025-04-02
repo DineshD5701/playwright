@@ -1,10 +1,11 @@
-// @ts-check
+// @ts-nocheck
 import { test, expect } from '@playwright/test';
 const { loadClientConfig } = require('../utils/configLoader');
 
 const config = loadClientConfig('meesho');
 
-test('Search a ticket and check ticket details', async ({ page }) => {
+
+test('Meesho CX', async ({ page }) => {
   await test.step('Login', async () => {
     await page.goto(`${config.url}/employee/index.html`);
 
@@ -23,6 +24,34 @@ test('Search a ticket and check ticket details', async ({ page }) => {
 
   await test.step('Search a ticket', async () => {
     await page.goto(`${config.url}/nui/`);
+
+    // Click on the Unassigned button
+    await page.getByRole('button', { name: 'Unassigned', exact: true }).click();
+    await page.waitForTimeout(1000)
+
+    // Click on the All Complete button
+    await page.getByRole('button', { name: 'All Complete' }).click();
+    await page.waitForTimeout(1000)
+
+    // Click on the All Pending button
+    await page.getByRole('button', { name: 'All Pending' }).click();
+    await page.waitForTimeout(1000)
+
+    // Click on the Created by me button
+    await page.getByRole('button', { name: 'Created by me' }).click();
+    await page.waitForTimeout(1000)
+
+    // Click on the All Junk button
+    await page.getByRole('button', { name: 'All Junk' }).click();
+    await page.waitForTimeout(1000)
+
+    // Click on the Completed by me button
+    await page.getByRole('button', { name: 'Completed by me' }).click();
+    await page.waitForTimeout(1000)
+
+    // Click on the Assigned to me button
+    await page.getByRole('button', { name: 'Assigned to me' }).click();
+    await page.waitForTimeout(1000)
 
     // Search the Ticket ID
     const searchInput = page.getByRole('textbox', { name: 'Search' });
@@ -144,7 +173,7 @@ test('Search a ticket and check ticket details', async ({ page }) => {
     await page.locator('button:nth-child(7)').click();
     await page.waitForTimeout(500)
 
-    
+    await page.pause()
 
   });
 });
