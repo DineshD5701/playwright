@@ -187,13 +187,13 @@ test('Meesho CX', async ({ page }) => {
     await page.locator("//button[@title='View Orders']").click();
     await page.waitForTimeout(1000)
 
-    // // Click on the Unag Order Button
-    // await page.getByRole('button', { name: 'Untag Order' }).click();
-    // await page.waitForTimeout(2000)
+    // Click on the Untag Order Button
+    await page.getByRole('button', { name: 'Untag Order' }).click();
+    await page.waitForTimeout(2000)
 
-    //  // Click on the Tag Order Button
-    //  await page.getByRole('checkbox', { name: '458643691034_1 Raghaw Women\'s' }).getByRole('button').first().click();
-    //  await page.waitForTimeout(2000)
+     // Click on the Tag Order Button
+     await page.getByRole('checkbox', { name: '458643691034_1 Raghaw Women\'s' }).getByRole('button').first().click();
+     await page.waitForTimeout(2000)
 
     // Click on Back Arrow Button
     await page.getByRole('button').filter({ hasText: 'arrow_back' }).click();
@@ -204,58 +204,58 @@ test('Meesho CX', async ({ page }) => {
   });
 
 
-  // await test.step('Web Viewer', async () => {
+  await test.step('Web Viewer', async () => {
 
-  //   // Click on Web Viewer Button (Right Corner)
-  //   await page.locator("//button[@title='Web Viewer']").click();   
-  //   await page.waitForTimeout(500)
+    // Click on Web Viewer Button (Right Corner)
+    await page.locator("//button[@title='Web Viewer']").click();   
+    await page.waitForTimeout(500)
 
-  //   // Click on the Refresh icon
-  //   await page.getByRole('button').filter({ hasText: 'refresh' })
-  //   await page.waitForTimeout(1000)
+    // Click on the Refresh icon
+    await page.getByRole('button').filter({ hasText: 'refresh' })
+    await page.waitForTimeout(1000)
 
-  //   // Click on Back Arrow Button
-  //   await page.locator('header').filter({ hasText: 'arrow_backWeb Viewerrefresh' }).getByLabel('Back')
-  //   await page.waitForTimeout(1000)
+    // Click on Back Arrow Button
+    await page.locator('header').filter({ hasText: 'arrow_backWeb Viewerrefresh' }).getByLabel('Back')
+    await page.waitForTimeout(1000)
 
-  //   // await page.pause
+    // await page.pause
     
-  // });
+  });
 
-  // await test.step('Product Search', async () => {
+  await test.step('Product Search', async () => {
 
-  //   // Click on Product Search Button (Right Corner)
-  //   await page.locator("//button[@title='Product Search']").click();   
-  //   await page.waitForTimeout(500)
+    // Click on Product Search Button (Right Corner)
+    await page.locator("//button[@title='Product Search']").click();   
+    await page.waitForTimeout(500)
 
-  //   // Click on the Text Button
-  //   await page.getByText('116840453Product Id')
-  //   await page.waitForTimeout(1000)
+    // Click on the Text Button
+    await page.getByText('116840453Product Id')
+    await page.waitForTimeout(1000)
 
-  //   // Fill the text
-  //   await page.getByRole('textbox').fill('116840452');
-  //   await page.waitForTimeout(1000)
+    // Fill the text
+    await page.getByRole('textbox').fill('116840452');
+    await page.waitForTimeout(1000)
 
-  //   // Click on the search Button
-  //   await page.getByRole('img', { name: 'img' }).click();
-  //   await page.waitForTimeout(1000)
+    // Click on the search Button
+    await page.getByRole('img', { name: 'img' }).click();
+    await page.waitForTimeout(1000)
 
-  //   // await page.pause
+    // await page.pause
     
-  // });
+  });
 
-  // await test.step('Invoice', async () => {
+  await test.step('Invoice', async () => {
 
-  //   // Click on Invoice Button (Right Corner)
-  //   await page.locator("//button[@title='Product Search']").click();   
-  //   await page.waitForTimeout(500)
+    // Click on Invoice Button (Right Corner)
+    await page.locator("//button[@title='Product Search']").click();   
+    await page.waitForTimeout(500)
 
-  //   // Click on the Back Arrow Button
-  //   await page.getByRole('button', { name: 'Back', exact: true }).click()
-  //   await page.waitForTimeout(1000)
+    // Click on the Back Arrow Button
+    await page.getByRole('button', { name: 'Back', exact: true }).click()
+    await page.waitForTimeout(1000)
 
    
-  //   // await page.pause
+    // await page.pause
     
-  // });
+  });
 });
