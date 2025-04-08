@@ -189,11 +189,11 @@ test('Meesho CX', async ({ page }) => {
 
     // Click on the Untag Order Button
     await page.getByRole('button', { name: 'Untag Order' }).click();
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(8000)
 
      // Click on the Tag Order Button
      await page.getByRole('checkbox', { name: '458643691034_1 Raghaw Women\'s' }).getByRole('button').first().click();
-     await page.waitForTimeout(2000)
+     await page.waitForTimeout(8000)
 
     // Click on Back Arrow Button
     await page.getByRole('button').filter({ hasText: 'arrow_back' }).click();
