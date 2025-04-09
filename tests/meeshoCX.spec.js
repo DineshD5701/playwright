@@ -53,23 +53,90 @@ test('Meesho CX', async ({ page }) => {
     await page.getByRole('button', { name: 'Assigned to me' }).click();
     await page.waitForTimeout(1000)
 
-    // Search the Ticket ID
-    const searchInput = page.getByRole('textbox', { name: 'Search' });
-    await searchInput.waitFor();
-    await searchInput.type('8742470952962', { delay: 50 });
-    await searchInput.press("Enter");
+  });
 
-    await page.waitForTimeout(500)
+
+  await test.step('Add Ticket', async () => {
+
+    // Click on the + icon
+    await page.locator('div').filter({ hasText: /^add$/ }).nth(2).click();
+    await page.waitForTimeout(1000)
+
+    // Click on the Add Ticket Button
+    await page.getByRole('menuitem', { name: 'Add Ticket' }).click();
+    await page.waitForTimeout(1000)
+
+    // Click on the Search customer button
+    await page.getByRole('button', { name: 'Search Customer' }).click();
+    await page.waitForTimeout(1000)
+
+    // Enter the Phone Number
+    await page.getByRole('textbox', { name: 'Enter Phone Number' }).click();
+    await page.getByRole('textbox', { name: 'Enter Phone Number' }).fill('9320297575');
+    await page.waitForTimeout(1000)
+
+    // Click on the Search and Attach Button
+    await page.getByRole('button', { name: 'Search and Attach' }).click();
+    await page.waitForTimeout(1000)
+
+    // Click on the Dr Vrushali Dhanale customer and select
+    await page.getByRole('gridcell', { name: 'Dr Vrushali Dhanale' }).locator('div').first().click();
+    await page.waitForTimeout(1000)
+    await page.getByRole('button', { name: 'Select User' }).click();
+    await page.waitForTimeout(1000)
+
+    // Tag the Order
+    await page.getByRole('checkbox', { name: '298810812423_1 Casual' }).getByRole('button').click();
+    await page.waitForTimeout(2000)
+    await page.getByRole('checkbox', { name: '298810812423_1 Casual' }).getByRole('button').click();
+    await page.waitForTimeout(1000)
+
+    // Fill the Folder Levels
+    await page.getByRole('button', { name: 'Cancelled' }).click();
+    await page.waitForTimeout(2000)
+    await page.getByRole('button', { name: 'Bank_Details' }).click();
+    await page.waitForTimeout(2000)
+    await page.getByRole('button', { name: 'Unable_to_Update_Bank_Details_Limit_Breached' }).click();
+    await page.waitForTimeout(2000)
+    await page.getByRole('textbox', { name: 'Assigned To' }).click();
+    await page.waitForTimeout(2000)
+
+    // Select the Queue and Assign it to Meesho Super Admin
+    await page.getByRole('textbox', { name: 'Assigned To' }).click();
+    await page.waitForTimeout(1000)
+    await page.getByRole('button', { name: 'Clear', exact: true }).click();
+    await page.waitForTimeout(1000)
+    await page.getByRole('textbox', { name: 'Assigned To' }).fill('Margin & COD Refund (CX)');
+    await page.waitForTimeout(1000)
+    await page.getByRole('option', { name: 'Margin & COD Refund (CX)' }).click();
+    await page.waitForTimeout(1000)
+    await page.getByRole('textbox', { name: 'Assign To' }).click();
+    await page.waitForTimeout(1000)
+    await page.getByRole('option', { name: 'Meesho Super Admin' }).click();
+    await page.waitForTimeout(1000)
+
+    // Click on the Submit button
+    await page.locator("//button[@title='Submit']").click();
+    await page.waitForTimeout(3000)
+
+    // await page.pause();
+  
   });
 
   await test.step('Check Ticket Details', async () => {
 
-    // Click on the Searched Ticket ID
-    const checkbox = page.getByRole('checkbox', { name: 'D Dr Vrushali Dhanale' });
-    await checkbox.waitFor();
-    await checkbox.click();
+    // // Search the Ticket ID
+    // const searchInput = page.getByRole('textbox', { name: 'Search' });
+    // await searchInput.waitFor();
+    // await searchInput.type('8742470952962', { delay: 50 });
+    // await searchInput.press("Enter");
 
-    await page.waitForTimeout(500)
+    // // Click on the Searched Ticket ID
+    // const checkbox = page.getByRole('checkbox', { name: 'D Dr Vrushali Dhanale' });
+    // await checkbox.waitFor();
+    // await checkbox.click();
+
+    // await page.waitForTimeout(500)
 
     // Click on the Order Timeline Button
     await page.getByRole('button', { name: 'Order Timeline' }).click();
@@ -143,11 +210,11 @@ test('Meesho CX', async ({ page }) => {
     await page.getByRole('button', { name: 'Referral Details' }).click();
     await page.waitForTimeout(200)
 
-    // Click on the ODP Details Accordion
-    await page.getByRole('button', { name: 'ODP Details' }).click();
-    await page.waitForTimeout(200)
-    await page.getByRole('button', { name: 'ODP Details' }).click();
-    await page.waitForTimeout(200)
+    // // Click on the ODP Details Accordion
+    // await page.getByRole('button', { name: 'ODP Details' }).click();
+    // await page.waitForTimeout(200)
+    // await page.getByRole('button', { name: 'ODP Details' }).click();
+    // await page.waitForTimeout(200)
 
     // Orders tab
     await page.locator('#ticketdetailstab > .MuiTabs-root > .MuiTabs-scroller > .MuiTabs-flexContainer > button:nth-child(2)').click();
@@ -255,6 +322,22 @@ test('Meesho CX', async ({ page }) => {
     await page.waitForTimeout(1000)
 
    
+    // await page.pause
+    
+  });
+
+  await test.step('Notes Tab', async () => {
+
+    // Click on the Notes tab
+    await page.locator('button:nth-child(3)').first().click();
+    await page.waitForTimeout(500)
+
+    // Make a note and press the enter button
+    await page.locator("//div[@role='textbox' and @aria-label='Editor editing area: main']").type('Test QA', { delay: 50 });
+    await page.waitForTimeout(1000)
+    await page.locator("//button[@title='Saved Note']").click();
+    await page.waitForTimeout(1000)
+
     // await page.pause
     
   });
