@@ -25,6 +25,16 @@ test('Meesho CX', async ({ page }) => {
   await test.step('Search a ticket', async () => {
     await page.goto(`${config.url}/nui/`);
 
+    try {
+      // Wait for the element with a short timeout
+      const teaPopup = await page.waitForSelector("//li[text()='Tea']", { timeout: 2000 });
+      await teaPopup.click(); // or whatever action is needed
+      console.log("Tea popup was present and clicked.");
+    } catch (error) {
+      // Element not found or timeout reached
+      console.log("Tea popup did not appear. Continuing...");
+    }
+
     // Click on the Unassigned button
     await page.getByRole('button', { name: 'Unassigned', exact: true }).click();
     await page.waitForTimeout(1000)
