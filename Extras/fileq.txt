@@ -46,3 +46,7 @@
 //     await page.locator('button:nth-child(6)').click();
 //     await page.locator('button:nth-child(7)').click();
 //   });
+
+
+
+<li class="MuiButtonBase-root-153 MuiListItem-root-542 MuiMenuItem-root-539 MuiMenuItem-gutters-540 MuiListItem-gutters-547 MuiListItem-button-548" tabindex="-1" role="menuitem" aria-disabled="false" value="Tea">Tea<span class="MuiTouchRipple-root-398"></span></li>x1

@@ -341,4 +341,31 @@ test('Meesho CX', async ({ page }) => {
     // await page.pause
     
   });
+
+
+  await test.step('Junk the Ticket', async () => {
+
+    // Click on the Details tab
+    await page.locator('#ticketdetailstab').getByRole('tab').filter({ hasText: /^$/ }).first().click();
+    await page.waitForTimeout(2000)
+
+    // Click on the Status accordion (Pending)
+    await page.locator('#Status').getByRole('button', { name: 'Pending' }).click();
+    await page.waitForTimeout(1000)
+
+    // Select the Junk
+    await page.getByRole('menuitem', { name: 'Junk' }).click();
+    await page.waitForTimeout(1000)
+
+    // Fill the remarks and submit
+    await page.getByRole('textbox', { name: 'Remarks' }).click();
+    await page.waitForTimeout(500)
+    await page.getByRole('textbox', { name: 'Remarks' }).type("Test QA", { delay: 100 })
+    await page.waitForTimeout(500)
+    await page.getByRole('button', { name: 'Submit' }).click();
+    await page.waitForTimeout(2000)
+
+    await page.pause
+    
+  });
 });
