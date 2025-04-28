@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
-  timeout: 180000, // Increase global test timeout to 60 seconds
+  timeout: 280000, // Increase global test timeout to 60 seconds
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -11,9 +11,9 @@ export default defineConfig({
   reporter: 'html',
   use: {
     trace: 'on-first-retry',
-    timeout: 90000, // Ensure 60s timeout applies globally
-    actionTimeout: 90000, // 20s timeout for individual actions
-    navigationTimeout: 90000, // 30s timeout for page navigation
+    timeout: 120000, // Ensure 60s timeout applies globally
+    actionTimeout: 120000, // 20s timeout for individual actions
+    navigationTimeout: 120000, // 30s timeout for page navigation
   },
   projects: [
     {
