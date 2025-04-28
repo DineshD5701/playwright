@@ -522,11 +522,11 @@ test('Meesho CX', async ({ page }) => {
   // Select Disposition Type as Resolved
     await page.getByRole('textbox', { name: 'Disposition Type' }).click();
     await page.getByRole('option', { name: 'Resolved' }).click();
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1500)
 
 
    // Press the Submit button
-    await page.locator("//button[.//span[contains(text(), 'Submit')]]").click();
+    await page.getByRole('button', { name: 'Dispose this ticket' }).click();
     await page.waitForTimeout(2000)
   
   // await page.pause()
