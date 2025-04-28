@@ -21,7 +21,7 @@ test('Meesho CX', async ({ page }) => {
     await page.getByRole('textbox', { name: 'Password' }).type(config.password, { delay: 100 });
     await page.getByRole('button', { name: 'Login' }).click();
 
-  
+
   });
 
   // --------------------------- Go to NUI and check the UI ---------------------------------------------->>>>
@@ -69,7 +69,7 @@ test('Meesho CX', async ({ page }) => {
 
   });
 
-// <<<<<<-----------------------------ADD the Ticket --------------------------------------------------------->>>
+  // <<<<<<-----------------------------ADD the Ticket --------------------------------------------------------->>>
 
   await test.step('Add Ticket', async () => {
 
@@ -135,26 +135,26 @@ test('Meesho CX', async ({ page }) => {
     await page.waitForTimeout(3000)
 
     // await page.pause();
-  
+
   });
 
   await test.step('Fetching and storing the ticket', async () => {
-  
-  
+
+
     // Extract new ticket ID from UI
     const ticketIdMCX = await page.locator('//*[@id="Ticket ID"]/span/div').textContent();
     const trimmedTicketId = ticketIdMCX?.trim() || '';
-  
+
     // Define file path
     const filePath = path.resolve(__dirname, 'D:\\Baldeep\\Meesho plw\\test-data\\testData.json');
-  
+
     // Read existing data
     let existingData = {};
     if (fs.existsSync(filePath)) {
       const raw = fs.readFileSync(filePath, 'utf-8');
       existingData = JSON.parse(raw);
     }
-  
+
     // Update only ticketId
     const updatedData = {
       ...existingData,
@@ -166,34 +166,34 @@ test('Meesho CX', async ({ page }) => {
 
     // Save it back to JSON
     fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 2));
-  
+
     console.log(`🎫 ticketId "${trimmedTicketId}" saved to testData.json`);
   });
 
-//<<<<-------------------------------------Check Ticket Details ------------------------------------------>>>>>>>>>>
+  //<<<<-------------------------------------Check Ticket Details ------------------------------------------>>>>>>>>>>
 
   await test.step('Check Ticket Details', async () => {
 
-//  // Step 1: Read the ticket ID from the JSON file
-//   const filePath = path.resolve(__dirname, 'D:\\Baldeep\\Meesho plw\\test-data\\testData.json');
-//   const rawData = fs.readFileSync(filePath);
-//   const jsonData = JSON.parse(rawData);
+    //  // Step 1: Read the ticket ID from the JSON file
+    //   const filePath = path.resolve(__dirname, 'D:\\Baldeep\\Meesho plw\\test-data\\testData.json');
+    //   const rawData = fs.readFileSync(filePath);
+    //   const jsonData = JSON.parse(rawData);
 
-//   const ticketId = jsonData?.meesho?.ticketIdMCX;
+    //   const ticketId = jsonData?.meesho?.ticketIdMCX;
 
-//   if (!ticketId) {
-//     throw new Error("Ticket ID for meesho is missing in testData.json");
-//   }
+    //   if (!ticketId) {
+    //     throw new Error("Ticket ID for meesho is missing in testData.json");
+    //   }
 
-//   // Step 2: Search the Ticket ID in UI
-//   const searchInput = page.getByRole('textbox', { name: 'Search' });
-//   await searchInput.waitFor();
-//   await searchInput.type(ticketId, { delay: 50 });
-//   await searchInput.press("Enter");
-//   await page.getByRole('button', { name: 'Search', exact: true }).click();
-//   await page.waitForTimeout(800)
-//   await page.getByRole('checkbox', { name: 'D Dr Vrushali Dhanale' }).click();
-//     // await page.waitForTimeout(500)
+    //   // Step 2: Search the Ticket ID in UI
+    //   const searchInput = page.getByRole('textbox', { name: 'Search' });
+    //   await searchInput.waitFor();
+    //   await searchInput.type(ticketId, { delay: 50 });
+    //   await searchInput.press("Enter");
+    //   await page.getByRole('button', { name: 'Search', exact: true }).click();
+    //   await page.waitForTimeout(800)
+    //   await page.getByRole('checkbox', { name: 'D Dr Vrushali Dhanale' }).click();
+    //     // await page.waitForTimeout(500)
 
     // Click on the Order Timeline Button
     await page.getByRole('button', { name: 'Order Timeline' }).click();
@@ -306,7 +306,7 @@ test('Meesho CX', async ({ page }) => {
   await test.step('Order Details page', async () => {
 
     // Click on Ticket Details tab
-    await page.locator('#ticketdetailstab > .MuiTabs-root > .MuiTabs-scroller > .MuiTabs-flexContainer > button').first().click();    await page.waitForTimeout(1000)
+    await page.locator('#ticketdetailstab > .MuiTabs-root > .MuiTabs-scroller > .MuiTabs-flexContainer > button').first().click(); await page.waitForTimeout(1000)
     await page.waitForTimeout(500)
 
     // Click on the View Orders Button (Right Corner)
@@ -317,9 +317,9 @@ test('Meesho CX', async ({ page }) => {
     await page.getByRole('button', { name: 'Untag Order' }).click();
     await page.waitForTimeout(8000)
 
-     // Click on the Tag Order Button
-     await page.getByRole('checkbox', { name: '458643691034_1 Raghaw Women\'s' }).getByRole('button').first().click();
-     await page.waitForTimeout(8000)
+    // Click on the Tag Order Button
+    await page.getByRole('checkbox', { name: '458643691034_1 Raghaw Women\'s' }).getByRole('button').first().click();
+    await page.waitForTimeout(8000)
 
     // Click on Back Arrow Button
     await page.getByRole('button').filter({ hasText: 'arrow_back' }).click();
@@ -329,12 +329,12 @@ test('Meesho CX', async ({ page }) => {
 
   });
 
-// <<<<<<<-----------------------------------------Web Viewer--------------------------------------------->>>>>>
+  // <<<<<<<-----------------------------------------Web Viewer--------------------------------------------->>>>>>
 
   await test.step('Web Viewer', async () => {
 
     // Click on Web Viewer Button (Right Corner)
-    await page.locator("//button[@title='Web Viewer']").click();   
+    await page.locator("//button[@title='Web Viewer']").click();
     await page.waitForTimeout(500)
 
     // Click on the Refresh icon
@@ -346,7 +346,7 @@ test('Meesho CX', async ({ page }) => {
     await page.waitForTimeout(1000)
 
     // await page.pause
-    
+
   });
 
   //<<<<<-----------------------------------------Product Search---------------------------------------->>>>
@@ -354,7 +354,7 @@ test('Meesho CX', async ({ page }) => {
   await test.step('Product Search', async () => {
 
     // Click on Product Search Button (Right Corner)
-    await page.locator("//button[@title='Product Search']").click();   
+    await page.locator("//button[@title='Product Search']").click();
     await page.waitForTimeout(500)
 
     // Click on the Text Button
@@ -370,7 +370,7 @@ test('Meesho CX', async ({ page }) => {
     await page.waitForTimeout(1000)
 
     // await page.pause
-    
+
   });
 
   //<<<<<-----------------------------------------------Invoice------------------------------------------------>>>>
@@ -378,16 +378,16 @@ test('Meesho CX', async ({ page }) => {
   await test.step('Invoice', async () => {
 
     // Click on Invoice Button (Right Corner)
-    await page.locator("//button[@title='Product Search']").click();   
+    await page.locator("//button[@title='Product Search']").click();
     await page.waitForTimeout(500)
 
     // Click on the Back Arrow Button
     await page.getByRole('button', { name: 'Back', exact: true }).click()
     await page.waitForTimeout(1000)
 
-   
+
     // await page.pause
-    
+
   });
 
   //<<<<<<---------------------------------------------Notes Tab----------------------------------------------->>>>>>
@@ -405,7 +405,7 @@ test('Meesho CX', async ({ page }) => {
     await page.waitForTimeout(1000)
 
     // await page.pause
-    
+
   });
 
   //<<<<---------------------------------------------Junk the Ticket-------------------------------------->>>>>>
@@ -433,25 +433,25 @@ test('Meesho CX', async ({ page }) => {
     await page.waitForTimeout(2000)
 
     await page.pause
-    
+
   });
 
   //<<<<<<--------------------------------------Unjunk the Ticket------------------------------------------->>>>>>>
 
   await test.step('UnJunk the Ticket', async () => {
 
-     // Step 1: Read the ticket ID from the JSON file
-  const filePath = path.resolve(__dirname, 'D:\\Baldeep\\Meesho plw\\test-data\\testData.json');
-  const rawData = fs.readFileSync(filePath);
-  const jsonData = JSON.parse(rawData);
+    // Step 1: Read the ticket ID from the JSON file
+    const filePath = path.resolve(__dirname, 'D:\\Baldeep\\Meesho plw\\test-data\\testData.json');
+    const rawData = fs.readFileSync(filePath);
+    const jsonData = JSON.parse(rawData);
 
-  const ticketId = jsonData?.meesho?.ticketIdMCX;
+    const ticketId = jsonData?.meesho?.ticketIdMCX;
 
-  if (!ticketId) {
-    throw new Error("Ticket ID for meesho is missing in testData.json");
-  }
+    if (!ticketId) {
+      throw new Error("Ticket ID for meesho is missing in testData.json");
+    }
 
-  // Step 2: Search the Ticket ID in UI
+    // Step 2: Search the Ticket ID in UI
     const searchInput = page.getByRole('textbox', { name: 'Search' });
     await searchInput.waitFor();
     await searchInput.type(ticketId, { delay: 50 });
@@ -467,7 +467,7 @@ test('Meesho CX', async ({ page }) => {
     await page.waitForTimeout(500)
 
     // await page.pause
-    
+
   });
 
   //<<<<<---------------------------------------Dispose the Ticket--------------------------------------->>>>>>>
@@ -496,41 +496,41 @@ test('Meesho CX', async ({ page }) => {
     await page.getByRole('button', { name: 'Search', exact: true }).click();
     await page.waitForTimeout(800)
     await page.getByRole('checkbox', { name: 'D Dr Vrushali Dhanale' }).click();
-   // await page.waitForTimeout(500)
+    // await page.waitForTimeout(500)
 
-   // Click on the Dispose button
-   await page.locator('#ticketdetailstab').getByRole('button').click();
-   await page.waitForTimeout(500)
+    // Click on the Dispose button
+    await page.locator('#ticketdetailstab').getByRole('button').click();
+    await page.waitForTimeout(500)
 
     //Select the Queue
     await page.getByRole('textbox', { name: 'Select Queue' }).click();
     await page.getByText('Margin & COD Refund (CX)').click();
     await page.waitForTimeout(600)
 
-  //  //Select the Assign to
+    //  //Select the Assign to
     await page.getByRole('textbox', { name: 'Assign To' }).click();
     await page.getByText('Meesho Super Admin').click();
     await page.waitForTimeout(500)
 
-   // Fill remarks
+    // Fill remarks
     await page.getByRole('textbox', { name: 'Add remark' }).click();
     await page.getByRole('textbox', { name: 'Add remark' }).press('ControlOrMeta+a');
     await page.getByRole('textbox', { name: 'Add remark' }).fill('Test QA');
     await page.waitForTimeout(500)
 
 
-  // Select Disposition Type as Resolved
+    // Select Disposition Type as Resolved
     await page.getByRole('textbox', { name: 'Disposition Type' }).click();
     await page.getByRole('option', { name: 'Resolved' }).click();
     await page.waitForTimeout(1500)
 
 
-   // Press the Submit button
+    // Press the Submit button
     await page.getByRole('button', { name: 'Dispose this ticket' }).click();
     await page.waitForTimeout(2000)
-  
-  // await page.pause()
-   
- });
+
+    // await page.pause()
+
+  });
 
 });
