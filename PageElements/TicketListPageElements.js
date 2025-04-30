@@ -1,0 +1,14 @@
+export const searchTextBox = '//input[@placeholder="Search tickets..."]';
+export const expendView = '//button[@title="Expanded View"]';
+export const clickOnSearchTicket = '(//div[@component="[object Object]"])[1]';
+export const ticketDetailsTab = '//button[@data-tabkeys="TICKET_DETAILS"]';
+export const notificationCrossIcon = '(//span[text()="close"])[2]';
+export const ticketCheckBox =
+  "span[title='Ticket ID: 736149704013'] input[type='checkbox']";
+export const assignButton = '//span[text()="Assign"]';
+export const selectQueueButton = '//div[@label="Select Queue"]';
+export const selectQueueOption = '//div[@title="Kapture QA User (Me)"]';
+export const assignRemarkTextBox = '//textarea[@id="assign-ticket-remarks"]';
+export const assignTicketsubmitButton = '//span[text()="Submit"]';
+export const advanceFilterButton = '//span[@title="Advanced Filter"]';
+export const advanceFilterSubmitButton = '//span[text()="Submit"]';
