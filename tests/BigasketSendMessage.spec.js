@@ -1,14 +1,11 @@
 import { test, expect } from "@playwright/test";
 import BaseClass from "../Generic/BaseClass";
+const testdata = require("../Generic/TestData.json");
 import TicketListPage from "../Pages/TicketListPage";
 import TicketDetailspage from "../Pages/TicketDetailsPage";
 
-test.beforeEach(async ({ page }) => {
-  const basePage = new BaseClass(page); // Initialize BasePage
-  await basePage.setUp(); // Setup and login
-});
-
 test("Bigbasket Send Message", async ({ page }) => {
+  await page.goto(testdata["BigbasketNUIURL"], { waitUntil: "networkidle" });
   const ticketListPage = new TicketListPage(page);
   await ticketListPage.doSearchTicketWithTicketID();
   await ticketListPage.doExpendView();

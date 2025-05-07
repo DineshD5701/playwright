@@ -1,0 +1,9 @@
+services:
+  webkit:
+    build:
+      context: .
+      dockerfile: Dockerfile # Explicitly define Dockerfile path if it's not in the same directory
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production

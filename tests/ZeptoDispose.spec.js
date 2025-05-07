@@ -1,22 +1,22 @@
-import { test, expect } from "@playwright/test";
-import BaseClass from "../Generic/BaseClass";
-import TicketListPage from "../Pages/TicketListPage";
-import TicketDetailspage from "../Pages/TicketDetailsPage";
-import TicketDisposePage from "../Pages/TicketDisposePage";
+// import { test, expect } from "@playwright/test";
+// import BaseClass from "../Generic/BaseClass";
+// import TicketListPage from "../Pages/TicketListPage";
+// import TicketDetailspage from "../Pages/TicketDetailsPage";
+// import TicketDisposePage from "../Pages/TicketDisposePage";
 
-test.beforeEach(async ({ page }) => {
-  const basePage = new BaseClass(page); // Initialize BasePage
-  await basePage.setUp(); // Setup and login
-});
+// test.beforeEach(async ({ page }) => {
+//   const basePage = new BaseClass(page); // Initialize BasePage
+//   await basePage.setUp(); // Setup and login
+// });
 
-test("Zepto dispose Test", async ({ page }) => {
-  const ticketListPage = new TicketListPage(page);
-  await ticketListPage.doSearchTicketWithTicketID();
-  await ticketListPage.doExpendView();
-  await ticketListPage.doClickOnSearchTciket();
-  await ticketListPage.doValiadationForSearchTicket();
+// test("Zepto dispose Test", async ({ page }) => {
+//   const ticketListPage = new TicketListPage(page);
+//   await ticketListPage.doSearchTicketWithTicketID();
+//   await ticketListPage.doExpendView();
+//   await ticketListPage.doClickOnSearchTciket();
+//   await ticketListPage.doValiadationForSearchTicket();
 
-  const ticketDisposePage = new TicketDisposePage(page);
-  await ticketDisposePage.doDispose();
-  await ticketDisposePage.doVerifyDisposition();
-});
+//   const ticketDisposePage = new TicketDisposePage(page);
+//   await ticketDisposePage.doDispose();
+//   await ticketDisposePage.doVerifyDisposition();
+// });

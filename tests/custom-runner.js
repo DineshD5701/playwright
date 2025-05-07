@@ -1,6 +1,9 @@
 const { exec } = require("child_process");
 
-const testFiles = ["tests/ZeptoTicketSearchByEmailID.spec.js"];
+const testFiles = [
+  "tests/BigasketOrdersTabTest.spec.js",
+  "tests/BigasketSendMessage.spec.js",
+];
 
 async function runTestsSequentially() {
   for (const testFile of testFiles) {
