@@ -1,34 +1,55 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="41.079975">
-<testsuite name="BigasketSendMessage.spec.js" timestamp="2025-05-07T10:25:41.516Z" hostname="Chrome" tests="1" failures="0" skipped="0" time="22.984" errors="0">
-<testcase name="Bigbasket Send Message" classname="BigasketSendMessage.spec.js" time="22.984">
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="29.070066999999998">
+<testsuite name="BigasketOrdersTabTest.spec.js" timestamp="2025-06-04T12:47:25.998Z" hostname="Chrome" tests="1" failures="1" skipped="0" time="8.107" errors="0">
+<testcase name="Bigbasket orders Tab Test" classname="BigasketOrdersTabTest.spec.js" time="8.107">
+<failure message="BigasketOrdersTabTest.spec.js:7:5 Bigbasket orders Tab Test" type="FAILURE">
+<![CDATA[  [Chrome] › BigasketOrdersTabTest.spec.js:7:5 › Bigbasket orders Tab Test ─────────────────────────
+
+    Error: page.click: Target page, context or browser has been closed
+    Call log:
+      - waiting for locator('xpath=(//div[@component="[object Object]"])[1]')
+
+
+       at ..\Generic\ElemenetClass.js:34
+
+      32 |
+      33 |   async waitAndClick(selector) {
+    > 34 |     return await this.page.click(selector);
+         |                            ^
+      35 |   }
+      36 |
+      37 |   async waitAndHardClick(selector) {
+        at ElementClass.waitAndClick (C:\kapturePlaywrite\playwright\Generic\ElemenetClass.js:34:28)
+        at TicketListPage.doClickOnSearchTciket (C:\kapturePlaywrite\playwright\Pages\TicketListPage.js:79:29)
+        at C:\kapturePlaywrite\playwright\tests\BigasketOrdersTabTest.spec.js:12:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\BigasketOrdersTabTest-Bigbasket-orders-Tab-Test-Chrome\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\BigasketOrdersTabTest-Bigbasket-orders-Tab-Test-Chrome\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\BigasketOrdersTabTest-Bigbasket-orders-Tab-Test-Chrome\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\BigasketOrdersTabTest-Bigbasket-orders-Tab-Test-Chrome\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
 <system-out>
 <![CDATA[Waiting for input field to appear...
 Input field is ready. Filling the ticket ID...
 pressed enter key
 ExpendView method is executed
-clickOnSearchTicket method is executed
-Waiting for TICKET_DETAILS button...
-Validation successfull
-pressed enter key
+
+[[ATTACHMENT|test-results\BigasketOrdersTabTest-Bigbasket-orders-Tab-Test-Chrome\video.webm]]
+
+[[ATTACHMENT|test-results\BigasketOrdersTabTest-Bigbasket-orders-Tab-Test-Chrome\error-context.md]]
+
+[[ATTACHMENT|test-results\BigasketOrdersTabTest-Bigbasket-orders-Tab-Test-Chrome\trace.zip]]
 ]]>
 </system-out>
-<system-err>
-<![CDATA[Error interacting with TICKET_DETAILS button: TypeError: _TicketListPageElements.ticketDetailsTab.waitFor is not a function
-    at TicketListPage.doValiadationForSearchTicket [90m(C:\kapturePlaywrite\playwright\[39mPages\TicketListPage.js:91:30[90m)[39m
-    at [90mC:\kapturePlaywrite\playwright\[39mtests\BigasketSendMessage.spec.js:14:3
-    at [90mC:\kapturePlaywrite\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:339:9
-    at [90mC:\kapturePlaywrite\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:286:11
-    at TimeoutManager.withRunnable [90m(C:\kapturePlaywrite\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\timeoutManager.js:64:14[90m)[39m
-    at TestInfoImpl._runAsStage [90m(C:\kapturePlaywrite\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:284:7[90m)[39m
-    at [90mC:\kapturePlaywrite\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:331:7
-    at [90mC:\kapturePlaywrite\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:286:11
-    at TimeoutManager.withRunnable [90m(C:\kapturePlaywrite\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\timeoutManager.js:52:27[90m)[39m
-    at TestInfoImpl._runAsStage [90m(C:\kapturePlaywrite\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:284:7[90m)[39m
-    at WorkerMain._runTest [90m(C:\kapturePlaywrite\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:281:5[90m)[39m
-    at WorkerMain.runTestGroup [90m(C:\kapturePlaywrite\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:205:11[90m)[39m
-    at process.<anonymous> [90m(C:\kapturePlaywrite\playwright\[39mnode_modules\[4mplaywright[24m\lib\common\process.js:95:22[90m)[39m
-]]>
-</system-err>
 </testcase>
 </testsuite>
 </testsuites>

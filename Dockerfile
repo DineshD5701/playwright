@@ -1,18 +1,21 @@
-# Use an official Node.js runtime as a parent image
-FROM node:14
+# Use Node.js 14 as base
+FROM mcr.microsoft.com/playwright:focal
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package.json /app
+# Install dependencies
+COPY package.json package-lock.json* ./
 RUN npm install
 
-# Copy the rest of the application code
-COPY . /app
+# Install Playwright and its dependencies
+RUN npx playwright install --with-deps
 
-# Expose the port your app will run on
+# Copy the rest of your code
+COPY . .
+
+# Expose app port (optional if you're not serving anything)
 EXPOSE 3000
 
-# Define the command to run your app
-CMD ["npm", "start"]
+# Run Playwright tests by default
+CMD ["npx", "playwright", "test"]

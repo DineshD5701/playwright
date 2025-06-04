@@ -16,22 +16,22 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@playwright/test": "^1.49.0",
+    "@playwright/test": "^1.52.0",
     "@types/node": "^22.10.1",
     "allure-playwright": "^3.0.7",
-      "eslint": "^8.52.0",
-      "eslint-plugin-react": "^7.33.2",
-      "eslint-plugin-react-hooks": "^4.6.0",
-      "eslint-plugin-react-refresh": "^0.4.3",
-      "husky": "^8.0.3",
-      "lint-staged": "^15.0.2",
-      "prettier": "^3.0.3",
-      "vite": "^4.4.5"
-    },
-    "lint-staged": {
-      "**/*.{js,jsx,json}": [
-        "eslint . --fix",
-        "prettier --write ."
-      ]
-    }
+    "eslint": "^8.52.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.0.2",
+    "prettier": "^3.0.3",
+    "vite": "^4.4.5"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,json}": [
+      "eslint . --fix",
+      "prettier --write ."
+    ]
+  }
 }
