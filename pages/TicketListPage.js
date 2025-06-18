@@ -49,7 +49,7 @@ class TicketListPage {
   }
 
   // Search ticket with ticket ID
-  async doSearchTicketWithTicketID(ticketID = testdata.BigbasketTicketID1) {
+  async doSearchTicketWithTicketID(ticketID) {
     console.log("Waiting for input field to appear...");
 
     // Convert the selector string to a Locator object inside the method

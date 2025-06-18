@@ -6,7 +6,7 @@ const testdata = require("../Generic/TestData.json");
 test("Bigbasket Search Test By TicketId", async ({ page }) => {
   await page.goto(testdata["BigbasketNUIURL"], { waitUntil: "networkidle" });
   const ticketListPage = new TicketListPage(page);
-  await ticketListPage.doSearchTicketWithTicketID();
+  await ticketListPage.doSearchTicketWithTicketID(testdata.BigbasketTicketID1);
   await ticketListPage.doExpendView();
   await ticketListPage.doClickOnSearchTciket();
   await ticketListPage.doValiadationForSearchTicket();

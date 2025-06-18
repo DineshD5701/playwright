@@ -134,7 +134,7 @@ class TicketDetailsPage {
     // await this.moreTicketTabButton.click();
     await this.elementClass.waitAndClick(moreTicketTabButton);
     // await this.moreTicketsTabFirstTicket.click();
-    await this.elementClass.waitAndClick(moreTicketsTabFirstTicket);
+    // await this.elementClass.waitAndClick(moreTicketsTabFirstTicket);
   }
   //info tab test
   async doinfotab() {

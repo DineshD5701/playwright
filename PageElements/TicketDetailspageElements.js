@@ -2,7 +2,7 @@ export const messageTextBox = '//textarea[@name="message"]';
 export const ordersTabButton = "//button[@title='View Orders']";
 export const notesTabButton = '//button[@data-tabkeys="NOTES"]';
 export const notesTextArea = "//div[@aria-label='Editor editing area: main']";
-export const notesSaveButton = "//span[text()='send']";
+export const notesSaveButton = "//span[text()='Add']";
 export const warningMessageCloserButton = "//span[text()='close']";
 export const moreTicketTabButton = '//button[@datatracking="PAST_TICKET"]';
 export const moreTicketsTabFirstTicket =

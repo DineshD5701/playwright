@@ -7,7 +7,7 @@ const testdata = require("../Generic/TestData.json");
 test("Bigbasket create Notes Test", async ({ page }) => {
   await page.goto(testdata["BigbasketNUIURL"], { waitUntil: "networkidle" });
   const ticketListPage = new TicketListPage(page);
-  await ticketListPage.doSearchTicketWithTicketID();
+  await ticketListPage.doSearchTicketWithTicketID(testdata.BigbasketTicketID1);
   await ticketListPage.doExpendView();
   await ticketListPage.doClickOnSearchTciket();
   await ticketListPage.doValiadationForSearchTicket();

@@ -5,9 +5,9 @@ import TicketDetailspage from "../Pages/TicketDetailsPage";
 const testdata = require("../Generic/TestData.json");
 
 test("Bigbasket History Tab test", async ({ page }) => {
-  await page.goto(testdata["BigbasketoldUI URL"], { waitUntil: "networkidle" });
+  await page.goto(testdata["BigbasketNUIURL"], { waitUntil: "networkidle" });
   const ticketListPage = new TicketListPage(page);
-  await ticketListPage.doSearchTicketWithTicketID();
+  await ticketListPage.doSearchTicketWithTicketID(testdata.BigbasketTicketID1);
   await ticketListPage.doExpendView();
   await ticketListPage.doClickOnSearchTciket();
   await ticketListPage.doValiadationForSearchTicket();
