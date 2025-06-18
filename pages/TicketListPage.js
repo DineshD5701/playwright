@@ -12,6 +12,12 @@ import {
   assignRemarkTextBox,
   selectQueueOption,
   selectQueueButton,
+  comppletedByMe,
+  assignedToMeTab,
+  AllJunks,
+  allCompletedTab,
+  allPendingTab,
+  unAssignedTab,
 } from "../PageElements/TicketListPageElements";
 import { ticketDetailsTab } from "../PageElements/TicketListPageElements";
 import {
@@ -179,6 +185,21 @@ class TicketListPage {
     await this.elementClass.waitAndClick(advanceFilterButton);
     // await this.advanceFilterSubmitButton.click();
     await this.elementClass.waitAndClick(advanceFilterSubmitButton);
+    await this.page.waitForTimeout(2000);
+  }
+
+  async doAllTabsTest() {
+    await this.elementClass.waitAndClick(unAssignedTab);
+    await this.page.waitForTimeout(2000);
+    await this.elementClass.waitAndClick(allPendingTab);
+    await this.page.waitForTimeout(2000);
+    await this.elementClass.waitAndClick(allCompletedTab);
+    await this.page.waitForTimeout(2000);
+    await this.elementClass.waitAndClick(AllJunks);
+    await this.page.waitForTimeout(2000);
+    await this.elementClass.waitAndClick(assignedToMeTab);
+    await this.page.waitForTimeout(2000);
+    await this.elementClass.waitAndClick(comppletedByMe);
     await this.page.waitForTimeout(2000);
   }
 }
