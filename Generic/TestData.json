@@ -6,5 +6,14 @@
   "BigbasketTicketID": "736149704013",
   "BigbasketTicketID1": "736149704013",
   "BigbasketPhoneNumber": "8861872771",
-  "BigbasketEamilID": "shankar.lamani@kapturecrm.com"
+  "BigbasketEamilID": "shankar.lamani@kapturecrm.com",
+
+  "MeeshoCXusername": "testkap",
+  "MeeshoCXpassword": "Test@123",
+  "MeeshoCXoldUI URL": "https://meesho.kapturecrm.com/employee/index.html",
+  "MeeshoCXNUIURL": "https://meesho.kapturecrm.com/nui/",
+  "MeeshoCXTicketID": "736149704013",
+  "MeeshoCXTicketID1": "736149704013",
+  "MeeshoCXPhoneNumber": "8861872771",
+  "MeeshoCXEamilID": "baldeep.singh@kapturecrm.com"
 }

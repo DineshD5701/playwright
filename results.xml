@@ -1,6 +1,48 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="53.155524">
-<testsuite name="BigbasketAllTabsTest.spec.js" timestamp="2025-06-18T06:49:00.267Z" hostname="Chrome" tests="1" failures="0" skipped="0" time="37.158" errors="0">
-<testcase name="Bigbasket All Tabs Test" classname="BigbasketAllTabsTest.spec.js" time="37.158">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="43.94451">
+<testsuite name="MeeshoCXTicketSearchByPhoneNumber.spec.js" timestamp="2025-06-18T11:14:46.359Z" hostname="Chrome" tests="1" failures="0" skipped="0" time="29.888" errors="0">
+<testcase name="MeeshoCX MoreTickets Test" classname="MeeshoCXTicketSearchByPhoneNumber.spec.js" time="29.888">
+<system-out>
+<![CDATA[Waiting for username field...
+Filling username...
+Clicking on the Next Button
+Filling password...
+Clicking login button...
+Navigating to NUI...
+Waiting for search field...
+Logged in successfully! Test can continue.
+Waiting for TICKET_DETAILS button...
+Validation successfull
+ExpendView method is executed
+clickOnSearchTicket method is executed
+Waiting for TICKET_DETAILS button...
+Validation successfull
+]]>
+</system-out>
+<system-err>
+<![CDATA[Error interacting with TICKET_DETAILS button: TypeError: _TicketListPageElements.ticketDetailsTab.waitFor is not a function
+    at TicketListPage.doValiadationForSearchTicket [90m(C:\kapturePlaywriteProduction\playwright\[39mPages\TicketListPage.js:98:30[90m)[39m
+    at [90mC:\kapturePlaywriteProduction\playwright\[39mtests\MeeshoCXTicketSearchByPhoneNumber.spec.js:15:3
+    at [90mC:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:304:9
+    at [90mC:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:277:11
+    at TimeoutManager.withRunnable [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\timeoutManager.js:67:14[90m)[39m
+    at TestInfoImpl._runWithTimeout [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:275:7[90m)[39m
+    at [90mC:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:302:7
+    at WorkerMain._runTest [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:277:5[90m)[39m
+    at WorkerMain.runTestGroup [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:193:11[90m)[39m
+    at process.<anonymous> [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\common\process.js:70:22[90m)[39m
+Error interacting with TICKET_DETAILS button: TypeError: _TicketListPageElements.ticketDetailsTab.waitFor is not a function
+    at TicketListPage.doValiadationForSearchTicket [90m(C:\kapturePlaywriteProduction\playwright\[39mPages\TicketListPage.js:98:30[90m)[39m
+    at [90mC:\kapturePlaywriteProduction\playwright\[39mtests\MeeshoCXTicketSearchByPhoneNumber.spec.js:20:3
+    at [90mC:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:304:9
+    at [90mC:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:277:11
+    at TimeoutManager.withRunnable [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\timeoutManager.js:67:14[90m)[39m
+    at TestInfoImpl._runWithTimeout [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:275:7[90m)[39m
+    at [90mC:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:302:7
+    at WorkerMain._runTest [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:277:5[90m)[39m
+    at WorkerMain.runTestGroup [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:193:11[90m)[39m
+    at process.<anonymous> [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\common\process.js:70:22[90m)[39m
+]]>
+</system-err>
 </testcase>
 </testsuite>
 </testsuites>

@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export const searchTextBox = '//input[@placeholder="Search tickets..."]';
 export const expendView = '//button[@title="Expanded View"]';
 export const clickOnSearchTicket = '(//div[@component="[object Object]"])[1]';
@@ -18,3 +20,4 @@ export const allCompletedTab = '//span[text()="All Complete"]';
 export const AllJunks = '//span[@title="All Junk"]';
 export const assignedToMeTab = '//span[@title="Assigned to me"]';
 export const comppletedByMe = '//span[@title="Assigned to me"]';
+export const handleLoginPopUp = '//li[@value="Lunch"]';

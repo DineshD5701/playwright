@@ -18,6 +18,7 @@ import {
   allCompletedTab,
   allPendingTab,
   unAssignedTab,
+  handleLoginPopUp,
 } from "../PageElements/TicketListPageElements";
 import { ticketDetailsTab } from "../PageElements/TicketListPageElements";
 import {
@@ -201,6 +202,13 @@ class TicketListPage {
     await this.page.waitForTimeout(2000);
     await this.elementClass.waitAndClick(comppletedByMe);
     await this.page.waitForTimeout(2000);
+  }
+  async doHandleLoginPopup() {
+    if (await this.page.isVisible(handleLoginPopUp)) {
+      await this.elementClass.waitAndClick(handleLoginPopUp);
+    } else {
+      console.log("Popup not visible, skipping click.");
+    }
   }
 }
 export default TicketListPage;
