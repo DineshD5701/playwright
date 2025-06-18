@@ -1,5 +1,7 @@
 import { expect } from "@playwright/test";
 import BaseClass from "../Generic/BaseClass";
+import MeeshoCXBaseClass from "../Generic/MeeshoCXBaseClass";
+
 
 class ElementClass {
   constructor(page) {

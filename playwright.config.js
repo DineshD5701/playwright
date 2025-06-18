@@ -1,30 +1,77 @@
-// at top‐level of playwright.config.js
-export const testDir = "tests";
-export const timeout = 60000;
-export const retries = 0;
-export const reporter = [
-  ["html"],
-  ["junit", { outputFile: "results.xml" }],
-  ["allure-playwright"],
-];
+// // at top‐level of playwright.config.js
+// export const testDir = "tests";
+// export const timeout = 60000;
+// export const retries = 0;
+// export const reporter = [
+//   ["html"],
+//   ["junit", { outputFile: "results.xml" }],
+//   ["allure-playwright"],
+// ];
 
-// tell Playwright to run this file once before all tests:
-export const globalSetup = "./global-setup.js";
+// // tell Playwright to run this file once before all tests:
+// export const globalSetup = "./global-setup.js";
 
-export const projects = [
-  {
-    name: `Chrome`,
-    use: {
-      browserName: `chromium`,
-      channel: `chrome`,
-      headless: false,
-      viewport: { width: 1000, height: 600 },
-      screenshot: `only-on-failure`,
-      video: `retain-on-failure`,
-      trace: `retain-on-failure`,
-      // load the saved session so every test starts logged‑in
-      storageState: "auth.json",
+// export const projects = [
+//   {
+//     name: `Chrome`,
+//     use: {
+//       browserName: `chromium`,
+//       channel: `chrome`,
+//       headless: false,
+//       viewport: { width: 1000, height: 600 },
+//       screenshot: `only-on-failure`,
+//       video: `retain-on-failure`,
+//       trace: `retain-on-failure`,
+//       // load the saved session so every test starts logged‑in
+//       storageState: "auth.json",
+//     },
+//   },
+//   // …other projects
+// ];
+
+
+
+// playwright.config.js
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  testDir: 'tests',
+  timeout: 60000,
+  retries: 0,
+  globalSetup: './global-setup.js',
+
+  reporter: [
+    ['html'],
+    ['junit', { outputFile: 'results.xml' }],
+    ['allure-playwright'],
+  ],
+
+  projects: [
+    {
+      name: 'Bigbasket',
+      use: {
+        browserName: 'chromium',
+        channel: 'chrome',
+        headless: false,
+        viewport: { width: 1000, height: 600 },
+        screenshot: 'only-on-failure',
+        video: 'retain-on-failure',
+        trace: 'retain-on-failure',
+        storageState: 'auth.json', // unique auth file for Bigbasket
+      },
     },
-  },
-  // …other projects
-];
+    {
+      name: 'MeeshoCX',
+      use: {
+        browserName: 'chromium',
+        channel: 'chrome',
+        headless: false,
+        viewport: { width: 1000, height: 600 },
+        screenshot: 'only-on-failure',
+        video: 'retain-on-failure',
+        trace: 'retain-on-failure',
+        storageState: 'meesho-auth.json', // unique auth file for MeeshoCX
+      },
+    },
+  ],
+});

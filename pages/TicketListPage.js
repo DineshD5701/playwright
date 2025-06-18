@@ -181,5 +181,25 @@ class TicketListPage {
     await this.elementClass.waitAndClick(advanceFilterSubmitButton);
     await this.page.waitForTimeout(2000);
   }
+
+  // -----------------------------------------Meesho CX--------------------------------------------//
+
+async doMeeshoCXSearchTicketWithTicketID(ticketID = testdata.MeeshoCXTicketID) {
+    console.log("Waiting for input field to appear...");
+
+    // Convert the selector string to a Locator object inside the method
+    const searchTextBoxLocator = this.page.locator(searchTextBox);
+    // Wait for the input field to be visible and enabled
+    await searchTextBoxLocator.waitFor({ state: "visible" }); // Wait for visibility
+    await expect(searchTextBoxLocator).toBeEnabled(); // Ensure the input field is enabled
+    console.log("Input field is ready. Filling the ticket ID...");
+
+    // Perform the fill operation
+    //await this.searchTextBox.fill(ticketID);
+    await this.elementClass.waitAndFill(searchTextBox, ticketID);
+    await searchTextBoxLocator.press("Enter", { timeout: 60000 }); // Increase timeout to 60 seconds if necessary
+    console.log("pressed enter key");
+  }
+  
 }
 export default TicketListPage;
