@@ -2,8 +2,8 @@
   "cookies": [
     {
       "name": "JSESSIONRID",
-      "value": "3SDmlhjtZ1s1DmlhjtZ",
-      "domain": "bigbasket.kapdesk.com",
+      "value": "3SDmlhjtZ1s3DmlhjtZ",
+      "domain": "meesho.kapturecrm.com",
       "path": "/",
       "expires": -1,
       "httpOnly": true,
@@ -13,7 +13,7 @@
     {
       "name": "timeOffset",
       "value": "0",
-      "domain": "bigbasket.kapdesk.com",
+      "domain": "meesho.kapturecrm.com",
       "path": "/",
       "expires": -1,
       "httpOnly": false,
@@ -22,58 +22,38 @@
     },
     {
       "name": "_KAPTURECRM_SESSION",
-      "value": "w5rdk58kct0zpslffj05190901p9a6dn1jfg7lspp5s2mc",
-      "domain": "bigbasket.kapdesk.com",
+      "value": "6aa9k7ndcxles8jr2xkn1593181e02ii32feig13pt8db1",
+      "domain": "meesho.kapturecrm.com",
       "path": "/",
-      "expires": 1750373199.193804,
+      "expires": 1750373208.416244,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "mp_6c02537f8f758b0feedfd53581fbaeec_mixpanel",
-      "value": "%7B%22distinct_id%22%3A%22%24device%3A9946bd6d-e9de-4faf-821c-ffe3069b7c5b%22%2C%22%24device_id%22%3A%229946bd6d-e9de-4faf-821c-ffe3069b7c5b%22%2C%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%2C%22__mps%22%3A%7B%7D%2C%22__mpso%22%3A%7B%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%7D%2C%22__mpus%22%3A%7B%7D%2C%22__mpa%22%3A%7B%7D%2C%22__mpu%22%3A%7B%7D%2C%22__mpr%22%3A%5B%5D%2C%22__mpap%22%3A%5B%5D%7D",
-      "domain": ".kapdesk.com",
+      "value": "%7B%22distinct_id%22%3A%22%24device%3A123c90cf-b5be-47cc-a2b4-71037a2793f1%22%2C%22%24device_id%22%3A%22123c90cf-b5be-47cc-a2b4-71037a2793f1%22%2C%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%2C%22__mps%22%3A%7B%7D%2C%22__mpso%22%3A%7B%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%7D%2C%22__mpus%22%3A%7B%7D%2C%22__mpa%22%3A%7B%7D%2C%22__mpu%22%3A%7B%7D%2C%22__mpr%22%3A%5B%5D%2C%22__mpap%22%3A%5B%5D%7D",
+      "domain": ".kapturecrm.com",
       "path": "/",
-      "expires": 1781855199,
+      "expires": 1781855208,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "_ga",
-      "value": "GA1.1.2114802761.1750319200",
-      "domain": ".kapdesk.com",
+      "value": "GA1.1.1241543794.1750319209",
+      "domain": ".kapturecrm.com",
       "path": "/",
-      "expires": 1784879202.396051,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
-      "name": "_ga_6RBDMB8XTE",
-      "value": "GS2.1.s1750319202$o1$g0$t1750319202$j60$l0$h0",
-      "domain": ".kapdesk.com",
-      "path": "/",
-      "expires": 1784879202.44528,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
-      "name": "_ga_KKZH5KWGEE",
-      "value": "GS2.1.s1750319199$o1$g1$t1750319203$j56$l0$h0",
-      "domain": ".kapdesk.com",
-      "path": "/",
-      "expires": 1784879203.025286,
+      "expires": 1784879211.911042,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "session_expire",
-      "value": "eyJzeXN0ZW1UaW1lIjoxNzUwMzE5MjAyMTAxLCJleHBpcnlUaW1lIjoxNzUwMzczMjAyMTAxfQ==",
-      "domain": "bigbasket.kapdesk.com",
+      "value": "eyJzeXN0ZW1UaW1lIjoxNzUwMzE5MjExNTQ3LCJleHBpcnlUaW1lIjoxNzUwMzczMjExNTQ3fQ==",
+      "domain": "meesho.kapturecrm.com",
       "path": "/",
       "expires": -1,
       "httpOnly": true,
@@ -81,23 +61,43 @@
       "sameSite": "None"
     },
     {
+      "name": "_ga_6RBDMB8XTE",
+      "value": "GS2.1.s1750319211$o1$g0$t1750319211$j60$l0$h0",
+      "domain": ".kapturecrm.com",
+      "path": "/",
+      "expires": 1784879211.981444,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
       "name": "JSESSIONID",
-      "value": "6C1DC8A9731944B338274ADA78D62736",
-      "domain": "bigbasket.kapdesk.com",
+      "value": "F1C3EAAEC0EF325C7DCC9BAC1D62F49E",
+      "domain": "meesho.kapturecrm.com",
       "path": "/",
       "expires": -1,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
+    },
+    {
+      "name": "_ga_KKZH5KWGEE",
+      "value": "GS2.1.s1750319209$o1$g1$t1750319212$j57$l0$h0",
+      "domain": ".kapturecrm.com",
+      "path": "/",
+      "expires": 1784879212.512105,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
     }
   ],
   "origins": [
     {
-      "origin": "https://bigbasket.kapdesk.com",
+      "origin": "https://meesho.kapturecrm.com",
       "localStorage": [
         {
           "name": "kapture_device_id",
-          "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36en-IN-1280|7200dc9598b-a840-44de-b4ed-5b7945cd49c7"
+          "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36en-IN-1280|720626bad3d-5ef0-4805-9deb-eed1263c4485"
         },
         {
           "name": "state",
@@ -109,7 +109,7 @@
         },
         {
           "name": "@firebase/performance/configexpire",
-          "value": "1750362403278"
+          "value": "1750362413024"
         }
       ]
     },
@@ -118,7 +118,7 @@
       "localStorage": [
         {
           "name": "rc::a",
-          "value": "MWNwY3RnNzY5bmVvaA=="
+          "value": "YnZkOGVqMTZqbzdiaw=="
         }
       ]
     }

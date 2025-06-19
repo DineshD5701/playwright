@@ -19,6 +19,10 @@ import {
   allPendingTab,
   unAssignedTab,
   handleLoginPopUp,
+  hanleLoginPopUpRefresherOption,
+  handleLoginPopUpLunchOption,
+  hanleLoginPopUpTrainingOption,
+  hanleLoginPopUpBriefingOption,
 } from "../PageElements/TicketListPageElements";
 import { ticketDetailsTab } from "../PageElements/TicketListPageElements";
 import {
@@ -204,10 +208,15 @@ class TicketListPage {
     await this.page.waitForTimeout(2000);
   }
   async doHandleLoginPopup() {
-    if (await this.page.isVisible(handleLoginPopUp)) {
-      await this.elementClass.waitAndClick(handleLoginPopUp);
-    } else {
-      console.log("Popup not visible, skipping click.");
+    try {
+      if (handleLoginPopUp && (await this.page.isVisible(handleLoginPopUp))) {
+        await this.page.waitForTimeout(1000);
+        await this.elementClass.waitAndClick(handleLoginPopUp);
+      } else {
+        console.log("Refresher option not visible or selector invalid");
+      }
+    } catch (error) {
+      console.error("Error while handling refresher option:", error);
     }
   }
 }

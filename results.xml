@@ -1,38 +1,62 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="43.94451">
-<testsuite name="MeeshoCXTicketSearchByPhoneNumber.spec.js" timestamp="2025-06-18T11:14:46.359Z" hostname="Chrome" tests="1" failures="0" skipped="0" time="29.888" errors="0">
-<testcase name="MeeshoCX MoreTickets Test" classname="MeeshoCXTicketSearchByPhoneNumber.spec.js" time="29.888">
+<testsuites id="" name="" tests="14" failures="1" skipped="13" errors="0" time="57.931266">
+<testsuite name="bigbasket-tests\BigasketOrdersTabTest.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="1" skipped="0" time="16.392" errors="0">
+<testcase name="Bigbasket orders Tab Test" classname="bigbasket-tests\BigasketOrdersTabTest.spec.js" time="16.392">
+<failure message="BigasketOrdersTabTest.spec.js:7:5 Bigbasket orders Tab Test" type="FAILURE">
+<![CDATA[  [Bigbasket] › bigbasket-tests\BigasketOrdersTabTest.spec.js:7:5 › Bigbasket orders Tab Test ──────
+
+    Error: page.click: Test ended.
+    Call log:
+      - waiting for locator('//button[@title=\'View Orders\']')
+
+
+       at ..\Generic\ElemenetClass.js:34
+
+      32 |
+      33 |   async waitAndClick(selector) {
+    > 34 |     return await this.page.click(selector);
+         |                            ^
+      35 |   }
+      36 |
+      37 |   async waitAndHardClick(selector) {
+        at ElementClass.waitAndClick (C:\kapturePlaywriteProduction\playwright\Generic\ElemenetClass.js:34:28)
+        at TicketDetailsPage.doOrdersTabTest (C:\kapturePlaywriteProduction\playwright\Pages\TicketDetailsPage.js:103:29)
+        at C:\kapturePlaywriteProduction\playwright\tests\bigbasket-tests\BigasketOrdersTabTest.spec.js:16:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\bigbasket-tests-BigasketOr-3f7c4-t-Bigbasket-orders-Tab-Test-Bigbasket\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\bigbasket-tests-BigasketOr-3f7c4-t-Bigbasket-orders-Tab-Test-Bigbasket\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\bigbasket-tests-BigasketOr-3f7c4-t-Bigbasket-orders-Tab-Test-Bigbasket\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\bigbasket-tests-BigasketOr-3f7c4-t-Bigbasket-orders-Tab-Test-Bigbasket\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
 <system-out>
-<![CDATA[Waiting for username field...
-Filling username...
-Clicking on the Next Button
-Filling password...
-Clicking login button...
-Navigating to NUI...
-Waiting for search field...
-Logged in successfully! Test can continue.
-Waiting for TICKET_DETAILS button...
-Validation successfull
+<![CDATA[Waiting for input field to appear...
+Input field is ready. Filling the ticket ID...
+pressed enter key
 ExpendView method is executed
 clickOnSearchTicket method is executed
 Waiting for TICKET_DETAILS button...
 Validation successfull
+
+[[ATTACHMENT|test-results\bigbasket-tests-BigasketOr-3f7c4-t-Bigbasket-orders-Tab-Test-Bigbasket\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\bigbasket-tests-BigasketOr-3f7c4-t-Bigbasket-orders-Tab-Test-Bigbasket\error-context.md]]
+
+[[ATTACHMENT|test-results\bigbasket-tests-BigasketOr-3f7c4-t-Bigbasket-orders-Tab-Test-Bigbasket\trace.zip]]
 ]]>
 </system-out>
 <system-err>
 <![CDATA[Error interacting with TICKET_DETAILS button: TypeError: _TicketListPageElements.ticketDetailsTab.waitFor is not a function
-    at TicketListPage.doValiadationForSearchTicket [90m(C:\kapturePlaywriteProduction\playwright\[39mPages\TicketListPage.js:98:30[90m)[39m
-    at [90mC:\kapturePlaywriteProduction\playwright\[39mtests\MeeshoCXTicketSearchByPhoneNumber.spec.js:15:3
-    at [90mC:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:304:9
-    at [90mC:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:277:11
-    at TimeoutManager.withRunnable [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\timeoutManager.js:67:14[90m)[39m
-    at TestInfoImpl._runWithTimeout [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:275:7[90m)[39m
-    at [90mC:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:302:7
-    at WorkerMain._runTest [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:277:5[90m)[39m
-    at WorkerMain.runTestGroup [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:193:11[90m)[39m
-    at process.<anonymous> [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\common\process.js:70:22[90m)[39m
-Error interacting with TICKET_DETAILS button: TypeError: _TicketListPageElements.ticketDetailsTab.waitFor is not a function
-    at TicketListPage.doValiadationForSearchTicket [90m(C:\kapturePlaywriteProduction\playwright\[39mPages\TicketListPage.js:98:30[90m)[39m
-    at [90mC:\kapturePlaywriteProduction\playwright\[39mtests\MeeshoCXTicketSearchByPhoneNumber.spec.js:20:3
+    at TicketListPage.doValiadationForSearchTicket [90m(C:\kapturePlaywriteProduction\playwright\[39mPages\TicketListPage.js:102:30[90m)[39m
+    at [90mC:\kapturePlaywriteProduction\playwright\[39mtests\bigbasket-tests\BigasketOrdersTabTest.spec.js:13:3
     at [90mC:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\workerMain.js:304:9
     at [90mC:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\testInfo.js:277:11
     at TimeoutManager.withRunnable [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\worker\timeoutManager.js:67:14[90m)[39m
@@ -43,6 +67,84 @@ Error interacting with TICKET_DETAILS button: TypeError: _TicketListPageElements
     at process.<anonymous> [90m(C:\kapturePlaywriteProduction\playwright\[39mnode_modules\[4mplaywright[24m\lib\common\process.js:70:22[90m)[39m
 ]]>
 </system-err>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigasketSendMessage.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="31.338" errors="0">
+<testcase name="Bigbasket Send Message" classname="bigbasket-tests\BigasketSendMessage.spec.js" time="31.338">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigbasketAdvanceFilter.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="31.578" errors="0">
+<testcase name="BigBasket AdvanceSearch Test " classname="bigbasket-tests\BigbasketAdvanceFilter.spec.js" time="31.578">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigbasketAllTabsTest.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="32.149" errors="0">
+<testcase name="Bigbasket All Tabs Test" classname="bigbasket-tests\BigbasketAllTabsTest.spec.js" time="32.149">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigbasketCreateNotes.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="30.736" errors="0">
+<testcase name="Bigbasket create Notes Test" classname="bigbasket-tests\BigbasketCreateNotes.spec.js" time="30.736">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigbasketHistoryTab.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="30.707" errors="0">
+<testcase name="Bigbasket History Tab test" classname="bigbasket-tests\BigbasketHistoryTab.spec.js" time="30.707">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigbasketMoreTickets.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="Bigbasket MoreTickets Test" classname="bigbasket-tests\BigbasketMoreTickets.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigbasketoInfoTab.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="Bigbasket info Tab test" classname="bigbasket-tests\BigbasketoInfoTab.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigbasketSideConversation.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="Bigbasket SideConversation Test " classname="bigbasket-tests\BigbasketSideConversation.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigbasketTAssignmentTicket.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="BigBasket Ticket assignment" classname="bigbasket-tests\BigbasketTAssignmentTicket.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigbasketTicketSearchByEmailID.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="BigBasket Search Test by Email ID" classname="bigbasket-tests\BigbasketTicketSearchByEmailID.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigbasketTicketSearchByPhoneNumber.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="BigBasket Search Test by PhoneNumber " classname="bigbasket-tests\BigbasketTicketSearchByPhoneNumber.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\BigbasketTicketSearchByTicketID.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="Bigbasket" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="Bigbasket Search Test By TicketId" classname="bigbasket-tests\BigbasketTicketSearchByTicketID.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="meeshocx-tests\MeeshoCXTicketSearchByPhoneNumber.spec.js" timestamp="2025-06-19T07:46:54.552Z" hostname="MeeshoCX" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="MeeshoCX MoreTickets Test" classname="meeshocx-tests\MeeshoCXTicketSearchByPhoneNumber.spec.js" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
 </testsuites>

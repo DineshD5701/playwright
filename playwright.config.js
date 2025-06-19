@@ -1,30 +1,46 @@
-// at top‐level of playwright.config.js
-export const testDir = "tests";
-export const timeout = 60000;
-export const retries = 0;
-export const reporter = [
-  ["html"],
-  ["junit", { outputFile: "results.xml" }],
-  ["allure-playwright"],
-];
+// playwright.config.js
+const { defineConfig } = require("@playwright/test");
 
-// tell Playwright to run this file once before all tests:
-export const globalSetup = "./global-setup.js";
+module.exports = defineConfig({
+  testDir: "tests",
+  timeout: 60000,
+  retries: 0,
+  reporter: [
+    ["html"],
+    ["junit", { outputFile: "results.xml" }],
+    ["allure-playwright"],
+  ],
 
-export const projects = [
-  {
-    name: `Chrome`,
-    use: {
-      browserName: `chromium`,
-      channel: `chrome`,
-      headless: false,
-      viewport: { width: 1000, height: 600 },
-      screenshot: `only-on-failure`,
-      video: `retain-on-failure`,
-      trace: `retain-on-failure`,
-      // load the saved session so every test starts logged‑in
-      storageState: "auth.json",
+  globalSetup: "./global-setup.js",
+
+  projects: [
+    {
+      name: "Bigbasket",
+      testMatch: ["tests/bigbasket-tests/*.spec.js"],
+      use: {
+        browserName: "chromium",
+        channel: "chrome",
+        headless: false,
+        viewport: { width: 1000, height: 600 },
+        storageState: "auth.json",
+        screenshot: "only-on-failure",
+        video: "retain-on-failure",
+        trace: "retain-on-failure",
+      },
     },
-  },
-  // …other projects
-];
+    {
+      name: "MeeshoCX",
+      testMatch: ["tests/meeshocx-tests/*.spec.js"],
+      use: {
+        browserName: "chromium",
+        channel: "chrome",
+        headless: false,
+        viewport: { width: 1000, height: 600 },
+        storageState: "meesho-auth.json",
+        screenshot: "only-on-failure",
+        video: "retain-on-failure",
+        trace: "retain-on-failure",
+      },
+    },
+  ],
+});
