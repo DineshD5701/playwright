@@ -20,7 +20,7 @@ module.exports = defineConfig({
       use: {
         browserName: "chromium",
         channel: "chrome",
-        headless: false,
+        headless: true,
         viewport: { width: 1000, height: 600 },
         storageState: "auth.json",
         screenshot: "only-on-failure",
@@ -34,7 +34,7 @@ module.exports = defineConfig({
       use: {
         browserName: "chromium",
         channel: "chrome",
-        headless: false,
+        headless: true,
         viewport: { width: 1000, height: 600 },
         storageState: "meesho-auth.json",
         screenshot: "only-on-failure",
