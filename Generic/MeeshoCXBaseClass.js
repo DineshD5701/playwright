@@ -1,4 +1,4 @@
-import MeeshoCXLoginPage from "../Pages/MeeshoCXLoginPage";
+import MeeshoCXLoginPage from "../pages/MeeshoCXLoginPage";
 //const testata = JSON.parse(JSON.stringify(require("../Generic/TestData.json")));
 const testdata = require("./TestData.json"); // Adjust path as needed
 const { chromium } = require("playwright");
