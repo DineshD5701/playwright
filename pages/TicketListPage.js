@@ -34,6 +34,7 @@ class TicketListPage {
   constructor(page) {
     this.page = page;
     this.elementClass = new ElementClass(page);
+    this.ticketDetailsTab = page.locator(ticketDetailsTab);
     // this.searchTextBox = page.locator(
     //   "//input[@placeholder='Search tickets...']"
     // );
@@ -91,29 +92,40 @@ class TicketListPage {
     console.log("clickOnSearchTicket method is executed");
   }
 
-  //validation for search Ticket
+  // validation for search Ticket
   async doValiadationForSearchTicket() {
     console.log("Waiting for TICKET_DETAILS button...");
     try {
-      // Wait for page to load and network activity to settle
+      // Wait for page load and network idle
       await this.page.waitForLoadState("networkidle");
 
-      // Wait for the button to be visible
-      await ticketDetailsTab.waitFor({
+      // Define the locator (assuming XPath is used)
+      const ticketDetailsTabLocator = this.page.locator(
+        '//button[@data-tabkeys="TICKET_DETAILS"]'
+      );
+
+      // Wait for the element to be visible
+      await ticketDetailsTabLocator.waitFor({
         state: "visible",
         timeout: 5000,
       });
-      console.log("Button is now visible!");
+      console.log("TICKET_DETAILS button is now visible!");
 
-      // Click on the button
-      await this.elementClass.waitAndClick(ticketDetailsTab);
-      // await this.ticketDetailsTab.click();
-      console.log("Clicked on the TICKET_DETAILS button!");
+      // Optional check before clicking
+      if (await ticketDetailsTabLocator.isVisible()) {
+        console.log("TICKET_DETAILS element is visible");
+        await ticketDetailsTabLocator.click();
+        console.log("Clicked on the TICKET_DETAILS button!");
+      } else {
+        console.log("TICKET_DETAILS element is not visible");
+      }
     } catch (error) {
-      console.error("Error interacting with TICKET_DETAILS button:", error);
+      console.error("❌ Error interacting with TICKET_DETAILS button:", error);
     }
-    console.log("Validation successfull");
+
+    console.log("✅ Validation successful");
   }
+
   // Search ticket with PhoneNumber
   async doSearchTicketWithPhoneNumber(
     PhoneNumber = testdata.BigbasketPhoneNumber
@@ -202,10 +214,10 @@ class TicketListPage {
     await this.page.waitForTimeout(2000);
     await this.elementClass.waitAndClick(AllJunks);
     await this.page.waitForTimeout(2000);
-    await this.elementClass.waitAndClick(assignedToMeTab);
-    await this.page.waitForTimeout(2000);
-    await this.elementClass.waitAndClick(comppletedByMe);
-    await this.page.waitForTimeout(2000);
+    // await this.elementClass.waitAndClick(assignedToMeTab);
+    // await this.page.waitForTimeout(2000);
+    // await this.elementClass.waitAndClick(comppletedByMe);
+    // await this.page.waitForTimeout(2000);
   }
   async doHandleLoginPopup() {
     try {

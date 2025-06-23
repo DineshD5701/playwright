@@ -22,37 +22,37 @@
     },
     {
       "name": "_KAPTURECRM_SESSION",
-      "value": "6aa9k7ndcxles8jr2xkn1593181e02ii32feig13pt8db1",
+      "value": "plbjtcprb07h3410haal159318ipbcnuiau3e4m1lqatwr",
       "domain": "meesho.kapturecrm.com",
       "path": "/",
-      "expires": 1750373208.416244,
+      "expires": 1750713761.262536,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "mp_6c02537f8f758b0feedfd53581fbaeec_mixpanel",
-      "value": "%7B%22distinct_id%22%3A%22%24device%3A123c90cf-b5be-47cc-a2b4-71037a2793f1%22%2C%22%24device_id%22%3A%22123c90cf-b5be-47cc-a2b4-71037a2793f1%22%2C%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%2C%22__mps%22%3A%7B%7D%2C%22__mpso%22%3A%7B%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%7D%2C%22__mpus%22%3A%7B%7D%2C%22__mpa%22%3A%7B%7D%2C%22__mpu%22%3A%7B%7D%2C%22__mpr%22%3A%5B%5D%2C%22__mpap%22%3A%5B%5D%7D",
+      "value": "%7B%22distinct_id%22%3A%22%24device%3A0e5fe9b3-5abb-4781-8c52-98dfb0ad1079%22%2C%22%24device_id%22%3A%220e5fe9b3-5abb-4781-8c52-98dfb0ad1079%22%2C%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%2C%22__mps%22%3A%7B%7D%2C%22__mpso%22%3A%7B%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%7D%2C%22__mpus%22%3A%7B%7D%2C%22__mpa%22%3A%7B%7D%2C%22__mpu%22%3A%7B%7D%2C%22__mpr%22%3A%5B%5D%2C%22__mpap%22%3A%5B%5D%7D",
       "domain": ".kapturecrm.com",
       "path": "/",
-      "expires": 1781855208,
+      "expires": 1782195762,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "_ga",
-      "value": "GA1.1.1241543794.1750319209",
+      "value": "GA1.1.1507249574.1750659762",
       "domain": ".kapturecrm.com",
       "path": "/",
-      "expires": 1784879211.911042,
+      "expires": 1785219766.094105,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "session_expire",
-      "value": "eyJzeXN0ZW1UaW1lIjoxNzUwMzE5MjExNTQ3LCJleHBpcnlUaW1lIjoxNzUwMzczMjExNTQ3fQ==",
+      "value": "eyJzeXN0ZW1UaW1lIjoxNzUwNjU5NzY0NjkwLCJleHBpcnlUaW1lIjoxNzUwNzEzNzY0NjkwfQ==",
       "domain": "meesho.kapturecrm.com",
       "path": "/",
       "expires": -1,
@@ -62,33 +62,33 @@
     },
     {
       "name": "_ga_6RBDMB8XTE",
-      "value": "GS2.1.s1750319211$o1$g0$t1750319211$j60$l0$h0",
+      "value": "GS2.1.s1750659766$o1$g0$t1750659766$j60$l0$h0",
       "domain": ".kapturecrm.com",
       "path": "/",
-      "expires": 1784879211.981444,
+      "expires": 1785219766.169474,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_KKZH5KWGEE",
+      "value": "GS2.1.s1750659762$o1$g1$t1750659766$j56$l0$h0",
+      "domain": ".kapturecrm.com",
+      "path": "/",
+      "expires": 1785219766.458019,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "JSESSIONID",
-      "value": "F1C3EAAEC0EF325C7DCC9BAC1D62F49E",
+      "value": "01BBE7894652D4683C4F5F729FDDA957",
       "domain": "meesho.kapturecrm.com",
       "path": "/",
       "expires": -1,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
-    },
-    {
-      "name": "_ga_KKZH5KWGEE",
-      "value": "GS2.1.s1750319209$o1$g1$t1750319212$j57$l0$h0",
-      "domain": ".kapturecrm.com",
-      "path": "/",
-      "expires": 1784879212.512105,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
     }
   ],
   "origins": [
@@ -97,7 +97,7 @@
       "localStorage": [
         {
           "name": "kapture_device_id",
-          "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36en-IN-1280|720626bad3d-5ef0-4805-9deb-eed1263c4485"
+          "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36en-IN-1280|7204bad1939-c5a4-4243-a62a-9c1c0eb1eee4"
         },
         {
           "name": "state",
@@ -105,11 +105,11 @@
         },
         {
           "name": "@firebase/performance/config",
-          "value": "{\"entries\":{\"fpr_disabled_android_versions\":\"\",\"fpr_disabled_ios_versions\":\"\",\"fpr_disabled_web_versions\":\"\",\"fpr_enabled\":\"true\",\"fpr_experiment_app_start_ttid\":\"true\",\"fpr_log_endpoint_url\":\"https://firebaselogging.googleapis.com/v0cc/log?format=json_proto\",\"fpr_log_source\":\"462\",\"fpr_log_transport_android_percent\":\"100.0\",\"fpr_log_transport_ios_percent\":\"100.0\",\"fpr_log_transport_key\":\"AIzaSyCx80ru6-RXeTi3GvqkFsMVyMf-vpgIoVw\",\"fpr_rl_network_request_event_count_bg\":\"70\",\"fpr_rl_network_request_event_count_fg\":\"700\",\"fpr_rl_time_limit_sec\":\"600\",\"fpr_rl_trace_event_count_bg\":\"30\",\"fpr_rl_trace_event_count_fg\":\"300\",\"fpr_session_gauge_cpu_capture_frequency_bg_ms\":\"0\",\"fpr_session_gauge_cpu_capture_frequency_fg_ms\":\"100\",\"fpr_session_gauge_memory_capture_frequency_bg_ms\":\"0\",\"fpr_session_gauge_memory_capture_frequency_fg_ms\":\"100\",\"fpr_session_max_length_min\":\"240\",\"fpr_vc_fragment_sampling_rate\":\"0.1\",\"fpr_vc_network_request_sampling_rate\":\"0.1094231027308621\",\"fpr_vc_session_sampling_rate\":\"0.25\",\"fpr_vc_trace_sampling_rate\":\"1.0\"},\"state\":\"UPDATE\",\"templateVersion\":\"252\"}"
+          "value": "{\"entries\":{\"fpr_disabled_android_versions\":\"\",\"fpr_disabled_ios_versions\":\"\",\"fpr_disabled_web_versions\":\"\",\"fpr_enabled\":\"true\",\"fpr_experiment_app_start_ttid\":\"true\",\"fpr_log_endpoint_url\":\"https://firebaselogging.googleapis.com/v0cc/log?format=json_proto\",\"fpr_log_source\":\"462\",\"fpr_log_transport_android_percent\":\"100.0\",\"fpr_log_transport_ios_percent\":\"100.0\",\"fpr_log_transport_key\":\"AIzaSyCx80ru6-RXeTi3GvqkFsMVyMf-vpgIoVw\",\"fpr_rl_network_request_event_count_bg\":\"70\",\"fpr_rl_network_request_event_count_fg\":\"700\",\"fpr_rl_time_limit_sec\":\"600\",\"fpr_rl_trace_event_count_bg\":\"30\",\"fpr_rl_trace_event_count_fg\":\"300\",\"fpr_session_gauge_cpu_capture_frequency_bg_ms\":\"0\",\"fpr_session_gauge_cpu_capture_frequency_fg_ms\":\"100\",\"fpr_session_gauge_memory_capture_frequency_bg_ms\":\"0\",\"fpr_session_gauge_memory_capture_frequency_fg_ms\":\"100\",\"fpr_session_max_length_min\":\"240\",\"fpr_vc_fragment_sampling_rate\":\"0.1\",\"fpr_vc_network_request_sampling_rate\":\"0.10965566459325969\",\"fpr_vc_session_sampling_rate\":\"0.25\",\"fpr_vc_trace_sampling_rate\":\"1.0\"},\"state\":\"UPDATE\",\"templateVersion\":\"254\"}"
         },
         {
           "name": "@firebase/performance/configexpire",
-          "value": "1750362413024"
+          "value": "1750702968183"
         }
       ]
     },
@@ -118,7 +118,7 @@
       "localStorage": [
         {
           "name": "rc::a",
-          "value": "YnZkOGVqMTZqbzdiaw=="
+          "value": "bmlvNXh1cGc0a2tq"
         }
       ]
     }

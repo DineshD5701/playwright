@@ -6,7 +6,7 @@ const MeeshoCXLoginPage = require("./Pages/MeeshoCXLoginPage").default;
 
 module.exports = async () => {
   console.log("🌐 Starting Global Login Setup...");
-
+  console.log("Bigbasket Login Started");
   const browser = await chromium.launch();
 
   // Bigbasket login
@@ -19,6 +19,7 @@ module.exports = async () => {
   await loginPage.login(testdata.Bigbasketusername, testdata.Bigbasketpassword);
   await bbContext.storageState({ path: "auth.json" });
   console.log("✅ Bigbasket Login Complete");
+  console.log("=====================================================");
 
   // MeeshoCX login
   const meeshoContext = await browser.newContext();
@@ -26,6 +27,7 @@ module.exports = async () => {
   await meeshoPage.goto(testdata["MeeshoCXoldUI URL"], {
     waitUntil: "networkidle",
   });
+  console.log("MeeshoCX Login Started");
   const meeshoLoginPage = new MeeshoCXLoginPage(meeshoPage);
   await meeshoLoginPage.meeshoCXlogin(
     testdata.MeeshoCXusername,
