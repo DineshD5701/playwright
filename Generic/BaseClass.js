@@ -1,4 +1,4 @@
-import LoginPage from "../Pages/loge";
+import LoginPage from "../Pages/LoginPage";
 //const testata = JSON.parse(JSON.stringify(require("../Generic/TestData.json")));
 const testdata = require("./TestData.json"); // Adjust path as needed
 const { chromium } = require("playwright");

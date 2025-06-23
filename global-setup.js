@@ -1,7 +1,7 @@
 // global-setup.js
 const { chromium } = require("@playwright/test");
 const testdata = require("./Generic/TestData.json");
-const LoginPage = require("./Pages/loge").default;
+const LoginPage = require("./Pages/LoginPage").default;
 const MeeshoCXLoginPage = require("./Pages/MeeshoCXLoginPage").default;
 
 module.exports = async () => {
