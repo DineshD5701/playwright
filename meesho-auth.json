@@ -22,73 +22,73 @@
     },
     {
       "name": "_KAPTURECRM_SESSION",
-      "value": "plbjtcprb07h3410haal159318ipbcnuiau3e4m1lqatwr",
+      "value": "0shv5xa0fsh7gyyg377m159318tg19yej0jvoezfi6fqtt",
       "domain": "meesho.kapturecrm.com",
       "path": "/",
-      "expires": 1750713761.262536,
+      "expires": 1750717239.085231,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "mp_6c02537f8f758b0feedfd53581fbaeec_mixpanel",
-      "value": "%7B%22distinct_id%22%3A%22%24device%3A0e5fe9b3-5abb-4781-8c52-98dfb0ad1079%22%2C%22%24device_id%22%3A%220e5fe9b3-5abb-4781-8c52-98dfb0ad1079%22%2C%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%2C%22__mps%22%3A%7B%7D%2C%22__mpso%22%3A%7B%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%7D%2C%22__mpus%22%3A%7B%7D%2C%22__mpa%22%3A%7B%7D%2C%22__mpu%22%3A%7B%7D%2C%22__mpr%22%3A%5B%5D%2C%22__mpap%22%3A%5B%5D%7D",
+      "value": "%7B%22distinct_id%22%3A%22%24device%3Adc9e3a02-3606-48d5-b1d6-1f909fa8ca27%22%2C%22%24device_id%22%3A%22dc9e3a02-3606-48d5-b1d6-1f909fa8ca27%22%2C%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%2C%22__mps%22%3A%7B%7D%2C%22__mpso%22%3A%7B%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%7D%2C%22__mpus%22%3A%7B%7D%2C%22__mpa%22%3A%7B%7D%2C%22__mpu%22%3A%7B%7D%2C%22__mpr%22%3A%5B%5D%2C%22__mpap%22%3A%5B%5D%7D",
       "domain": ".kapturecrm.com",
       "path": "/",
-      "expires": 1782195762,
+      "expires": 1782199239,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "_ga",
-      "value": "GA1.1.1507249574.1750659762",
+      "value": "GA1.1.1441338999.1750663240",
       "domain": ".kapturecrm.com",
       "path": "/",
-      "expires": 1785219766.094105,
+      "expires": 1785223242.358386,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_6RBDMB8XTE",
+      "value": "GS2.1.s1750663242$o1$g0$t1750663242$j60$l0$h0",
+      "domain": ".kapturecrm.com",
+      "path": "/",
+      "expires": 1785223242.408857,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "session_expire",
-      "value": "eyJzeXN0ZW1UaW1lIjoxNzUwNjU5NzY0NjkwLCJleHBpcnlUaW1lIjoxNzUwNzEzNzY0NjkwfQ==",
+      "value": "eyJzeXN0ZW1UaW1lIjoxNzUwNjYzMjQxMTI5LCJleHBpcnlUaW1lIjoxNzUwNzE3MjQxMTI5fQ==",
       "domain": "meesho.kapturecrm.com",
       "path": "/",
       "expires": -1,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
-    },
-    {
-      "name": "_ga_6RBDMB8XTE",
-      "value": "GS2.1.s1750659766$o1$g0$t1750659766$j60$l0$h0",
-      "domain": ".kapturecrm.com",
-      "path": "/",
-      "expires": 1785219766.169474,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
-      "name": "_ga_KKZH5KWGEE",
-      "value": "GS2.1.s1750659762$o1$g1$t1750659766$j56$l0$h0",
-      "domain": ".kapturecrm.com",
-      "path": "/",
-      "expires": 1785219766.458019,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
     },
     {
       "name": "JSESSIONID",
-      "value": "01BBE7894652D4683C4F5F729FDDA957",
+      "value": "3431AA4316834B872092049BBB92CF82",
       "domain": "meesho.kapturecrm.com",
       "path": "/",
       "expires": -1,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
+    },
+    {
+      "name": "_ga_KKZH5KWGEE",
+      "value": "GS2.1.s1750663239$o1$g1$t1750663242$j57$l0$h0",
+      "domain": ".kapturecrm.com",
+      "path": "/",
+      "expires": 1785223243.000251,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
     }
   ],
   "origins": [
@@ -97,7 +97,7 @@
       "localStorage": [
         {
           "name": "kapture_device_id",
-          "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36en-IN-1280|7204bad1939-c5a4-4243-a62a-9c1c0eb1eee4"
+          "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36en-IN-1280|72013c2ae1c-4950-4beb-999e-b8b900164f04"
         },
         {
           "name": "state",
@@ -109,7 +109,7 @@
         },
         {
           "name": "@firebase/performance/configexpire",
-          "value": "1750702968183"
+          "value": "1750706443746"
         }
       ]
     },
@@ -118,7 +118,7 @@
       "localStorage": [
         {
           "name": "rc::a",
-          "value": "bmlvNXh1cGc0a2tq"
+          "value": "NXU5emdxMXltN3kwMw=="
         }
       ]
     }

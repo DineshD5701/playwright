@@ -1,67 +1,14 @@
-<testsuites id="" name="" tests="14" failures="3" skipped="0" errors="0" time="672.9567289999999">
-<testsuite name="bigbasket-tests\01_BigbasketAllTabsTest.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="1" skipped="0" time="61.444" errors="0">
-<testcase name="Bigbasket All Tabs Test" classname="bigbasket-tests\01_BigbasketAllTabsTest.spec.js" time="61.444">
-<failure message="01_BigbasketAllTabsTest.spec.js:7:5 Bigbasket All Tabs Test" type="FAILURE">
-<![CDATA[  [Bigbasket] › bigbasket-tests\01_BigbasketAllTabsTest.spec.js:7:5 › Bigbasket All Tabs Test ──────
-
-    Test timeout of 60000ms exceeded.
-
-    Error: page.click: Test timeout of 60000ms exceeded.
-    Call log:
-      - waiting for locator('//span[@title="Assigned to me"]')
-
-
-       at ..\Generic\ElemenetClass.js:34
-
-      32 |
-      33 |   async waitAndClick(selector) {
-    > 34 |     return await this.page.click(selector);
-         |                            ^
-      35 |   }
-      36 |
-      37 |   async waitAndHardClick(selector) {
-        at ElementClass.waitAndClick (C:\kapturePlaywriteProduction\playwright\Generic\ElemenetClass.js:34:28)
-        at TicketListPage.doAllTabsTest (C:\kapturePlaywriteProduction\playwright\Pages\TicketListPage.js:219:29)
-        at C:\kapturePlaywriteProduction\playwright\tests\bigbasket-tests\01_BigbasketAllTabsTest.spec.js:10:3
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results\bigbasket-tests-01_Bigbask-e9a71-est-Bigbasket-All-Tabs-Test-Bigbasket\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results\bigbasket-tests-01_Bigbask-e9a71-est-Bigbasket-All-Tabs-Test-Bigbasket\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\test-results\bigbasket-tests-01_Bigbask-e9a71-est-Bigbasket-All-Tabs-Test-Bigbasket\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results\bigbasket-tests-01_Bigbask-e9a71-est-Bigbasket-All-Tabs-Test-Bigbasket\trace.zip
-    Usage:
-
-        npx playwright show-trace test-results\bigbasket-tests-01_Bigbask-e9a71-est-Bigbasket-All-Tabs-Test-Bigbasket\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|test-results\bigbasket-tests-01_Bigbask-e9a71-est-Bigbasket-All-Tabs-Test-Bigbasket\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\bigbasket-tests-01_Bigbask-e9a71-est-Bigbasket-All-Tabs-Test-Bigbasket\video.webm]]
-
-[[ATTACHMENT|test-results\bigbasket-tests-01_Bigbask-e9a71-est-Bigbasket-All-Tabs-Test-Bigbasket\error-context.md]]
-
-[[ATTACHMENT|test-results\bigbasket-tests-01_Bigbask-e9a71-est-Bigbasket-All-Tabs-Test-Bigbasket\trace.zip]]
-]]>
-</system-out>
+<testsuites id="" name="" tests="14" failures="3" skipped="0" errors="0" time="376.041041">
+<testsuite name="bigbasket-tests\01_BigbasketAllTabsTest.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="17.796" errors="0">
+<testcase name="Bigbasket All Tabs Test" classname="bigbasket-tests\01_BigbasketAllTabsTest.spec.js" time="17.796">
 </testcase>
 </testsuite>
-<testsuite name="bigbasket-tests\02_BigbasketAdvanceFilter.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="10.692" errors="0">
-<testcase name="BigBasket AdvanceSearch Test " classname="bigbasket-tests\02_BigbasketAdvanceFilter.spec.js" time="10.692">
+<testsuite name="bigbasket-tests\02_BigbasketAdvanceFilter.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="10.048" errors="0">
+<testcase name="BigBasket AdvanceSearch Test " classname="bigbasket-tests\02_BigbasketAdvanceFilter.spec.js" time="10.048">
 </testcase>
 </testsuite>
-<testsuite name="bigbasket-tests\03_BigbasketTicketSearchByTicketID.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="47.32" errors="0">
-<testcase name="Bigbasket Search Test By TicketId" classname="bigbasket-tests\03_BigbasketTicketSearchByTicketID.spec.js" time="47.32">
+<testsuite name="bigbasket-tests\03_BigbasketTicketSearchByTicketID.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="46.241" errors="0">
+<testcase name="Bigbasket Search Test By TicketId" classname="bigbasket-tests\03_BigbasketTicketSearchByTicketID.spec.js" time="46.241">
 <system-out>
 <![CDATA[Waiting for input field to appear...
 Input field is ready. Filling the ticket ID...
@@ -77,8 +24,8 @@ Clicked on the TICKET_DETAILS button!
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="bigbasket-tests\04_BigbasketTicketSearchByPhoneNumber.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="47.546" errors="0">
-<testcase name="BigBasket Search Test by PhoneNumber " classname="bigbasket-tests\04_BigbasketTicketSearchByPhoneNumber.spec.js" time="47.546">
+<testsuite name="bigbasket-tests\04_BigbasketTicketSearchByPhoneNumber.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="47.354" errors="0">
+<testcase name="BigBasket Search Test by PhoneNumber " classname="bigbasket-tests\04_BigbasketTicketSearchByPhoneNumber.spec.js" time="47.354">
 <system-out>
 <![CDATA[Waiting for input field to appear...
 Input field is ready. Filling the ticket ID...
@@ -94,30 +41,8 @@ Clicked on the TICKET_DETAILS button!
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="bigbasket-tests\05_BigbasketTicketSearchByEmailID.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="1" skipped="0" time="62.929" errors="0">
-<testcase name="BigBasket Search Test by Email ID" classname="bigbasket-tests\05_BigbasketTicketSearchByEmailID.spec.js" time="62.929">
-<failure message="05_BigbasketTicketSearchByEmailID.spec.js:6:5 BigBasket Search Test by Email ID" type="FAILURE">
-<![CDATA[  [Bigbasket] › bigbasket-tests\05_BigbasketTicketSearchByEmailID.spec.js:6:5 › BigBasket Search Test by Email ID 
-
-    Test timeout of 60000ms exceeded.
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results\bigbasket-tests-05_Bigbask-76dd2-ket-Search-Test-by-Email-ID-Bigbasket\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results\bigbasket-tests-05_Bigbask-76dd2-ket-Search-Test-by-Email-ID-Bigbasket\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results\bigbasket-tests-05_Bigbask-76dd2-ket-Search-Test-by-Email-ID-Bigbasket\trace.zip
-    Usage:
-
-        npx playwright show-trace test-results\bigbasket-tests-05_Bigbask-76dd2-ket-Search-Test-by-Email-ID-Bigbasket\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
+<testsuite name="bigbasket-tests\05_BigbasketTicketSearchByEmailID.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="47.297" errors="0">
+<testcase name="BigBasket Search Test by Email ID" classname="bigbasket-tests\05_BigbasketTicketSearchByEmailID.spec.js" time="47.297">
 <system-out>
 <![CDATA[Waiting for input field to appear...
 Input field is ready. Filling the ticket ID...
@@ -125,56 +50,16 @@ pressed enter key
 ExpendView method is executed
 clickOnSearchTicket method is executed
 Waiting for TICKET_DETAILS button...
+TICKET_DETAILS button is now visible!
+TICKET_DETAILS element is visible
+Clicked on the TICKET_DETAILS button!
 ✅ Validation successful
-
-[[ATTACHMENT|test-results\bigbasket-tests-05_Bigbask-76dd2-ket-Search-Test-by-Email-ID-Bigbasket\test-failed-1.png]]
-
-[[ATTACHMENT|test-results\bigbasket-tests-05_Bigbask-76dd2-ket-Search-Test-by-Email-ID-Bigbasket\video.webm]]
-
-[[ATTACHMENT|test-results\bigbasket-tests-05_Bigbask-76dd2-ket-Search-Test-by-Email-ID-Bigbasket\trace.zip]]
 ]]>
 </system-out>
-<system-err>
-<![CDATA[❌ Error interacting with TICKET_DETAILS button: page.waitForLoadState: Test timeout of 60000ms exceeded.
-    at TicketListPage.doValiadationForSearchTicket [90m(C:\kapturePlaywriteProduction\playwright\[39mPages\TicketListPage.js:100:23[90m)[39m
-    at [90mC:\kapturePlaywriteProduction\playwright\[39mtests\bigbasket-tests\05_BigbasketTicketSearchByEmailID.spec.js:12:24 {
-  [[32mSymbol(step)[39m]: {
-    stepId: [32m'pw:api@13'[39m,
-    location: {
-      file: [32m'C:\\kapturePlaywriteProduction\\playwright\\Pages\\TicketListPage.js'[39m,
-      line: [33m100[39m,
-      column: [33m23[39m,
-      function: [32m'TicketListPage.doValiadationForSearchTicket'[39m
-    },
-    category: [32m'pw:api'[39m,
-    title: [32m'page.waitForLoadState'[39m,
-    apiName: [32m'page.waitForLoadState'[39m,
-    params: { info: [36m[Object][39m },
-    boxedStack: [90mundefined[39m,
-    steps: [],
-    attachmentIndices: [],
-    info: TestStepInfoImpl {
-      annotations: [],
-      _testInfo: [36m[TestInfoImpl][39m,
-      _stepId: [32m'pw:api@13'[39m
-    },
-    complete: [36m[Function: complete][39m,
-    endWallTime: [33m1750660001736[39m,
-    error: {
-      message: [32m'Error: page.waitForLoadState: Test timeout of 60000ms exceeded.'[39m,
-      stack: [32m'Error: page.waitForLoadState: Test timeout of 60000ms exceeded.\n'[39m +
-        [32m'    at TicketListPage.doValiadationForSearchTicket (C:\\kapturePlaywriteProduction\\playwright\\Pages\\TicketListPage.js:100:23)\n'[39m +
-        [32m'    at C:\\kapturePlaywriteProduction\\playwright\\tests\\bigbasket-tests\\05_BigbasketTicketSearchByEmailID.spec.js:12:24'[39m,
-      cause: [90mundefined[39m
-    }
-  }
-}
-]]>
-</system-err>
 </testcase>
 </testsuite>
-<testsuite name="bigbasket-tests\06_BigbasketHistoryTab.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="51.107" errors="0">
-<testcase name="Bigbasket History Tab test" classname="bigbasket-tests\06_BigbasketHistoryTab.spec.js" time="51.107">
+<testsuite name="bigbasket-tests\06_BigbasketHistoryTab.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="47.857" errors="0">
+<testcase name="Bigbasket History Tab test" classname="bigbasket-tests\06_BigbasketHistoryTab.spec.js" time="47.857">
 <system-out>
 <![CDATA[Waiting for input field to appear...
 Input field is ready. Filling the ticket ID...
@@ -201,8 +86,88 @@ Text content: 736149704013
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="bigbasket-tests\07_BigbasketoInfoTab.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="48.705" errors="0">
-<testcase name="Bigbasket info Tab test" classname="bigbasket-tests\07_BigbasketoInfoTab.spec.js" time="48.705">
+<testsuite name="bigbasket-tests\07_BigbasketoInfoTab.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="1" skipped="0" time="61.139" errors="0">
+<testcase name="Bigbasket info Tab test" classname="bigbasket-tests\07_BigbasketoInfoTab.spec.js" time="61.139">
+<failure message="07_BigbasketoInfoTab.spec.js:7:5 Bigbasket info Tab test" type="FAILURE">
+<![CDATA[  [Bigbasket] › bigbasket-tests\07_BigbasketoInfoTab.spec.js:7:5 › Bigbasket info Tab test ─────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('//button[@title="Expanded View"]')
+        - locator resolved to <button tabindex="0" type="button" title="Expanded View" class="MuiButtonBase-root MuiButton-root MuiButton-text px-8 py-2 cursor-pointer ">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div aria-hidden="true" class="MuiBackdrop-root"></div> from <div role="presentation" class="MuiDialog-root jss528">…</div> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        100 × waiting for element to be visible, enabled and stable
+            - element is visible, enabled and stable
+            - scrolling into view if needed
+            - done scrolling
+            - <div aria-hidden="true" class="MuiBackdrop-root"></div> from <div role="presentation" class="MuiDialog-root jss528">…</div> subtree intercepts pointer events
+          - retrying click action
+            - waiting 500ms
+
+
+       at ..\Generic\ElemenetClass.js:34
+
+      32 |
+      33 |   async waitAndClick(selector) {
+    > 34 |     return await this.page.click(selector);
+         |                            ^
+      35 |   }
+      36 |
+      37 |   async waitAndHardClick(selector) {
+        at ElementClass.waitAndClick (C:\kapturePlaywriteProduction\playwright\Generic\ElemenetClass.js:34:28)
+        at TicketListPage.doExpendView (C:\kapturePlaywriteProduction\playwright\Pages\TicketListPage.js:84:29)
+        at C:\kapturePlaywriteProduction\playwright\tests\bigbasket-tests\07_BigbasketoInfoTab.spec.js:11:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\bigbasket-tests-07_BigbasketoInfoTab-Bigbasket-info-Tab-test-Bigbasket\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\bigbasket-tests-07_BigbasketoInfoTab-Bigbasket-info-Tab-test-Bigbasket\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\bigbasket-tests-07_BigbasketoInfoTab-Bigbasket-info-Tab-test-Bigbasket\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\bigbasket-tests-07_BigbasketoInfoTab-Bigbasket-info-Tab-test-Bigbasket\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\bigbasket-tests-07_BigbasketoInfoTab-Bigbasket-info-Tab-test-Bigbasket\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[Waiting for input field to appear...
+Input field is ready. Filling the ticket ID...
+pressed enter key
+
+[[ATTACHMENT|test-results\bigbasket-tests-07_BigbasketoInfoTab-Bigbasket-info-Tab-test-Bigbasket\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\bigbasket-tests-07_BigbasketoInfoTab-Bigbasket-info-Tab-test-Bigbasket\video.webm]]
+
+[[ATTACHMENT|test-results\bigbasket-tests-07_BigbasketoInfoTab-Bigbasket-info-Tab-test-Bigbasket\error-context.md]]
+
+[[ATTACHMENT|test-results\bigbasket-tests-07_BigbasketoInfoTab-Bigbasket-info-Tab-test-Bigbasket\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="bigbasket-tests\08_BigbasketMoreTickets.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="29.36" errors="0">
+<testcase name="Bigbasket MoreTickets Test" classname="bigbasket-tests\08_BigbasketMoreTickets.spec.js" time="29.36">
 <system-out>
 <![CDATA[Waiting for input field to appear...
 Input field is ready. Filling the ticket ID...
@@ -218,8 +183,8 @@ Clicked on the TICKET_DETAILS button!
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="bigbasket-tests\08_BigbasketMoreTickets.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="31.432" errors="0">
-<testcase name="Bigbasket MoreTickets Test" classname="bigbasket-tests\08_BigbasketMoreTickets.spec.js" time="31.432">
+<testsuite name="bigbasket-tests\09_BigasketOrdersTabTest.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="50.943" errors="0">
+<testcase name="Bigbasket orders Tab Test" classname="bigbasket-tests\09_BigasketOrdersTabTest.spec.js" time="50.943">
 <system-out>
 <![CDATA[Waiting for input field to appear...
 Input field is ready. Filling the ticket ID...
@@ -235,25 +200,8 @@ Clicked on the TICKET_DETAILS button!
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="bigbasket-tests\09_BigasketOrdersTabTest.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="46.879" errors="0">
-<testcase name="Bigbasket orders Tab Test" classname="bigbasket-tests\09_BigasketOrdersTabTest.spec.js" time="46.879">
-<system-out>
-<![CDATA[Waiting for input field to appear...
-Input field is ready. Filling the ticket ID...
-pressed enter key
-ExpendView method is executed
-clickOnSearchTicket method is executed
-Waiting for TICKET_DETAILS button...
-TICKET_DETAILS button is now visible!
-TICKET_DETAILS element is visible
-Clicked on the TICKET_DETAILS button!
-✅ Validation successful
-]]>
-</system-out>
-</testcase>
-</testsuite>
-<testsuite name="bigbasket-tests\10_BigbasketCreateNotes.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="37.705" errors="0">
-<testcase name="Bigbasket create Notes Test" classname="bigbasket-tests\10_BigbasketCreateNotes.spec.js" time="37.705">
+<testsuite name="bigbasket-tests\10_BigbasketCreateNotes.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="53.015" errors="0">
+<testcase name="Bigbasket create Notes Test" classname="bigbasket-tests\10_BigbasketCreateNotes.spec.js" time="53.015">
 <system-out>
 <![CDATA[Waiting for input field to appear...
 Input field is ready. Filling the ticket ID...
@@ -272,8 +220,8 @@ notesTextArea is clicked
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="bigbasket-tests\11_BigbasketSideConversation.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="59.315" errors="0">
-<testcase name="Bigbasket SideConversation Test " classname="bigbasket-tests\11_BigbasketSideConversation.spec.js" time="59.315">
+<testsuite name="bigbasket-tests\11_BigbasketSideConversation.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="55.321" errors="0">
+<testcase name="Bigbasket SideConversation Test " classname="bigbasket-tests\11_BigbasketSideConversation.spec.js" time="55.321">
 <system-out>
 <![CDATA[Waiting for input field to appear...
 Input field is ready. Filling the ticket ID...
@@ -294,8 +242,8 @@ sendButton is clicked
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="bigbasket-tests\12_BigasketSendMessage.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="36.104" errors="0">
-<testcase name="Bigbasket Send Message" classname="bigbasket-tests\12_BigasketSendMessage.spec.js" time="36.104">
+<testsuite name="bigbasket-tests\12_BigasketSendMessage.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="54.14" errors="0">
+<testcase name="Bigbasket Send Message" classname="bigbasket-tests\12_BigasketSendMessage.spec.js" time="54.14">
 <system-out>
 <![CDATA[Waiting for input field to appear...
 Input field is ready. Filling the ticket ID...
@@ -312,24 +260,91 @@ pressed enter key
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="bigbasket-tests\13_BigbasketTAssignmentTicket.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="Bigbasket" tests="1" failures="0" skipped="0" time="16.129" errors="0">
-<testcase name="BigBasket Ticket assignment" classname="bigbasket-tests\13_BigbasketTAssignmentTicket.spec.js" time="16.129">
+<testsuite name="bigbasket-tests\13_BigbasketTAssignmentTicket.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="Bigbasket" tests="1" failures="1" skipped="0" time="65.077" errors="0">
+<testcase name="BigBasket Ticket assignment" classname="bigbasket-tests\13_BigbasketTAssignmentTicket.spec.js" time="65.077">
+<failure message="13_BigbasketTAssignmentTicket.spec.js:6:5 BigBasket Ticket assignment" type="FAILURE">
+<![CDATA[  [Bigbasket] › bigbasket-tests\13_BigbasketTAssignmentTicket.spec.js:6:5 › BigBasket Ticket assignment 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('//button[@title="Expanded View"]')
+        - locator resolved to <button tabindex="0" type="button" title="Expanded View" class="MuiButtonBase-root MuiButton-root MuiButton-text px-8 py-2 cursor-pointer ">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div aria-hidden="true" class="MuiBackdrop-root"></div> from <div role="presentation" class="MuiDialog-root jss532">…</div> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div aria-hidden="true" class="MuiBackdrop-root"></div> from <div role="presentation" class="MuiDialog-root jss532">…</div> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        100 × waiting for element to be visible, enabled and stable
+            - element is visible, enabled and stable
+            - scrolling into view if needed
+            - done scrolling
+            - <div aria-hidden="true" class="MuiBackdrop-root"></div> from <div role="presentation" class="MuiDialog-root jss532">…</div> subtree intercepts pointer events
+          - retrying click action
+            - waiting 500ms
+
+
+       at ..\Generic\ElemenetClass.js:34
+
+      32 |
+      33 |   async waitAndClick(selector) {
+    > 34 |     return await this.page.click(selector);
+         |                            ^
+      35 |   }
+      36 |
+      37 |   async waitAndHardClick(selector) {
+        at ElementClass.waitAndClick (C:\kapturePlaywriteProduction\playwright\Generic\ElemenetClass.js:34:28)
+        at TicketListPage.doExpendView (C:\kapturePlaywriteProduction\playwright\Pages\TicketListPage.js:84:29)
+        at C:\kapturePlaywriteProduction\playwright\tests\bigbasket-tests\13_BigbasketTAssignmentTicket.spec.js:10:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\bigbasket-tests-13_Bigbask-d03a8-BigBasket-Ticket-assignment-Bigbasket\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\bigbasket-tests-13_Bigbask-d03a8-BigBasket-Ticket-assignment-Bigbasket\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\bigbasket-tests-13_Bigbask-d03a8-BigBasket-Ticket-assignment-Bigbasket\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\bigbasket-tests-13_Bigbask-d03a8-BigBasket-Ticket-assignment-Bigbasket\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\bigbasket-tests-13_Bigbask-d03a8-BigBasket-Ticket-assignment-Bigbasket\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
 <system-out>
 <![CDATA[Waiting for input field to appear...
 Input field is ready. Filling the ticket ID...
 pressed enter key
-ExpendView method is executed
-Waiting for ticket checkbox...
-Clicking on ticket checkbox...
-Ticket checkbox clicked successfully.
-Dropdown Selector: locator('//div[@label="Select Queue"]')
-Option Selector: locator('//div[@title="Kapture QA User (Me)"]')
+
+[[ATTACHMENT|test-results\bigbasket-tests-13_Bigbask-d03a8-BigBasket-Ticket-assignment-Bigbasket\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\bigbasket-tests-13_Bigbask-d03a8-BigBasket-Ticket-assignment-Bigbasket\video.webm]]
+
+[[ATTACHMENT|test-results\bigbasket-tests-13_Bigbask-d03a8-BigBasket-Ticket-assignment-Bigbasket\error-context.md]]
+
+[[ATTACHMENT|test-results\bigbasket-tests-13_Bigbask-d03a8-BigBasket-Ticket-assignment-Bigbasket\trace.zip]]
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="meeshocx-tests\01_MeeshoCXTicketSearchByPhoneNumber.spec.js" timestamp="2025-06-23T06:22:48.713Z" hostname="MeeshoCX" tests="1" failures="1" skipped="0" time="68.33" errors="0">
-<testcase name="MeeshoCX MoreTickets Test" classname="meeshocx-tests\01_MeeshoCXTicketSearchByPhoneNumber.spec.js" time="68.33">
+<testsuite name="meeshocx-tests\01_MeeshoCXTicketSearchByPhoneNumber.spec.js" timestamp="2025-06-23T07:20:45.114Z" hostname="MeeshoCX" tests="1" failures="1" skipped="0" time="68.971" errors="0">
+<testcase name="MeeshoCX MoreTickets Test" classname="meeshocx-tests\01_MeeshoCXTicketSearchByPhoneNumber.spec.js" time="68.971">
 <failure message="01_MeeshoCXTicketSearchByPhoneNumber.spec.js:7:5 MeeshoCX MoreTickets Test" type="FAILURE">
 <![CDATA[  [MeeshoCX] › meeshocx-tests\01_MeeshoCXTicketSearchByPhoneNumber.spec.js:7:5 › MeeshoCX MoreTickets Test 
 
@@ -354,7 +369,7 @@ Option Selector: locator('//div[@title="Kapture QA User (Me)"]')
           - <div aria-hidden="true" class="MuiBackdrop-root-514"></div> from <div role="presentation" class="MuiDialog-root-212 p-24">…</div> subtree intercepts pointer events
         - retrying click action
           - waiting 100ms
-        59 × waiting for element to be visible, enabled and stable
+        57 × waiting for element to be visible, enabled and stable
            - element is visible, enabled and stable
            - scrolling into view if needed
            - done scrolling
@@ -445,7 +460,7 @@ Call log:
       _stepId: [32m'pw:api@11'[39m
     },
     complete: [36m[Function: complete][39m,
-    endWallTime: [33m1750660367728[39m,
+    endWallTime: [33m1750663555015[39m,
     error: {
       message: [32m'TimeoutError: locator.waitFor: Timeout 5000ms exceeded.\n'[39m +
         [32m'Call log:\n'[39m +
