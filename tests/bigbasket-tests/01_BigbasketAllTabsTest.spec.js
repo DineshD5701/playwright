@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import BaseClass from "../../Generic/BaseClass";
-import TicketListPage from "../../pages/TicketListPage";
-import TicketDetailspage from "../../pages/TicketDetailsPage";
+import TicketListPage from "../../Pages/TicketListPage";
+import TicketDetailspage from "../../Pages/TicketDetailsPage";
 const testdata = require("../../Generic/TestData.json");
 
 test("Bigbasket All Tabs Test", async ({ page }) => {
