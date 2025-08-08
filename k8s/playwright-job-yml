@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: playwright-test-{{SHARD_ID}}
+spec:
+  template:
+    spec:
+      containers:
+      - name: playwright
+        image: ${DOCKERHUB_USERNAME}/playwright-k8:latest
+        command: ["npx", "playwright", "test", "--shard={{SHARD_ID}}/{{TOTAL_SHARDS}}"]
+      restartPolicy: Never
+  backoffLimit: 0

@@ -6,7 +6,7 @@ options:
 pipelines:
   default:
     - step:
-        name: Build, Push & Deploy to Local Minikube via ngrok
+        name: Build, Push & Run Playwright Jobs on Minikube via ngrok
         services:
           - docker
         script:
@@ -18,7 +18,7 @@ pipelines:
           # Docker login
           - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
-          # Build & push your Docker image
+          # Build & push Docker image
           - DOCKER_BUILDKIT=0 docker build -t $DOCKERHUB_USERNAME/playwright-k8:latest .
           - docker push $DOCKERHUB_USERNAME/playwright-k8:latest
 
@@ -26,15 +26,23 @@ pipelines:
           - echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
           - export KUBECONFIG=$(pwd)/kubeconfig
 
-          # Confirm k8s folder contents
-          - ls -l k8s/
+          # Deploy 4 Playwright Jobs for parallel shards
+          - |
+            for i in 1 2 3 4; do
+              sed "s/{{SHARD_ID}}/$i/g; s/{{TOTAL_SHARDS}}/4/g" k8s/playwright-job.yaml | kubectl apply -f -
+            done
 
-          # Deploy using kubectl via ngrok tunnel
-          - kubectl apply -f k8s/deployment.yml --validate=false
+          # Wait for all jobs to complete (polling)
+          - |
+            echo "Waiting for Playwright jobs to complete..."
+            for i in 1 2 3 4; do
+              kubectl wait --for=condition=complete --timeout=600s job/playwright-test-$i
+            done
 
-          # Wait for rollout to finish
-          - kubectl rollout status deployment/playwright-app --timeout=180s
-
-          # Optional: Get service and pod info
-          - kubectl get svc
-          - kubectl get pods -o wide
+          # Optional: show job pod logs for debugging
+          - |
+            for i in 1 2 3 4; do
+              pod=$(kubectl get pods -l job-name=playwright-test-$i -o jsonpath='{.items[0].metadata.name}')
+              echo "Logs for pod $pod:"
+              kubectl logs $pod || true
+            done
