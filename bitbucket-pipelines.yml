@@ -6,7 +6,7 @@ options:
 pipelines:
   default:
     - step:
-        name: Build, Push & Deploy to Local Minikube
+        name: Build, Push & Deploy to Local Minikube via ngrok
         services:
           - docker
         script:
@@ -15,19 +15,23 @@ pipelines:
           - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-          # Docker Hub login
+          # Docker login
           - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
-          # Build & push playwright-k8 image
+          # Build & push your Docker image
           - docker build -t $DOCKERHUB_USERNAME/playwright-k8:latest .
           - docker push $DOCKERHUB_USERNAME/playwright-k8:latest
 
-          # Use kubeconfig from ngrok
+          # Setup kubeconfig from ngrok tunnel
           - echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
           - export KUBECONFIG=$(pwd)/kubeconfig
 
-          # Update image in deployment OR create it
-          - kubectl set image deployment/playwright-app playwright=$DOCKERHUB_USERNAME/playwright-k8:latest || kubectl apply -f deployment.yml
+          # Deploy using kubectl via ngrok tunnel
+          - kubectl apply -f deployment.yml
 
-          # Wait for rollout
-          - kubectl rollout status deployment/playwright-app
+          # Wait for rollout to finish
+          - kubectl rollout status deployment/playwright-app --timeout=180s
+
+          # Optional: Get service and pod info
+          - kubectl get svc
+          - kubectl get pods -o wide

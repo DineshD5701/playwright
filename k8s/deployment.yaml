@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: playwright
-        image: <IMAGE_PLACEHOLDER>
+        image: dinesh571/playwright-k8:latest
         ports:
         - containerPort: 80
 ---
