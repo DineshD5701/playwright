@@ -26,8 +26,11 @@ pipelines:
           - echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
           - export KUBECONFIG=$(pwd)/kubeconfig
 
+          # Confirm k8s folder contents
+          - ls -l k8s/
+
           # Deploy using kubectl via ngrok tunnel
-          - kubectl apply -f deployment.yml
+          - kubectl apply -f k8s/deployment.yml
 
           # Wait for rollout to finish
           - kubectl rollout status deployment/playwright-app --timeout=180s
