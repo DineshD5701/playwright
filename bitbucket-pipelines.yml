@@ -1,12 +1,17 @@
-image: atlassian/default-image:3
+image: docker:20.10.16
+
+options:
+  docker: true
 
 pipelines:
   default:
     - step:
         name: Build and Deploy to Minikube via Ngrok
+        services:
+          - docker
         script:
-          - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
           - IMAGE_NAME="$DOCKERHUB_USERNAME/playwright-k8:latest"
+          - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
           - docker build -t $IMAGE_NAME .
           - docker push $IMAGE_NAME
 
@@ -21,3 +26,8 @@ pipelines:
 
           # Deploy update
           - kubectl set image deployment/playwright-deployment playwright=$IMAGE_NAME
+
+definitions:
+  services:
+    docker:
+      memory: 2048
