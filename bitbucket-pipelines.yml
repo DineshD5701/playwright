@@ -19,7 +19,7 @@ pipelines:
           - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
           # Build & push your Docker image
-          - docker build -t $DOCKERHUB_USERNAME/playwright-k8:latest .
+          - DOCKER_BUILDKIT=0 docker build -t $DOCKERHUB_USERNAME/playwright-k8:latest .
           - docker push $DOCKERHUB_USERNAME/playwright-k8:latest
 
           # Setup kubeconfig from ngrok tunnel
