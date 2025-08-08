@@ -1,40 +1,23 @@
-image: docker:20.10.16
-
-options:
-  docker: true
+image: atlassian/default-image:3
 
 pipelines:
   default:
     - step:
-        name: Build, Push, Deploy to PWK
-        services:
-          - docker
+        name: Build and Deploy to Minikube via Ngrok
         script:
-          # 1️⃣ Variables
-          - IMAGE_NAME="dinesh571/playwright-k8:latest"
-
-          # 2️⃣ Docker Hub Login
           - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-
-          # 3️⃣ Build & Push Image
+          - IMAGE_NAME="$DOCKERHUB_USERNAME/playwright-k8:latest"
           - docker build -t $IMAGE_NAME .
           - docker push $IMAGE_NAME
 
-          # 4️⃣ Install kubectl
+          # Install kubectl
           - apk add --no-cache curl bash
           - curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-          - chmod +x ./kubectl
-          - mv ./kubectl /usr/local/bin/kubectl
+          - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
 
-          # 5️⃣ Configure kubeconfig from Bitbucket variable
+          # Setup kubeconfig
           - mkdir -p ~/.kube
           - echo "$KUBECONFIG_B64" | base64 -d > ~/.kube/config
 
-          # 6️⃣ Deploy new image to Kubernetes
+          # Deploy update
           - kubectl set image deployment/playwright-deployment playwright=$IMAGE_NAME
-          - kubectl rollout status deployment/playwright-deployment
-
-definitions:
-  services:
-    docker:
-      memory: 2048
