@@ -1,20 +1,36 @@
-image: docker:24.0.5
+image: atlassian/default-image:3
 
 pipelines:
   default:
     - step:
-        name: Build & Push Docker Image
+        name: Build and Push Docker Image
         services:
           - docker
         script:
+          # Set image name
           - IMAGE_NAME="dinesh571/playwright-k8:latest"
-          - docker build -t $IMAGE_NAME .
+
+          # Log in to Docker Hub (if public image, skip login)
+          # docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASSWORD"
+
+          # Build and push image using standard Docker
+          - docker build --tag $IMAGE_NAME .
           - docker push $IMAGE_NAME
 
     - step:
-        name: Deploy to PWK
+        name: Deploy to Kubernetes (PWK)
         image: bitnami/kubectl:latest
         script:
+          # Use kubeconfig from repo root
           - export KUBECONFIG=$(pwd)/kubeconfig
-          - IMAGE_NAME="dinesh571/playwright-k8:latest"
-          - sed "s|<IMAGE_PLACEHOLDER>|$IMAGE_NAME|g" k8s/deployment.yaml | kubectl apply -f -
+
+          # Set new image in manifest
+          - sed -i "s|<IMAGE_PLACEHOLDER>|dinesh571/playwright-k8:latest|g" k8s-deployment.yaml
+
+          # Apply to PWK
+          - kubectl apply -f k8s-deployment.yaml
+
+definitions:
+  services:
+    docker:
+      memory: 3072
