@@ -29,7 +29,7 @@ pipelines:
           # Deploy 4 Playwright Jobs for parallel shards
           - |
             for i in 1 2 3 4; do
-              sed "s/{{SHARD_ID}}/$i/g; s/{{TOTAL_SHARDS}}/4/g" k8s/playwright-job.yml | kubectl apply -f -
+             sed "s/{{SHARD_ID}}/$i/g; s/{{TOTAL_SHARDS}}/4/g" k8s/playwright-job.yml | kubectl --kubeconfig=$HOME/.kube/config --context=minikube apply -f -
             done
 
           # Wait for all jobs to complete (polling)
