@@ -1,4 +1,4 @@
-image: ubuntu:22.04
+image: docker:24.0.6
 
 options:
   docker: true
@@ -6,39 +6,28 @@ options:
 pipelines:
   default:
     - step:
-        name: Deploy Playwright to Minikube
+        name: Build, Push & Deploy to Local Minikube
         services:
           - docker
         script:
-          # --- Install kubectl ---
-          - apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg
-          - curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key
-          - echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | tee /etc/apt/sources.list.d/kubernetes.list
-          - apt-get update && apt-get install -y kubectl
+          # Install kubectl
+          - apk add --no-cache curl bash
+          - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-          # --- Docker login ---
+          # Docker Hub login
           - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
-          # --- Build & push Docker image ---
-          - docker build -t $DOCKERHUB_USERNAME/playwright-tests:latest .
-          - docker push $DOCKERHUB_USERNAME/playwright-tests:latest
+          # Build & push playwright-k8 image
+          - docker build -t $DOCKERHUB_USERNAME/playwright-k8:latest .
+          - docker push $DOCKERHUB_USERNAME/playwright-k8:latest
 
-          # --- Configure kubectl ---
+          # Use kubeconfig from ngrok
           - echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
           - export KUBECONFIG=$(pwd)/kubeconfig
 
-          # --- Deploy both Deployment & Service from single file ---
-          - kubectl apply -f deployment.yml
+          # Update image in deployment OR create it
+          - kubectl set image deployment/playwright-app playwright=$DOCKERHUB_USERNAME/playwright-k8:latest || kubectl apply -f deployment.yml
 
-          # --- Wait for deployment rollout ---
-          - kubectl rollout status deployment/playwright-app --timeout=180s
-
-          # --- Show debug info ---
-          - kubectl get svc
-          - kubectl get pods -o wide
-          - kubectl logs -l app=ngrok --tail=50 || echo "No ngrok logs yet"
-
-definitions:
-  services:
-    docker:
-      memory: 2048
+          # Wait for rollout
+          - kubectl rollout status deployment/playwright-app
