@@ -30,7 +30,7 @@ pipelines:
           - ls -l k8s/
 
           # Deploy using kubectl via ngrok tunnel
-          - kubectl apply -f k8s/deployment.yml
+          - kubectl apply -f k8s/deployment.yml --validate=false
 
           # Wait for rollout to finish
           - kubectl rollout status deployment/playwright-app --timeout=180s
