@@ -1,5 +1,5 @@
 # Use Node.js 14 as base
-FROM mcr.microsoft.com/playwright:focal
+FROM mcr.microsoft.com/playwright:v1.52.0-jammy 
 
 # Set working directory
 WORKDIR /app

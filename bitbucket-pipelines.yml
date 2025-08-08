@@ -1,0 +1,20 @@
+image: docker:24.0.5
+
+pipelines:
+  default:
+    - step:
+        name: Build & Push Docker Image
+        services:
+          - docker
+        script:
+          - IMAGE_NAME="dinesh571/playwright-k8:latest"
+          - docker build -t $IMAGE_NAME .
+          - docker push $IMAGE_NAME
+
+    - step:
+        name: Deploy to PWK
+        image: bitnami/kubectl:latest
+        script:
+          - export KUBECONFIG=$(pwd)/kubeconfig
+          - IMAGE_NAME="dinesh571/playwright-k8:latest"
+          - sed "s|<IMAGE_PLACEHOLDER>|$IMAGE_NAME|g" k8s/deployment.yaml | kubectl apply -f -
