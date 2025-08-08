@@ -1,53 +1,53 @@
-image: atlassian/default-image:4
+image: ubuntu:22.04
+
+options:
+  docker: true
 
 pipelines:
   default:
     - step:
-        name: Build & Deploy to Minikube
+        name: Deploy Playwright to Minikube
         services:
           - docker
         script:
-          # 1️⃣ Setup kubectl
+          # Install dependencies
+          - apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+
+          # Install Docker CLI
+          - curl -fsSL https://get.docker.com | sh
+
+          # Install kubectl
+          - curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key
+          - echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" \
+            | tee /etc/apt/sources.list.d/kubernetes.list
           - apt-get update && apt-get install -y kubectl
 
-          # 2️⃣ Restore kubeconfig from Bitbucket variable
-          - mkdir -p ~/.kube
-          - echo "$KUBECONFIG_B64" | base64 -d > ~/.kube/config
-
-          # 3️⃣ Docker login to push image
+          # Docker login
           - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
-          # 4️⃣ Build & push the Playwright image
-          - IMAGE_NAME=dinesh571/playwright-k8:latest
-          - docker build -t $IMAGE_NAME .
-          - docker push $IMAGE_NAME
+          # Build & push image
+          - docker build -t $DOCKERHUB_USERNAME/playwright-tests:latest .
+          - docker push $DOCKERHUB_USERNAME/playwright-tests:latest
 
-          # 5️⃣ Deploy to Minikube
-          - kubectl create deployment playwright-deployment --image=$IMAGE_NAME --dry-run=client -o yaml | kubectl apply -f -
-          - kubectl set image deployment/playwright-deployment playwright=$IMAGE_NAME
+          # Replace image placeholder
+          - sed -i "s|<IMAGE_PLACEHOLDER>|$DOCKERHUB_USERNAME/playwright-tests:latest|g" k8s/deployment.yml
 
-          # 6️⃣ Expose service
-          - kubectl expose deployment playwright-deployment --type=NodePort --port=80 --name=playwright-service --dry-run=client -o yaml | kubectl apply -f -
+          # Set up kubeconfig
+          - echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
+          - export KUBECONFIG=$(pwd)/kubeconfig
 
-          # 7️⃣ Start ngrok to expose service
-          - curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
-          - echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | tee /etc/apt/sources.list.d/ngrok.list
-          - apt-get update && apt-get install -y ngrok
+          # Deploy
+          - kubectl apply -f k8s/deployment.yml
 
-          # Authenticate ngrok
-          - ngrok config add-authtoken $NGROK_AUTH_TOKEN
+          # Wait for pods
+          - kubectl rollout status deployment/playwright-app --timeout=120s
 
-          # Get NodePort for the service
-          - NODE_PORT=$(kubectl get service playwright-service -o=jsonpath='{.spec.ports[0].nodePort}')
-
-          # Start ngrok in background
-          - ngrok http --log=stdout $NODE_PORT > ngrok.log &
-          - sleep 5
-
-          # Print public URL
-          - curl --silent http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url'
+          # Debug info
+          - kubectl get svc
+          - kubectl get pods -o wide
+          - kubectl logs -l app=ngrok --tail=50 || echo "ngrok logs not found"
 
 definitions:
   services:
     docker:
-      memory: 2048
+      memory: 4096
