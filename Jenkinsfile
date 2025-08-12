@@ -7,11 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'kubernetes', url: 'https://bitbucket.org/adjetter/playwright/src/kubernetes/'
-            }
-        }
 
         stage('Build Docker Image') {
             steps {
