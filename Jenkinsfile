@@ -27,24 +27,27 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes Job') {
-            steps {
+        steps {
+            withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
                 sh '''
-                kubectl --kubeconfig=$KUBECONFIG_PATH delete job my-job --ignore-not-found
-                cat <<EOF | kubectl --kubeconfig=$KUBECONFIG_PATH apply -f -
+                kubectl --kubeconfig=$KUBECONFIG_FILE delete job my-job --ignore-not-found
+                cat <<EOF | kubectl --kubeconfig=$KUBECONFIG_FILE apply -f -
                 apiVersion: batch/v1
                 kind: Job
                 metadata:
-                  name: my-job
+                name: my-job
                 spec:
-                  template:
+                template:
                     spec:
-                      containers:
-                      - name: my-container
+                    containers:
+                    - name: my-container
                         image: $DOCKER_IMAGE:$IMAGE_TAG
-                      restartPolicy: Never
+                    restartPolicy: Never
                 EOF
                 '''
+                }
             }
         }
     }
+
 }
