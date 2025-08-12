@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "dinesh571/playwright-k8:latest"
+        DOCKER_IMAGE = "dinesh571/playwright-k8"
+        IMAGE_TAG = "latest-${BUILD_NUMBER}"
         KUBECONFIG_PATH = "/var/jenkins_home/.kube/config"
     }
 
@@ -10,7 +11,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE'
+                sh 'docker build -t $DOCKER_IMAGE:$IMAGE_TAG .'
             }
         }
 
@@ -19,7 +20,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    docker push $DOCKER_IMAGE
+                    docker push $DOCKER_IMAGE:$IMAGE_TAG
                     '''
                 }
             }
@@ -39,7 +40,7 @@ pipeline {
                     spec:
                       containers:
                       - name: my-container
-                        image: $DOCKER_IMAGE
+                        image: $DOCKER_IMAGE:$IMAGE_TAG
                       restartPolicy: Never
                 EOF
                 '''
