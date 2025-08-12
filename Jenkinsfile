@@ -29,7 +29,7 @@ pipeline {
         stage('Deploy to Kubernetes Job') {
         steps {
             withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
-                sh """
+                sh '''
                     kubectl --kubeconfig=$KUBECONFIG_FILE delete job my-job --ignore-not-found
                     cat <<'EOF' | kubectl --kubeconfig=$KUBECONFIG_FILE apply -f -
                     apiVersion: batch/v1
@@ -44,7 +44,7 @@ pipeline {
                             image: ${DOCKER_IMAGE}:${IMAGE_TAG}
                         restartPolicy: Never
                     EOF
-                """
+                '''
             }
         }
     }
