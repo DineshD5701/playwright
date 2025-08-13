@@ -31,8 +31,6 @@ pipeline {
         withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
             sh '''#!/bin/bash
                 set -e
-                export KUBECONFIG=/var/jenkins_home/.kube/config && kubectl get nodes
-
                 kubectl --kubeconfig="$KUBECONFIG_FILE" delete job my-job --ignore-not-found
 
                 kubectl --kubeconfig="$KUBECONFIG_FILE" apply -f - <<EOF
