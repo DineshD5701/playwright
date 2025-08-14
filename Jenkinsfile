@@ -30,7 +30,7 @@ pipeline {
                 steps {
                     sh '''
                         echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
-                        export KUBECONFIG=$(pwd)/kubeconfig
+                        export KUBECONFIG=\$(pwd)/kubeconfig
                         kubectl get nodes
                     '''
                 }
