@@ -48,15 +48,15 @@ pipeline {
       }
     }
     stage('Generate Allure Report') {
-      steps {
-        sh '''
-          export KUBECONFIG=$(pwd)/kubeconfig
-          POD_NAME=$(kubectl get pod -l job-name=playwright-test-1 -o jsonpath="{.items[0].metadata.name}")
-          kubectl cp $POD_NAME:/app/allure-results allure-results
-          allure generate allure-results --clean -o allure-report
-        '''
-        archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: false
+        steps {
+            sh '''
+            export KUBECONFIG=$(pwd)/kubeconfig
+            POD_NAME=$(kubectl get pod -l job-name=playwright-test-1 -o jsonpath="{.items[0].metadata.name}")
+            kubectl cp $POD_NAME:/app/allure-results allure-results
+            allure generate allure-results --clean -o allure-report
+            '''
+            archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: false
+        }
       }
-    }
   }
 }
