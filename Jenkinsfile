@@ -25,15 +25,13 @@ pipeline {
             }
         }
 
-        stages {
-            stage('Set Kubeconfig') {
-                steps {
-                    sh '''
-                        echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
-                        export KUBECONFIG=\$(pwd)/kubeconfig
-                        kubectl get nodes
-                    '''
-                }
+        stage('Set Kubeconfig') {
+            steps {
+                sh '''
+                    echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
+                    export KUBECONFIG=$(pwd)/kubeconfig
+                    kubectl get nodes
+                '''
             }
         }
 
@@ -50,7 +48,7 @@ pipeline {
                     // Start new jobs
                     sh '''
                         for i in $(seq 1 ${TOTAL_SHARDS}); do
-                            sed "s/{{SHARD_ID}}/\$i/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|\$DOCKERHUB_USERNAME|${DOCKER_IMAGE}|g" \
+                            sed "s/{{SHARD_ID}}/\$i/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
                             k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
                         done
                     '''
