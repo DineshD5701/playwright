@@ -40,11 +40,7 @@ pipeline {
                         # Replace with your actual job/deployment manifests
                         for i in 1 2 3 4; do
                             kubectl delete job playwright-test-$i --ignore-not-found
-                            sed "s/{{SHARD_ID}}/$i/g; \
-                            s/{{TOTAL_SHARDS}}/4/g; \
-                            s|\${DOCKER_IMAGE}|$DOCKER_IMAGE|g" k8s/playwright-job.yml | \
-                        kubectl apply -f -
-
+                            sed "s/{{SHARD_ID}}/$i/g; s/{{TOTAL_SHARDS}}/4/g" k8s/playwright-job.yml | kubectl apply -f -
                         done
 
                     '''
