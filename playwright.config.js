@@ -43,6 +43,7 @@ export default defineConfig({
   reporter: [
     ['html'],
     ['junit', { outputFile: 'results.xml' }],
+    ['line'],
     ['allure-playwright'],
   ],
 

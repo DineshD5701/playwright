@@ -19,6 +19,8 @@
     "@playwright/test": "^1.52.0",
     "@types/node": "^22.10.1",
     "allure-playwright": "^3.2.2",
+    "allure-playwright": "^2.0.0-beta.15",
+    "allure-commandline": "^2.29.0",
     "eslint": "^8.52.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
