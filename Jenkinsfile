@@ -2,141 +2,84 @@ pipeline {
     agent any
 
     environment {
-        // Store kubeconfig content as a Jenkins secret
+        NAMESPACE = "default"
+        TOTAL_SHARDS = 4
         KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
         DOCKER_IMAGE = "dinesh571/playwright:latest"
-        TOTAL_SHARDS = "4"
-        PVC_NAME = "allure-results-pvc"
-        PVC_MOUNT_PATH = "/app/allure-results"
+        PVC_NAME = "allure-pvc"  // Your PVC name
     }
 
     stages {
-        stage('Setup Kubeconfig') {
+
+        stage('Build & Push Docker Image') {
             steps {
                 script {
-                    sh '''
-                        echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
-                        export KUBECONFIG=$(pwd)/kubeconfig
-                        kubectl config get-contexts
-                        kubectl cluster-info
-                    '''
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh '''
+                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                            docker build -t $DOCKER_IMAGE .
+                            docker push $DOCKER_IMAGE
+                        '''
+                    }
                 }
             }
         }
 
-        stage('Deploy Allure PVC') {
+        stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
-                    sh '''
-                        export KUBECONFIG=$(pwd)/kubeconfig
-                        kubectl apply -f k8s/allure-pvc.yml
-                    '''
-                }
-            }
-        }
-
-        stage('Deploy Playwright Jobs') {
-            steps {
-                script {
-                    sh '''
-                        export KUBECONFIG=$(pwd)/kubeconfig
-                        for i in $(seq 1 $TOTAL_SHARDS); do
-                        kubectl delete job playwright-test-$i --ignore-not-found
-                        sed "s/{{SHARD_ID}}/$i/g; \
-                            s/{{TOTAL_SHARDS}}/$TOTAL_SHARDS/g; \
-                            s|{{DOCKER_IMAGE}}|$DOCKER_IMAGE|g; \
-                            s|{{PVC_NAME}}|$PVC_NAME|g; \
-                            s|{{PVC_MOUNT_PATH}}|$PVC_MOUNT_PATH|g" \
-                        k8s/playwright-job.yml \
-                        | kubectl apply -f -
+                    // Clean up any old jobs
+                    sh """
+                        for i in $(seq 1 ${TOTAL_SHARDS}); do
+                            kubectl delete job playwright-test-\$i --namespace=${NAMESPACE} --ignore-not-found
                         done
+                    """
 
-                    '''
-                }
-            }
-        }
+                    // Start new jobs
+                    sh """
+                        for i in $(seq 1 ${TOTAL_SHARDS}); do
+                            sed "s/{{SHARD_ID}}/\$i/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|\$DOCKERHUB_USERNAME|${DOCKER_IMAGE}|g" \
+                            k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
+                        done
+                    """
 
-        stage('Wait for Jobs to Complete') {
-            steps {
-                script {
-                    sh '''
-                        export KUBECONFIG=$(pwd)/kubeconfig
+                    // Wait for jobs to complete
+                    sh """
                         echo "Waiting for Playwright jobs to finish..."
-                        kubectl wait --for=condition=complete job --all --timeout=300s || true
-                    '''
+                        kubectl wait --for=condition=complete job/playwright-test-1 --namespace=${NAMESPACE} --timeout=900s
+                    """
                 }
             }
         }
 
-        stage('Fetch Allure Results from PVC') {
+        stage('Copy Allure Results from K8s') {
             steps {
                 script {
-                    sh '''
-                        export KUBECONFIG=$(pwd)/kubeconfig
+                    sh """
                         mkdir -p allure-results
-
-                        # Create a temporary pod to copy PVC contents
-                        kubectl run allure-fetch --restart=Never --image=alpine:3.18 -i --overrides="$(cat <<EOF
-{
-  "apiVersion": "v1",
-  "spec": {
-    "containers": [
-      {
-        "name": "fetch",
-        "image": "alpine:3.18",
-        "command": ["sleep", "300"],
-        "volumeMounts": [
-          {
-            "name": "allure-results",
-            "mountPath": "$PVC_MOUNT_PATH"
-          }
-        ]
-      }
-    ],
-    "volumes": [
-      {
-        "name": "allure-results",
-        "persistentVolumeClaim": {
-          "claimName": "$PVC_NAME"
-        }
-      }
-    ]
-  }
-}
-EOF
-)" >/dev/null 2>&1
-
-                        # Wait for pod to be running
-                        kubectl wait --for=condition=Ready pod/allure-fetch --timeout=60s
-
-                        # Copy results
-                        kubectl cp allure-fetch:$PVC_MOUNT_PATH ./allure-results
-
-                        # Cleanup temp pod
-                        kubectl delete pod allure-fetch
-                    '''
+                        POD_NAME=\$(kubectl get pods --namespace=${NAMESPACE} -l job-name=playwright-test-1 -o jsonpath='{.items[0].metadata.name}')
+                        kubectl cp ${NAMESPACE}/\$POD_NAME:/app/allure-results allure-results
+                    """
                 }
             }
         }
 
         stage('Generate Allure Report') {
             steps {
-                script {
-                    sh '''
-                        npx allure generate allure-results --clean -o allure-report
-                        # You can archive it instead of opening for CI/CD use
-                        tar -czf allure-report.tar.gz allure-report
-                        echo "Allure report generated and archived"
-                    '''
-                }
+                sh """
+                    allure generate allure-results --clean -o allure-report
+                """
             }
         }
-    }
 
-    post {
-        always {
-            sh 'rm -f kubeconfig'
-            archiveArtifacts artifacts: 'allure-report.tar.gz', fingerprint: true
+        stage('Publish Allure Report in Jenkins') {
+            steps {
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'allure-results']]
+                ])
+            }
         }
     }
 }
