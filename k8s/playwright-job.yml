@@ -8,7 +8,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: playwright
-        image: $DOCKER_IMAGE
+        image: {{DOCKER_IMAGE}}
         command: ["npx", "playwright", "test", "--shard", "{{SHARD_ID}}/{{TOTAL_SHARDS}}", "--reporter", "allure-playwright"]
         volumeMounts:
         - name: allure-results
