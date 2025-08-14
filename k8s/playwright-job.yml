@@ -12,7 +12,7 @@ spec:
         command: ["npx","playwright","test","--shard","{{SHARD_ID}}/{{TOTAL_SHARDS}}","--reporter","allure-playwright"]
         volumeMounts:
         - name: allure-results
-          mountPath: /allure-results
+          mountPath: /app/allure-results
       volumes:
       - name: allure-results
         persistentVolumeClaim:
