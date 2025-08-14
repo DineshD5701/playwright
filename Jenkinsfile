@@ -29,11 +29,14 @@ pipeline {
             steps {
                 sh '''
                     echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
-                    export KUBECONFIG=$(pwd)/kubeconfig
-                    kubectl get nodes
                 '''
+                script {
+                    env.KUBECONFIG = "${pwd()}/kubeconfig"
+                }
+                sh 'kubectl get nodes'
             }
         }
+
 
         stage('Run Playwright Jobs in K8s') {
             steps {
