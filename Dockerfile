@@ -18,4 +18,4 @@ ENV SHARD_ID=1
 ENV TOTAL_SHARDS=1
 
 # Run Playwright tests with Allure reporting
-ENTRYPOINT ["sh", "-c", "npx playwright test --shard=${SHARD_ID}/${TOTAL_SHARDS} --reporter=line,allure-playwright"]
+ENTRYPOINT ["sh","-c","npx playwright test --shard=${SHARD_ID}/${TOTAL_SHARDS} --reporter=line,allure-playwright"]

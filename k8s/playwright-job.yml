@@ -9,10 +9,12 @@ spec:
       containers:
       - name: playwright
         image: {{DOCKER_IMAGE}}
-        command: ["npx", "playwright", "test", "--shard", "{{SHARD_ID}}/{{TOTAL_SHARDS}}", "--reporter", "allure-playwright"]
+        command: ["npx","playwright","test","--shard","{{SHARD_ID}}/{{TOTAL_SHARDS}}","--reporter","allure-playwright"]
         volumeMounts:
         - name: allure-results
           mountPath: /allure-results
       volumes:
       - name: allure-results
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: allure-pvc
+
