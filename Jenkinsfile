@@ -29,25 +29,25 @@ pipeline {
             steps {
                 script {
                     // Clean up any old jobs
-                    sh """
+                    sh '''
                         for i in $(seq 1 ${TOTAL_SHARDS}); do
                             kubectl delete job playwright-test-\$i --namespace=${NAMESPACE} --ignore-not-found
                         done
-                    """
+                    '''
 
                     // Start new jobs
-                    sh """
+                    sh '''
                         for i in $(seq 1 ${TOTAL_SHARDS}); do
                             sed "s/{{SHARD_ID}}/\$i/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|\$DOCKERHUB_USERNAME|${DOCKER_IMAGE}|g" \
                             k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
                         done
-                    """
+                    '''
 
                     // Wait for jobs to complete
-                    sh """
+                    sh '''
                         echo "Waiting for Playwright jobs to finish..."
                         kubectl wait --for=condition=complete job/playwright-test-1 --namespace=${NAMESPACE} --timeout=900s
-                    """
+                    '''
                 }
             }
         }
