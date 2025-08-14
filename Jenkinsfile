@@ -41,6 +41,12 @@ pipeline {
             steps {
                 script {
                     for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
+                        sh '''
+                        for i in $(seq 1 ${TOTAL_SHARDS}); do
+                            kubectl delete job playwright-test-\$i --namespace=${NAMESPACE} --ignore-not-found
+                        done
+                    '''
+                    
                         sh """
                         sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
                         k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
