@@ -6,81 +6,57 @@ pipeline {
         TOTAL_SHARDS = 4
         KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
         DOCKER_IMAGE = "dinesh571/playwright:latest"
-        PVC_NAME = "allure-pvc"  // Your PVC name
+        PVC_NAME = "allure-pvc"
     }
 
     stages {
-
-        stage('Build & Push Docker Image') {
+        stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                        sh '''
-                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-                            docker build -t $DOCKER_IMAGE .
-                            docker push $DOCKER_IMAGE
-                        '''
+                    for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
+                        sh """
+                        sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
+                        k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
+                        """
                     }
                 }
             }
         }
 
-        stage('Set Kubeconfig') {
+        stage('Wait for Jobs to Complete') {
             steps {
-                sh '''
-                    echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
-                '''
-                script {
-                    env.KUBECONFIG = "${pwd()}/kubeconfig"
-                }
-                sh 'kubectl get nodes'
+                sh """
+                    echo "Waiting for Playwright jobs to finish..."
+                    kubectl wait --for=condition=complete --timeout=900s job --all --namespace=${NAMESPACE}
+                """
             }
         }
 
-
-        stage('Run Playwright Jobs in K8s') {
+        stage('Collect Allure Results from All Shards') {
             steps {
-                script {
-                    // Clean up any old jobs
-                    sh '''
-                        for i in $(seq 1 ${TOTAL_SHARDS}); do
-                            kubectl delete job playwright-test-\$i --namespace=${NAMESPACE} --ignore-not-found
-                        done
-                    '''
-
-                    // Start new jobs
-                    sh '''
-                        for i in $(seq 1 ${TOTAL_SHARDS}); do
-                            sed "s/{{SHARD_ID}}/\$i/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
-                            k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
-                        done
-                    '''
-
-                    // Wait for jobs to complete
-                    sh '''
-                        echo "Waiting for Playwright jobs to finish..."
-                        kubectl wait --for=condition=complete job/playwright-test-1 --namespace=${NAMESPACE} --timeout=900s
-                    '''
-                }
+                sh """
+                    mkdir -p allure-results
+                    for i in \$(seq 1 ${TOTAL_SHARDS}); do
+                        POD_NAME=\$(kubectl get pods --namespace=${NAMESPACE} -l job-name=playwright-test-\$i -o jsonpath='{.items[0].metadata.name}')
+                        kubectl cp ${NAMESPACE}/\$POD_NAME:/app/allure-results ./allure-results/shard-\$i
+                    done
+                """
             }
         }
 
-        stage('Copy Allure Results from K8s') {
+        stage('Merge Allure Results') {
             steps {
-                script {
-                    sh """
-                        mkdir -p allure-results
-                        POD_NAME=\$(kubectl get pods --namespace=${NAMESPACE} -l job-name=playwright-test-1 -o jsonpath='{.items[0].metadata.name}')
-                        kubectl cp ${NAMESPACE}/\$POD_NAME:/app/allure-results allure-results
-                    """
-                }
+                sh """
+                    mkdir -p allure-merged
+                    find allure-results -type d -name '*' -exec cp -r {}/* allure-merged/ \\;
+                """
             }
         }
 
         stage('Generate Allure Report') {
             steps {
                 sh """
-                    allure generate allure-results --clean -o allure-report
+                    allure generate allure-merged --clean -o allure-report
                 """
             }
         }
@@ -90,7 +66,7 @@ pipeline {
                 allure([
                     includeProperties: false,
                     jdk: '',
-                    results: [[path: 'allure-results']]
+                    results: [[path: 'allure-merged']]
                 ])
             }
         }
