@@ -2,9 +2,12 @@ pipeline {
     agent any
 
     environment {
-        // This secret should be stored in Jenkins as a "Secret Text" or "Secret File"
+        // Store kubeconfig content as a Jenkins secret
         KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
         DOCKER_IMAGE = "dinesh571/playwright:latest"
+        TOTAL_SHARDS = "4"
+        PVC_NAME = "allure-results-pvc"
+        PVC_MOUNT_PATH = "/app/allure-results"
     }
 
     stages {
@@ -32,33 +35,83 @@ pipeline {
             }
         }
 
-        stage('Deploy Playwright Grid') {
+        stage('Deploy Playwright Jobs') {
             steps {
                 script {
                     sh '''
                         export KUBECONFIG=$(pwd)/kubeconfig
-                        # Replace with your actual job/deployment manifests
-                        for i in 1 2 3 4; do
-                        sed "s/{{SHARD_ID}}/$i/g; s/{{TOTAL_SHARDS}}/4/g; s|{{DOCKER_IMAGE}}|dinesh571/playwright:latest|g" k8s/playwright-job.yml \
-                        | kubectl apply --kubeconfig=$(pwd)/kubeconfig -f -
+                        for i in $(seq 1 $TOTAL_SHARDS); do
+                          sed "s/{{SHARD_ID}}/$i/g; \
+                               s/{{TOTAL_SHARDS}}/$TOTAL_SHARDS/g; \
+                               s|{{DOCKER_IMAGE}}|$DOCKER_IMAGE|g; \
+                               s|{{PVC_NAME}}|$PVC_NAME|g; \
+                               s|{{PVC_MOUNT_PATH}}|$PVC_MOUNT_PATH|g" \
+                          k8s/playwright-job.yml \
+                          | kubectl apply -f -
                         done
-
-
                     '''
                 }
             }
         }
 
-        stage('Wait & Fetch Allure Results') {
+        stage('Wait for Jobs to Complete') {
             steps {
                 script {
                     sh '''
                         export KUBECONFIG=$(pwd)/kubeconfig
-                        echo "Waiting for tests to complete..."
-                        kubectl wait --for=condition=complete job --all --timeout=600s || true
+                        echo "Waiting for Playwright jobs to finish..."
+                        kubectl wait --for=condition=complete job --all --timeout=1200s || true
+                    '''
+                }
+            }
+        }
 
+        stage('Fetch Allure Results from PVC') {
+            steps {
+                script {
+                    sh '''
+                        export KUBECONFIG=$(pwd)/kubeconfig
                         mkdir -p allure-results
-                        kubectl cp $(kubectl get pods --selector=job-name=playwright-test-1 -o jsonpath='{.items[0].metadata.name}'):/app/allure-results ./allure-results
+
+                        # Create a temporary pod to copy PVC contents
+                        kubectl run allure-fetch --restart=Never --image=alpine:3.18 -i --overrides="$(cat <<EOF
+{
+  "apiVersion": "v1",
+  "spec": {
+    "containers": [
+      {
+        "name": "fetch",
+        "image": "alpine:3.18",
+        "command": ["sleep", "300"],
+        "volumeMounts": [
+          {
+            "name": "allure-results",
+            "mountPath": "$PVC_MOUNT_PATH"
+          }
+        ]
+      }
+    ],
+    "volumes": [
+      {
+        "name": "allure-results",
+        "persistentVolumeClaim": {
+          "claimName": "$PVC_NAME"
+        }
+      }
+    ]
+  }
+}
+EOF
+)" >/dev/null 2>&1
+
+                        # Wait for pod to be running
+                        kubectl wait --for=condition=Ready pod/allure-fetch --timeout=60s
+
+                        # Copy results
+                        kubectl cp allure-fetch:$PVC_MOUNT_PATH ./allure-results
+
+                        # Cleanup temp pod
+                        kubectl delete pod allure-fetch
                     '''
                 }
             }
@@ -69,7 +122,9 @@ pipeline {
                 script {
                     sh '''
                         npx allure generate allure-results --clean -o allure-report
-                        npx allure open allure-report
+                        # You can archive it instead of opening for CI/CD use
+                        tar -czf allure-report.tar.gz allure-report
+                        echo "Allure report generated and archived"
                     '''
                 }
             }
@@ -79,6 +134,7 @@ pipeline {
     post {
         always {
             sh 'rm -f kubeconfig'
+            archiveArtifacts artifacts: 'allure-report.tar.gz', fingerprint: true
         }
     }
 }
