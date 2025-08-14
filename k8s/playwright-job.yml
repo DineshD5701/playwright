@@ -8,16 +8,11 @@ spec:
       restartPolicy: Never
       containers:
       - name: playwright
-        image: dinesh571/playwright-tests:latest
-        env:
-          - name: SHARD_ID
-            value: "{{SHARD_ID}}"
-          - name: TOTAL_SHARDS
-            value: "{{TOTAL_SHARDS}}"
+        image: $DOCKER_IMAGE
+        command: ["npx", "playwright", "test", "--shard", "{{SHARD_ID}}/{{TOTAL_SHARDS}}", "--reporter", "allure-playwright"]
         volumeMounts:
-          - name: allure-results
-            mountPath: /app/allure-results
-      volumes:
         - name: allure-results
-          persistentVolumeClaim:
-            claimName: allure-pvc
+          mountPath: /allure-results
+      volumes:
+      - name: allure-results
+        emptyDir: {}

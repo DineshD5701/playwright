@@ -1,20 +1,21 @@
 FROM mcr.microsoft.com/playwright:v1.47.0-jammy
 
-# Install Allure CLI globally
-RUN npm install -g allure-commandline --save-dev
+# Install only Allure CLI
+RUN npm install -g allure-commandline@2.29.0 --no-audit --no-fund
 
-# Copy package files and install deps
+# Set working directory
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-RUN npx playwright install --with-deps
 
-# Copy all test files
+# Install only project dependencies
+COPY package*.json ./
+RUN npm ci --only=prod --no-audit --no-fund
+
+# Copy test files
 COPY . .
 
-# Set environment variables for shards (default 1/1 if not set)
+# Environment vars for sharding
 ENV SHARD_ID=1
 ENV TOTAL_SHARDS=1
 
-# Entrypoint will run the shard
+# Run Playwright tests with Allure reporting
 ENTRYPOINT ["sh", "-c", "npx playwright test --shard=${SHARD_ID}/${TOTAL_SHARDS} --reporter=line,allure-playwright"]

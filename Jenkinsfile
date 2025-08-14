@@ -1,69 +1,81 @@
 pipeline {
-  agent any
-  environment {
-    DOCKER_IMAGE = "dinesh571/playwright-tests:latest"
-    TOTAL_SHARDS = "4"
-  }
-  stages {
+    agent any
 
-    stage('Setup Kubeconfig') {
-    steps {
-        withCredentials([string(credentialsId: 'KUBECONFIG_CONTENT', variable: 'KUBECONFIG_CONTENT')]) {
-            sh '''
-                echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
-                export KUBECONFIG=$(pwd)/kubeconfig
-                kubectl cluster-info
-            '''
+    environment {
+        // This secret should be stored in Jenkins as a "Secret Text" or "Secret File"
+        KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
+        DOCKER_IMAGE = "dinesh571/playwright:latest"
+    }
+
+    stages {
+        stage('Setup Kubeconfig') {
+            steps {
+                script {
+                    sh '''
+                        echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
+                        export KUBECONFIG=$(pwd)/kubeconfig
+                        kubectl config get-contexts
+                        kubectl cluster-info
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy Allure PVC') {
+            steps {
+                script {
+                    sh '''
+                        export KUBECONFIG=$(pwd)/kubeconfig
+                        kubectl apply -f k8s/allure-pvc.yml
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy Playwright Grid') {
+            steps {
+                script {
+                    sh '''
+                        export KUBECONFIG=$(pwd)/kubeconfig
+                        # Replace with your actual job/deployment manifests
+                        for i in 1 2 3 4; do
+                            sed "s/{{SHARD_ID}}/$i/g; s/{{TOTAL_SHARDS}}/4/g" k8s/playwright-job.yml | kubectl apply -f -
+                        done
+                    '''
+                }
+            }
+        }
+
+        stage('Wait & Fetch Allure Results') {
+            steps {
+                script {
+                    sh '''
+                        export KUBECONFIG=$(pwd)/kubeconfig
+                        echo "Waiting for tests to complete..."
+                        kubectl wait --for=condition=complete job --all --timeout=600s || true
+
+                        mkdir -p allure-results
+                        kubectl cp $(kubectl get pods --selector=job-name=playwright-test-1 -o jsonpath='{.items[0].metadata.name}'):/app/allure-results ./allure-results
+                    '''
+                }
+            }
+        }
+
+        stage('Generate Allure Report') {
+            steps {
+                script {
+                    sh '''
+                        npx allure generate allure-results --clean -o allure-report
+                        npx allure open allure-report
+                    '''
+                }
+            }
         }
     }
-}
 
-
-    stage('Build & Push Docker Image') {
-      steps {
-        sh '''
-          docker build -t $DOCKER_IMAGE .
-          docker push $DOCKER_IMAGE
-        '''
-      }
-    }
-
-    stage('Run Playwright Shard') {
-        steps {
-            sh '''
-                export KUBECONFIG=$(pwd)/kubeconfig
-                SHARD_ID=1
-                TOTAL_SHARDS=4
-
-                # Delete existing job if present
-                kubectl delete job playwright-test-${SHARD_ID} --ignore-not-found
-
-                # Apply new job
-                sed "s/{{SHARD_ID}}/${SHARD_ID}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g" k8s/playwright-job.yml | kubectl apply -f -
-            '''
+    post {
+        always {
+            sh 'rm -f kubeconfig'
         }
     }
-
-
-    stage('Wait for Jobs to Finish') {
-      steps {
-        sh '''
-          export KUBECONFIG=$(pwd)/kubeconfig
-          kubectl wait --for=condition=complete job --all --timeout=900s
-        '''
-      }
-    }
-
-    stage('Generate Allure Report') {
-      steps {
-        sh '''
-          export KUBECONFIG=$(pwd)/kubeconfig
-          POD_NAME=$(kubectl get pod -l job-name=playwright-test-1 -o jsonpath="{.items[0].metadata.name}")
-          kubectl cp $POD_NAME:/app/allure-results allure-results
-          allure generate allure-results --clean -o allure-report
-        '''
-        archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: false
-      }
-    }
-  }
 }
