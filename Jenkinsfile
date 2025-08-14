@@ -65,31 +65,26 @@ pipeline {
             }
         }
 
-        stage('Collect Allure Results from All Shards') {
+        stage('Copy Allure Results from K8s') {
             steps {
-                sh """
-                    mkdir -p allure-results
-                    for i in \$(seq 1 ${TOTAL_SHARDS}); do
-                        POD_NAME=\$(kubectl get pods --namespace=${NAMESPACE} -l job-name=playwright-test-\$i -o jsonpath='{.items[0].metadata.name}')
-                        kubectl cp ${NAMESPACE}/\$POD_NAME:/app/allure-results ./allure-results/shard-\$i
-                    done
-                """
-            }
-        }
-
-        stage('Merge Allure Results') {
-            steps {
-                sh """
-                    mkdir -p allure-merged
-                    find allure-results -type d -name '*' -exec cp -r {}/* allure-merged/ \\;
-                """
+                script {
+                    sh """
+                        mkdir -p allure-results/merged
+                        for i in \$(seq 1 ${TOTAL_SHARDS}); do
+                            POD_NAME=\$(kubectl get pods --namespace=${NAMESPACE} -l job-name=playwright-test-\$i -o jsonpath='{.items[0].metadata.name}')
+                            mkdir -p allure-results/shard-\$i
+                            kubectl cp ${NAMESPACE}/\$POD_NAME:/app/allure-results allure-results/shard-\$i
+                            cp -r allure-results/shard-\$i/* allure-results/merged/
+                        done
+                    """
+                }
             }
         }
 
         stage('Generate Allure Report') {
             steps {
                 sh """
-                    allure generate allure-merged --clean -o allure-report
+                    allure generate allure-results/merged --clean -o allure-report
                 """
             }
         }
@@ -99,10 +94,11 @@ pipeline {
                 allure([
                     includeProperties: false,
                     jdk: '',
-                    results: [[path: 'allure-merged']]
+                    results: [[path: 'allure-results/merged']]
                 ])
             }
         }
+
     }
 }
 
