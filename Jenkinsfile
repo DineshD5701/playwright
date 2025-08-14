@@ -6,10 +6,38 @@ pipeline {
         TOTAL_SHARDS = 4
         KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
         DOCKER_IMAGE = "dinesh571/playwright:latest"
-        PVC_NAME = "allure-pvc"
+        PVC_NAME = "allure-pvc"  // Your PVC name
     }
 
     stages {
+
+        stage('Build & Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh '''
+                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                            docker build -t $DOCKER_IMAGE .
+                            docker push $DOCKER_IMAGE
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Set Kubeconfig') {
+            steps {
+                sh '''
+                    echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
+                '''
+                script {
+                    env.KUBECONFIG = "${pwd()}/kubeconfig"
+                }
+                sh 'kubectl get nodes'
+            }
+        }
+
+            stages {
         stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
