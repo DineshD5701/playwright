@@ -28,25 +28,22 @@ pipeline {
       }
     }
 
-    stage('Run Playwright Shards in K8s') {
-      steps {
-        sh '''
-          export KUBECONFIG=$(pwd)/kubeconfig
-          kubectl apply -f k8s/allure-pvc.yml
-        '''
-        script {
-          for (int i = 1; i <= TOTAL_SHARDS.toInteger(); i++) {
+    stage('Run Playwright Shard') {
+        steps {
             sh '''
-              export KUBECONFIG=$(pwd)/kubeconfig
-              SHARD_ID=''' + i + '''
-              TOTAL_SHARDS=''' + TOTAL_SHARDS + '''
-              sed "s/{{SHARD_ID}}/$SHARD_ID/g; s/{{TOTAL_SHARDS}}/$TOTAL_SHARDS/g" \
-              k8s/playwright-job.yml | kubectl apply -f -
+                export KUBECONFIG=$(pwd)/kubeconfig
+                SHARD_ID=1
+                TOTAL_SHARDS=4
+
+                # Delete existing job if present
+                kubectl delete job playwright-test-${SHARD_ID} --ignore-not-found
+
+                # Apply new job
+                sed "s/{{SHARD_ID}}/${SHARD_ID}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g" k8s/playwright-job.yml | kubectl apply -f -
             '''
-          }
         }
-      }
     }
+
 
     stage('Wait for Jobs to Finish') {
       steps {
