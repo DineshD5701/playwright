@@ -3,19 +3,21 @@ pipeline {
   environment {
     DOCKER_IMAGE = "dinesh571/playwright-tests:latest"
     TOTAL_SHARDS = "4"
-    KUBECONFIG_B64 = credentials('MINIKUBE_KUBECONFIG_B64') // Jenkins Secret Text
   }
   stages {
 
     stage('Setup Kubeconfig') {
-      steps {
-        sh '''
-          echo "$KUBECONFIG_B64" | base64 -d > kubeconfig
-          export KUBECONFIG=$(pwd)/kubeconfig
-          kubectl cluster-info
-        '''
-      }
+    steps {
+        withCredentials([string(credentialsId: 'KUBECONFIG_CONTENT', variable: 'KUBECONFIG_CONTENT')]) {
+            sh '''
+                echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
+                export KUBECONFIG=$(pwd)/kubeconfig
+                kubectl cluster-info
+            '''
+        }
     }
+}
+
 
     stage('Build & Push Docker Image') {
       steps {
