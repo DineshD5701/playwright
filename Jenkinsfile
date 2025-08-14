@@ -37,7 +37,6 @@ pipeline {
             }
         }
 
-            stages {
         stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
@@ -99,7 +98,5 @@ pipeline {
             }
         }
     }
-}
-
 }
 
