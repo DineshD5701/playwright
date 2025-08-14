@@ -62,7 +62,7 @@ pipeline {
                     sh '''
                         export KUBECONFIG=$(pwd)/kubeconfig
                         echo "Waiting for Playwright jobs to finish..."
-                        kubectl wait --for=condition=complete job --all --timeout=120s || true
+                        kubectl wait --for=condition=complete job --all --timeout=300s || true
                     '''
                 }
             }
