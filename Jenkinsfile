@@ -39,7 +39,7 @@ pipeline {
                         export KUBECONFIG=$(pwd)/kubeconfig
                         # Replace with your actual job/deployment manifests
                         for i in 1 2 3 4; do
-                        sed "s/{{SHARD_ID}}/$i/g; s/{{TOTAL_SHARDS}}/4/g; s|{{DOCKER_IMAGE}}|dinesh571/playwright:latest|g" k8s/job.yml \
+                        sed "s/{{SHARD_ID}}/$i/g; s/{{TOTAL_SHARDS}}/4/g; s|{{DOCKER_IMAGE}}|dinesh571/playwright:latest|g" k8s/playwright-job.yml \
                         | kubectl apply --kubeconfig=$(pwd)/kubeconfig -f -
                         done
 
