@@ -8,7 +8,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: playwright
-        image: my-dockerhub-user/playwright-tests:latest
+        image: dinesh571/playwright-tests:latest
         env:
           - name: SHARD_ID
             value: "{{SHARD_ID}}"
