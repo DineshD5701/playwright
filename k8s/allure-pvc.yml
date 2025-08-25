@@ -1,9 +1,11 @@
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
   name: allure-pvc
 spec:
-  accessModes: ["ReadWriteMany"]
+  accessModes:
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
+  storageClassName: standard   # for Minikube use "standard"
