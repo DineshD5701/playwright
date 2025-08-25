@@ -116,13 +116,13 @@ pipeline {
             }
         }
 
-        stage('Generate Allure Report') {
-            steps {
-                sh """
-                    allure generate allure-results/merged --clean -o allure-report || true
-                """
-            }
-        }
+        // stage('Generate Allure Report') {
+        //     steps {
+        //         sh """
+        //             allure generate allure-results/merged --clean -o allure-report || true
+        //         """
+        //     }
+        // }
 
         stage('Publish Allure Report in Jenkins') {
             steps {
