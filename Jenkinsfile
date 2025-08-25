@@ -71,15 +71,46 @@ pipeline {
             steps {
                 script {
                     sh """
+                        # Clean old results
+                        rm -rf allure-results
                         mkdir -p allure-results/merged
-                        for i in \$(seq 1 ${TOTAL_SHARDS}); do
-                            POD_NAME=\$(kubectl get pods --namespace=${NAMESPACE} -l job-name=playwright-test-\$i -o jsonpath='{.items[0].metadata.name}')
-                            if [ -n "\$POD_NAME" ]; then
-                                mkdir -p allure-results/shard-\$i
-                                kubectl cp ${NAMESPACE}/\$POD_NAME:/app/allure-results allure-results/shard-\$i || true
-                                cp -r allure-results/shard-\$i/* allure-results/merged/ || true
-                            fi
-                        done
+
+                        # Delete old fetch pod if exists
+                        kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
+
+                        # Start a temporary pod with PVC mounted
+                        kubectl run allure-fetch --namespace=${NAMESPACE} \
+                        --image=busybox:1.36 --restart=Never \
+                        --overrides='
+                        {
+                            "apiVersion": "v1",
+                            "spec": {
+                            "containers": [{
+                                "name": "allure-fetch",
+                                "image": "busybox:1.36",
+                                "command": ["sleep", "3600"],
+                                "volumeMounts": [{
+                                "mountPath": "/app/allure-results",
+                                "name": "allure-results"
+                                }]
+                            }],
+                            "volumes": [{
+                                "name": "allure-results",
+                                "persistentVolumeClaim": {
+                                "claimName": "${PVC_NAME}"
+                                }
+                            }]
+                            }
+                        }'
+
+                        # Wait for pod ready
+                        kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
+
+                        # Copy results from PVC via the fetch pod
+                        kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
+
+                        # Cleanup fetch pod
+                        kubectl delete pod allure-fetch --namespace=${NAMESPACE}
                     """
                 }
             }
