@@ -17,7 +17,7 @@ COPY package*.json ./
 RUN npm install
 
 # Install Playwright dependencies + Chrome
-RUN npx playwright install --with-deps && npx playwright install chrome
+RUN npx playwright install --with-deps && npx playwright install --force chrome
 
 # Copy all test files
 COPY . .
