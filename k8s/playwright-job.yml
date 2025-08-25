@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: playwright-test-{{SHARD_ID}}
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: playwright
+        image: {{DOCKER_IMAGE}}
+        command:
+        - npx
+        - playwright
+        - test
+        - --shard
+        - "{{SHARD_ID}}/{{TOTAL_SHARDS}}"
+        - --reporter
+        - allure-playwright
+        env:
+        - name: ALLURE_RESULTS_DIR
+          value: /app/allure-results
+        volumeMounts:
+        - name: allure-results
+          mountPath: /app/allure-results
+      volumes:
+      - name: allure-results
+        persistentVolumeClaim:
+          claimName: allure-pvc
