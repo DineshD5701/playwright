@@ -1,6 +1,6 @@
 {
   "Bigbasketusername": "kaptureqa",
-  "Bigbasketpassword": "Testing@12345678",
+  "Bigbasketpassword": "Testing@123456789",
   "BigbasketoldUI URL": "https://bigbasket.kapdesk.com/employee/home.html",
   "BigbasketNUIURL": "https://bigbasket.kapdesk.com/nui/",
   "BigbasketTicketID": "736149704013",
@@ -9,7 +9,7 @@
   "BigbasketEamilID": "shankar.lamani@kapturecrm.com",
 
   "MeeshoCXusername": "testkap",
-  "MeeshoCXpassword": "Test@123",
+  "MeeshoCXpassword": "Test@1234",
   "MeeshoCXoldUI URL": "https://meesho.kapturecrm.com/employee/index.html",
   "MeeshoCXNUIURL": "https://meesho.kapturecrm.com/nui/",
   "MeeshoCXTicketID": "736149704013",

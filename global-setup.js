@@ -22,20 +22,20 @@ module.exports = async () => {
   console.log("=====================================================");
 
   // MeeshoCX login
-  const meeshoContext = await browser.newContext();
-  const meeshoPage = await meeshoContext.newPage();
-  await meeshoPage.goto(testdata["MeeshoCXoldUI URL"], {
-    waitUntil: "networkidle",
-  });
-  console.log("MeeshoCX Login Started");
-  const meeshoLoginPage = new MeeshoCXLoginPage(meeshoPage);
-  await meeshoLoginPage.meeshoCXlogin(
-    testdata.MeeshoCXusername,
-    testdata.MeeshoCXpassword
-  );
-  await meeshoContext.storageState({ path: "meesho-auth.json" });
-  console.log("✅ MeeshoCX Login Complete");
+  // const meeshoContext = await browser.newContext();
+  // const meeshoPage = await meeshoContext.newPage();
+  // await meeshoPage.goto(testdata["MeeshoCXoldUI URL"], {
+  //   waitUntil: "networkidle",
+  // });
+  // console.log("MeeshoCX Login Started");
+  // const meeshoLoginPage = new MeeshoCXLoginPage(meeshoPage);
+  // await meeshoLoginPage.meeshoCXlogin(
+  //   testdata.MeeshoCXusername,
+  //   testdata.MeeshoCXpassword
+  // );
+  // await meeshoContext.storageState({ path: "meesho-auth.json" });
+  // console.log("✅ MeeshoCX Login Complete");
 
-  await browser.close();
-  console.log("🚀 Global Setup Finished");
+  // await browser.close();
+  // console.log("🚀 Global Setup Finished");
 };
