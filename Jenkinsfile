@@ -11,7 +11,7 @@ pipeline {
 
     stages {
 
-    //     stage('Build & Push Docker Image') {
+        stage('Build & Push Docker Image') {
     //             when {
     //     changeset "**/Dockerfile, **/package*.json"
     // }
