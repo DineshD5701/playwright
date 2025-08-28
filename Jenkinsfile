@@ -12,9 +12,9 @@ pipeline {
     stages {
 
         stage('Build & Push Docker Image') {
-    //             when {
-    //     changeset "**/Dockerfile, **/package*.json"
-    // }
+                when {
+        changeset "**/Dockerfile, **/package*.json"
+    }
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
