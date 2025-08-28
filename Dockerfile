@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/playwright:v1.47.0-jammy
 
 # Install Allure CLI globally
-RUN npm install -g allure-commandline --save-dev
+#RUN npm install -g allure-commandline --save-dev
 
 # Install Google Chrome Stable
 RUN apt-get update && apt-get install -y wget gnupg \
