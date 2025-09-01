@@ -22,3 +22,4 @@ ENV TOTAL_SHARDS=1
 
 # Entrypoint
 ENTRYPOINT ["sh", "-c", "npx playwright test --shard=${SHARD_ID}/${TOTAL_SHARDS} --reporter=line,allure-playwright || true"]
+
