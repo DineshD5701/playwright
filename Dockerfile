@@ -10,8 +10,8 @@ FROM mcr.microsoft.com/playwright:v1.55.0-jammy
 WORKDIR /app
 
 COPY --from=build /app /app
-#RUN npx playwright install --with-deps chromium chrome
-RUN npx playwright install chrome
+RUN npx playwright install --with-deps chromium chrome
+#RUN npx playwright install chrome
 RUN npm install -g allure-commandline
 
 
