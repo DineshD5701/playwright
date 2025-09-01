@@ -1,31 +1,24 @@
 FROM mcr.microsoft.com/playwright:v1.47.0-jammy
 
-# Install Allure CLI globally
-RUN npm install -g allure-commandline --save-dev
+# Install Allure CLI globally (use prod install, not dev)
+RUN npm install -g allure-commandline
 
-# Install Google Chrome Stable
-RUN apt-get update && apt-get install -y wget gnupg \
-    && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" \
-       > /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update && apt-get install -y google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy package files and install deps
+# Workdir
 WORKDIR /app
+
+# Copy only package files first (to leverage Docker cache)
 COPY package*.json ./
-RUN npm install
+RUN npm ci --omit=dev
 
-# Install Playwright dependencies + Chrome
-RUN npx playwright install --with-deps && npx playwright install --force chrome
+# Install ONLY required Playwright browsers (skip duplicates)
+RUN npx playwright install --with-deps chromium
 
-# Copy all test files
+# Copy tests after deps are installed
 COPY . .
 
-# Set environment variables for shards (default 1/1 if not set)
+# Set env variables
 ENV SHARD_ID=1
 ENV TOTAL_SHARDS=1
 
-# Entrypoint will run the shard, allow empty shards gracefully
+# Entrypoint
 ENTRYPOINT ["sh", "-c", "npx playwright test --shard=${SHARD_ID}/${TOTAL_SHARDS} --reporter=line,allure-playwright || true"]
-
