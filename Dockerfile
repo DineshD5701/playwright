@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.47.0-jammy AS build
+FROM mcr.microsoft.com/playwright:v1.55.0-jammy AS build
 
 WORKDIR /app
 COPY package*.json ./
@@ -6,12 +6,14 @@ RUN npm ci --omit=dev
 COPY . .
 
 # Final runtime
-FROM mcr.microsoft.com/playwright:v1.47.0-jammy
+FROM mcr.microsoft.com/playwright:v1.55.0-jammy
 WORKDIR /app
 
 COPY --from=build /app /app
 RUN npx playwright install --with-deps chromium chrome
+#RUN npx playwright install chrome
 RUN npm install -g allure-commandline
+
 
 ENV SHARD_ID=1
 ENV TOTAL_SHARDS=1
