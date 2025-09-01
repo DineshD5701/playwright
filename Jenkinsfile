@@ -13,10 +13,7 @@ pipeline {
 
         stage('Build & Push Docker Image') {
                 when {
-        when {
         changeset "Dockerfile, **/Dockerfile, package*.json, **/package*.json"
-    }
-
     }
             steps {
                 script {
