@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.47.0-jammy:slim AS build
+FROM mcr.microsoft.com/playwright:v1.47.0-jammy-slim AS build
 
 WORKDIR /app
 COPY package*.json ./
