@@ -43,14 +43,12 @@ pipeline {
         stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
-                    // Clean up old jobs
                     sh '''
                         for i in $(seq 1 ${TOTAL_SHARDS}); do
                             kubectl delete job playwright-test-$i --namespace=${NAMESPACE} --ignore-not-found
                         done
                     '''
 
-                    // Launch shards
                     for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
                         sh """
                         sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
@@ -74,14 +72,11 @@ pipeline {
             steps {
                 script {
                     sh """
-                        # Clean old results
                         rm -rf allure-results
                         mkdir -p allure-results/merged
 
-                        # Delete old fetch pod if exists
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
 
-                        # Start a temporary pod with PVC mounted
                         kubectl run allure-fetch --namespace=${NAMESPACE} \
                         --image=busybox:1.36 --restart=Never \
                         --overrides='
@@ -106,13 +101,8 @@ pipeline {
                             }
                         }'
 
-                        # Wait for pod ready
                         kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
-
-                        # Copy results from PVC via the fetch pod
                         kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
-
-                        # Cleanup fetch pod
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE}
                     """
                 }
@@ -129,21 +119,39 @@ pipeline {
             }
         }
 
-        stage('Send Report Link to Google Chat') {
+        stage('Send Report Summary to Google Chat') {
             steps {
                 withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_URL')]) {
                     script {
                         def allureReportUrl = "${env.BUILD_URL}allure/"
-                        def message = """
-                        {
-                          "text": "✅ Playwright Test Run Completed\\n*Job:* ${env.JOB_NAME}\\n*Build:* #${env.BUILD_NUMBER}\\n*Allure Report:* ${allureReportUrl}"
-                        }
-                        """
-                        sh """
-                            curl -X POST -H 'Content-Type: application/json' \
-                            -d '${message}' \
-                            "$GCHAT_URL"
-                        """
+
+                        sh '''
+                            set +e
+                            # Parse Allure test results JSON
+                            TOTAL=$(jq '. | length' allure-results/merged/*.json 2>/dev/null | awk '{s+=$1} END {print s}')
+                            FAILED=$(jq -r 'select(.status=="failed") | .name' allure-results/merged/*.json 2>/dev/null | wc -l)
+                            BROKEN=$(jq -r 'select(.status=="broken") | .name' allure-results/merged/*.json 2>/dev/null | wc -l)
+                            SKIPPED=$(jq -r 'select(.status=="skipped") | .name' allure-results/merged/*.json 2>/dev/null | wc -l)
+                            PASSED=$(jq -r 'select(.status=="passed") | .name' allure-results/merged/*.json 2>/dev/null | wc -l)
+
+                            # Get names of first 5 failed tests
+                            FAILED_TESTS=$(jq -r 'select(.status=="failed") | .name' allure-results/merged/*.json 2>/dev/null | head -5)
+                            FAILED_TESTS=$(echo "$FAILED_TESTS" | sed 's/^/- /' || echo "- None")
+
+                            MESSAGE="{
+                              \\"text\\": \\"🚀 *Playwright Test Suite Completed* 🚀\\\\n
+                              🧪 *Total:* $TOTAL\\\\n
+                              ✅ *Passed:* $PASSED\\\\n
+                              ❌ *Failed:* $FAILED\\\\n
+                              ⚠️ *Broken:* $BROKEN\\\\n
+                              ⏭️ *Skipped:* $SKIPPED\\\\n
+                              🔴 *Failed Tests:*\\\\n$FAILED_TESTS\\\\n
+                              📊 *Allure Report:* ${allureReportUrl}\\"
+                            }"
+
+                            curl -X POST -H 'Content-Type: application/json' -d "$MESSAGE" "$GCHAT_URL"
+                            set -e
+                        '''
                     }
                 }
             }
