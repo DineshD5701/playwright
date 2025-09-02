@@ -73,42 +73,49 @@ pipeline {
 
         stage('Copy Allure Results from K8s') {
             steps {
-                sh '''
-                    rm -rf allure-results
-                    mkdir -p allure-results/merged
+                script {
+                    sh """
+                        # Clean old results
+                        rm -rf allure-results
+                        mkdir -p allure-results/merged
 
-                    kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
+                        # Delete old fetch pod if exists
+                        kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
 
-                    kubectl run allure-fetch --namespace=${NAMESPACE} \
-                      --image=busybox:1.36 --restart=Never \
-                      --overrides='
-                      {
-                          "apiVersion": "v1",
-                          "spec": {
-                          "containers": [{
-                              "name": "allure-fetch",
-                              "image": "busybox:1.36",
-                              "command": ["sleep", "3600"],
-                              "volumeMounts": [{
-                                  "mountPath": "/app/allure-results",
-                                  "name": "allure-results"
-                              }]
-                          }],
-                          "volumes": [{
-                              "name": "allure-results",
-                              "persistentVolumeClaim": {
-                                  "claimName": "${PVC_NAME}"
-                              }
-                          }]
-                          }
-                      }'
+                        # Start a temporary pod with PVC mounted
+                        kubectl run allure-fetch --namespace=${NAMESPACE} \
+                        --image=busybox:1.36 --restart=Never \
+                        --overrides='
+                        {
+                            "apiVersion": "v1",
+                            "spec": {
+                            "containers": [{
+                                "name": "allure-fetch",
+                                "image": "busybox:1.36",
+                                "command": ["sleep", "3600"],
+                                "volumeMounts": [{
+                                "mountPath": "/app/allure-results",
+                                "name": "allure-results"
+                                }]
+                            }],
+                            "volumes": [{
+                                "name": "allure-results",
+                                "persistentVolumeClaim": {
+                                "claimName": "${PVC_NAME}"
+                                }
+                            }]
+                            }
+                        }'
 
-                    kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=300s
+                        # Wait for pod ready
+                        kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
 
-                    kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
+                        # Copy results from PVC via the fetch pod
+                        kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
 
-                    kubectl delete pod allure-fetch --namespace=${NAMESPACE}
-                '''
+                        # Cleanup fetch pod
+                        kubectl delete pod allure-fetch --namespace=${NAMESPACE}
+                    """
             }
         }
 
