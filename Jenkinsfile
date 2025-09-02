@@ -103,7 +103,7 @@ pipeline {
                           }
                       }'
 
-                    kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=120s
+                    kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=300s
 
                     kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
 
