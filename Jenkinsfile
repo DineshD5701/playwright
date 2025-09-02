@@ -110,4 +110,4 @@ pipeline {
             archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
         }
     }
-}
+
