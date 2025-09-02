@@ -135,8 +135,8 @@ pipeline {
                     TOTAL=$(jq '.statistic.total' allure-results/merged/widgets/summary.json)
                     DURATION=$(jq '.time.duration' allure-results/merged/widgets/summary.json)
 
-                    DURATION_MIN=$((DURATION / 60000))
-                    DURATION_SEC=$(((DURATION % 60000) / 1000))
+                    DURATION_MIN=$((DURATION / 600000))
+                    DURATION_SEC=$(((DURATION % 600000) / 1000))
 
                     MESSAGE="*Playwright Test Execution Summary*\\n
                     Total: $TOTAL\\n
