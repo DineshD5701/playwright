@@ -54,7 +54,7 @@ pipeline {
                     // Launch shards
                     for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
                         sh """
-                        sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
+                        sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/allure-results|g" \
                         k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
                         """
                     }
@@ -76,10 +76,10 @@ pipeline {
                 script {
                     sh """
                         rm -rf allure-results
-                        mkdir -p allure-results/merged
-        
+                        mkdir -p allure-results
+
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
-        
+
                         kubectl run allure-fetch --namespace=${NAMESPACE} \
                         --image=busybox:1.36 --restart=Never \
                         --overrides='
@@ -91,7 +91,7 @@ pipeline {
                                 "image": "busybox:1.36",
                                 "command": ["sleep", "3600"],
                                 "volumeMounts": [{
-                                "mountPath": "/app/allure-results",
+                                "mountPath": "/allure-results",
                                 "name": "allure-results"
                                 }]
                             }],
@@ -103,11 +103,11 @@ pipeline {
                             }]
                             }
                         }'
-        
+
                         kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=300s
-        
-                        kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
-        
+
+                        kubectl cp ${NAMESPACE}/allure-fetch:/allure-results allure-results
+
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE}
                     """
                 }
@@ -119,7 +119,7 @@ pipeline {
                 allure([
                     includeProperties: false,
                     jdk: '',
-                    results: [[path: 'allure-results/merged']]
+                    results: [[path: 'allure-results']]
                 ])
             }
         }
@@ -127,15 +127,19 @@ pipeline {
         stage('Send Report to Google Chat') {
             steps {
                 sh '''
-                    # Ensure jq is available (better: bake into Docker image)
                     apt-get update && apt-get install -y jq
 
-                    PASSED=$(jq '.statistic.passed' allure-results/merged/widgets/summary.json)
-                    FAILED=$(jq '.statistic.failed' allure-results/merged/widgets/summary.json)
-                    BROKEN=$(jq '.statistic.broken' allure-results/merged/widgets/summary.json)
-                    SKIPPED=$(jq '.statistic.skipped' allure-results/merged/widgets/summary.json)
-                    TOTAL=$(jq '.statistic.total' allure-results/merged/widgets/summary.json)
-                    DURATION=$(jq '.time.duration' allure-results/merged/widgets/summary.json)
+                    if [ ! -f allure-results/widgets/summary.json ]; then
+                      echo "summary.json not found! Skipping GChat notification."
+                      exit 0
+                    fi
+
+                    PASSED=$(jq '.statistic.passed' allure-results/widgets/summary.json)
+                    FAILED=$(jq '.statistic.failed' allure-results/widgets/summary.json)
+                    BROKEN=$(jq '.statistic.broken' allure-results/widgets/summary.json)
+                    SKIPPED=$(jq '.statistic.skipped' allure-results/widgets/summary.json)
+                    TOTAL=$(jq '.statistic.total' allure-results/widgets/summary.json)
+                    DURATION=$(jq '.time.duration' allure-results/widgets/summary.json)
 
                     DURATION_MIN=$((DURATION / 60000))
                     DURATION_SEC=$(((DURATION % 60000) / 1000))
