@@ -10,6 +10,7 @@ pipeline {
         GCHAT_WEBHOOK   = credentials('GCHAT_WEBHOOK')  // stored in Jenkins credentials
     }
 
+    stages {
         stage('Checkout') {
             steps {
                 git branch: 'main',
@@ -17,7 +18,6 @@ pipeline {
                     credentialsId: 'github-token'
             }
         }
-
 
         stage('Build Docker Image') {
             steps {
@@ -110,4 +110,4 @@ pipeline {
             archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
         }
     }
-
+}
