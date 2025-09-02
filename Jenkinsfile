@@ -124,7 +124,6 @@ pipeline {
             }
         }
 
-        stages {
             stage('Notify') {
                 steps {
                     sh '''
@@ -134,7 +133,7 @@ pipeline {
                     '''
                 }
             }
-        }
+        
         stage('Send Report to Google Chat') {
             steps {
                 script {
