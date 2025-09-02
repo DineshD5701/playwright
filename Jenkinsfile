@@ -2,12 +2,11 @@ pipeline {
     agent any
 
     environment {
-        NAMESPACE          = "default"
-        TOTAL_SHARDS       = 4
+        NAMESPACE = "default"
+        TOTAL_SHARDS = 4
         KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
-        DOCKER_IMAGE       = "dinesh571/playwright:latest"
-        PVC_NAME           = "allure-pvc"
-        GCHAT_WEBHOOK      = credentials('GCHAT_WEBHOOK') // Jenkins secret
+        DOCKER_IMAGE = "dinesh571/playwright:latest"
+        PVC_NAME = "allure-pvc"
     }
 
     stages {
@@ -54,7 +53,7 @@ pipeline {
                     // Launch shards
                     for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
                         sh """
-                        sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/allure-results|g" \
+                        sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
                         k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
                         """
                     }
@@ -75,11 +74,14 @@ pipeline {
             steps {
                 script {
                     sh """
+                        # Clean old results
                         rm -rf allure-results
-                        mkdir -p allure-results
+                        mkdir -p allure-results/merged
 
+                        # Delete old fetch pod if exists
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
 
+                        # Start a temporary pod with PVC mounted
                         kubectl run allure-fetch --namespace=${NAMESPACE} \
                         --image=busybox:1.36 --restart=Never \
                         --overrides='
@@ -91,7 +93,7 @@ pipeline {
                                 "image": "busybox:1.36",
                                 "command": ["sleep", "3600"],
                                 "volumeMounts": [{
-                                "mountPath": "/allure-results",
+                                "mountPath": "/app/allure-results",
                                 "name": "allure-results"
                                 }]
                             }],
@@ -104,10 +106,13 @@ pipeline {
                             }
                         }'
 
-                        kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=300s
+                        # Wait for pod ready
+                        kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
 
-                        kubectl cp ${NAMESPACE}/allure-fetch:/allure-results allure-results
+                        # Copy results from PVC via the fetch pod
+                        kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
 
+                        # Cleanup fetch pod
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE}
                     """
                 }
@@ -119,44 +124,28 @@ pipeline {
                 allure([
                     includeProperties: false,
                     jdk: '',
-                    results: [[path: 'allure-results']]
+                    results: [[path: 'allure-results/merged']]
                 ])
             }
         }
 
-        stage('Send Report to Google Chat') {
+        stage('Send Report Link to Google Chat') {
             steps {
-                sh '''
-                    apt-get update && apt-get install -y jq
-
-                    if [ ! -f allure-results/widgets/summary.json ]; then
-                      echo "summary.json not found! Skipping GChat notification."
-                      exit 0
-                    fi
-
-                    PASSED=$(jq '.statistic.passed' allure-results/widgets/summary.json)
-                    FAILED=$(jq '.statistic.failed' allure-results/widgets/summary.json)
-                    BROKEN=$(jq '.statistic.broken' allure-results/widgets/summary.json)
-                    SKIPPED=$(jq '.statistic.skipped' allure-results/widgets/summary.json)
-                    TOTAL=$(jq '.statistic.total' allure-results/widgets/summary.json)
-                    DURATION=$(jq '.time.duration' allure-results/widgets/summary.json)
-
-                    DURATION_MIN=$((DURATION / 60000))
-                    DURATION_SEC=$(((DURATION % 60000) / 1000))
-
-                    MESSAGE="*Playwright Test Execution Summary*\\n
-                    Total: $TOTAL\\n
-                    ✅ Passed: $PASSED\\n
-                    ❌ Failed: $FAILED\\n
-                    ⚠️ Broken: $BROKEN\\n
-                    ⏭ Skipped: $SKIPPED\\n
-                    ⏱ Duration: ${DURATION_MIN}m ${DURATION_SEC}s\\n
-                    👉 Full Allure report available in Jenkins UI"
-
-                    curl -X POST -H "Content-Type: application/json" \
-                         -d "{\\"text\\": \\"$MESSAGE\\"}" \
-                         "$GCHAT_WEBHOOK"
-                '''
+                withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_URL')]) {
+                    script {
+                        def allureReportUrl = "${env.BUILD_URL}allure/"
+                        def message = """
+                        {
+                          "text": "✅ Playwright Test Run Completed\\n*Job:* ${env.JOB_NAME}\\n*Build:* #${env.BUILD_NUMBER}\\n*Allure Report:* ${allureReportUrl}"
+                        }
+                        """
+                        sh """
+                            curl -X POST -H 'Content-Type: application/json' \
+                            -d '${message}' \
+                            "$GCHAT_URL"
+                        """
+                    }
+                }
             }
         }
     }
