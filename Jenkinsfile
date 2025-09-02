@@ -135,7 +135,6 @@ pipeline {
             }
         
         stage('Send Report to Google Chat') {
-
             steps {
                 sh 'apt-get update && apt-get install -y jq'
                 sh '''
