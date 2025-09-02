@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     environment {
-        NAMESPACE        = "default"
-        TOTAL_SHARDS     = 4
+        NAMESPACE          = "default"
+        TOTAL_SHARDS       = 4
         KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
-        DOCKER_IMAGE     = "dinesh571/playwright:latest"
-        PVC_NAME         = "allure-pvc"
-        GCHAT_WEBHOOK    = credentials('GCHAT_WEBHOOK') // Jenkins secret for webhook
+        DOCKER_IMAGE       = "dinesh571/playwright:latest"
+        PVC_NAME           = "allure-pvc"
+        GCHAT_WEBHOOK      = credentials('GCHAT_WEBHOOK') // Jenkins secret
     }
 
     stages {
@@ -73,44 +73,42 @@ pipeline {
 
         stage('Copy Allure Results from K8s') {
             steps {
-                script {
-                    sh """
-                        rm -rf allure-results
-                        mkdir -p allure-results/merged
+                sh '''
+                    rm -rf allure-results
+                    mkdir -p allure-results/merged
 
-                        kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
+                    kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
 
-                        kubectl run allure-fetch --namespace=${NAMESPACE} \
-                        --image=busybox:1.36 --restart=Never \
-                        --overrides='
-                        {
-                            "apiVersion": "v1",
-                            "spec": {
-                            "containers": [{
-                                "name": "allure-fetch",
-                                "image": "busybox:1.36",
-                                "command": ["sleep", "3600"],
-                                "volumeMounts": [{
-                                "mountPath": "/app/allure-results",
-                                "name": "allure-results"
-                                }]
-                            }],
-                            "volumes": [{
-                                "name": "allure-results",
-                                "persistentVolumeClaim": {
-                                "claimName": "${PVC_NAME}"
-                                }
-                            }]
-                            }
-                        }'
+                    kubectl run allure-fetch --namespace=${NAMESPACE} \
+                      --image=busybox:1.36 --restart=Never \
+                      --overrides='
+                      {
+                          "apiVersion": "v1",
+                          "spec": {
+                          "containers": [{
+                              "name": "allure-fetch",
+                              "image": "busybox:1.36",
+                              "command": ["sleep", "3600"],
+                              "volumeMounts": [{
+                                  "mountPath": "/app/allure-results",
+                                  "name": "allure-results"
+                              }]
+                          }],
+                          "volumes": [{
+                              "name": "allure-results",
+                              "persistentVolumeClaim": {
+                                  "claimName": "${PVC_NAME}"
+                              }
+                          }]
+                          }
+                      }'
 
-                        kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
+                    kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
 
-                        kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
+                    kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
 
-                        kubectl delete pod allure-fetch --namespace=${NAMESPACE}
-                    """
-                }
+                    kubectl delete pod allure-fetch --namespace=${NAMESPACE}
+                '''
             }
         }
 
@@ -124,55 +122,37 @@ pipeline {
             }
         }
 
-            stage('Notify') {
-                steps {
-                    sh '''
-                      curl -X POST -H "Content-Type: application/json" \
-                      -d '{"text": "Playwright tests finished!"}' \
-                      "$GCHAT_WEBHOOK"
-                    '''
-                }
-            }
-        
         stage('Send Report to Google Chat') {
             steps {
-                    sh 'apt-get update && apt-get install -y jq'
-                    sh '''
-                      PASSED=$(jq .statistic.passed allure-results/merged/widgets/summary.json)
-                      FAILED=$(jq .statistic.failed allure-results/merged/widgets/summary.json)
-                      curl -X POST -H "Content-Type: application/json" \
-                        -d "{\\"text\\": \\"Playwright Results: Passed=$PASSED, Failed=$FAILED\\"}" \
-                        "$GCHAT_WEBHOOK"
-                    '''
-                }
-            
-                script {
-                    // Extract values using jq
-                    sh '''
-                        PASSED=\$(jq '.statistic.passed' allure-results/merged/widgets/summary.json)
-                        FAILED=\$(jq '.statistic.failed' allure-results/merged/widgets/summary.json)
-                        BROKEN=\$(jq '.statistic.broken' allure-results/merged/widgets/summary.json)
-                        SKIPPED=\$(jq '.statistic.skipped' allure-results/merged/widgets/summary.json)
-                        TOTAL=\$(jq '.statistic.total' allure-results/merged/widgets/summary.json)
-                        DURATION=\$(jq '.time.duration' allure-results/merged/widgets/summary.json)
-        
-                        DURATION_MIN=\$((DURATION / 60000))
-                        DURATION_SEC=\$(((DURATION % 60000) / 1000))
-        
-                        MESSAGE="*Playwright Test Execution Summary*\\n
-                        Total: \$TOTAL\\n
-                        ✅ Passed: \$PASSED\\n
-                        ❌ Failed: \$FAILED\\n
-                        ⚠️ Broken: \$BROKEN\\n
-                        ⏭ Skipped: \$SKIPPED\\n
-                        ⏱ Duration: \${DURATION_MIN}m \${DURATION_SEC}s\\n
-                        👉 Full Allure report available in Jenkins UI"
-        
-                        curl -X POST -H 'Content-Type: application/json' \
-                             -d "{\\"text\\": \\"\$MESSAGE\\"}" ${GCHAT_WEBHOOK}
-                    '''
-                }
+                sh '''
+                    # Ensure jq is available (better: bake into Docker image)
+                    apt-get update && apt-get install -y jq
+
+                    PASSED=$(jq '.statistic.passed' allure-results/merged/widgets/summary.json)
+                    FAILED=$(jq '.statistic.failed' allure-results/merged/widgets/summary.json)
+                    BROKEN=$(jq '.statistic.broken' allure-results/merged/widgets/summary.json)
+                    SKIPPED=$(jq '.statistic.skipped' allure-results/merged/widgets/summary.json)
+                    TOTAL=$(jq '.statistic.total' allure-results/merged/widgets/summary.json)
+                    DURATION=$(jq '.time.duration' allure-results/merged/widgets/summary.json)
+
+                    DURATION_MIN=$((DURATION / 60000))
+                    DURATION_SEC=$(((DURATION % 60000) / 1000))
+
+                    MESSAGE="*Playwright Test Execution Summary*\\n
+                    Total: $TOTAL\\n
+                    ✅ Passed: $PASSED\\n
+                    ❌ Failed: $FAILED\\n
+                    ⚠️ Broken: $BROKEN\\n
+                    ⏭ Skipped: $SKIPPED\\n
+                    ⏱ Duration: ${DURATION_MIN}m ${DURATION_SEC}s\\n
+                    👉 Full Allure report available in Jenkins UI"
+
+                    curl -X POST -H "Content-Type: application/json" \
+                         -d "{\\"text\\": \\"$MESSAGE\\"}" \
+                         "$GCHAT_WEBHOOK"
+                '''
             }
-        }           
+        }
     }
 }
+
