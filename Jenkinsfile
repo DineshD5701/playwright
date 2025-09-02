@@ -10,12 +10,14 @@ pipeline {
         GCHAT_WEBHOOK   = credentials('GCHAT_WEBHOOK')  // stored in Jenkins credentials
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/DineshD5701/playwright.git'
-            }
+    stage('Checkout') {
+        steps {
+            git branch: 'main',
+                url: 'https://github.com/DineshD5701/playwright.git',
+                credentialsId: 'github-token'
         }
+    }
+
 
         stage('Build Docker Image') {
             steps {
