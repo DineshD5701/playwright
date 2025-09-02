@@ -127,39 +127,32 @@ pipeline {
         stage('Send Report to Google Chat') {
             steps {
                 script {
-                    def summaryJson = readJSON file: 'allure-results/merged/widgets/summary.json'
-                    def stats = summaryJson.statistic
-
-                    def passed  = stats.passed ?: 0
-                    def failed  = stats.failed ?: 0
-                    def broken  = stats.broken ?: 0
-                    def skipped = stats.skipped ?: 0
-                    def total   = stats.total ?: 0
-                    def time    = summaryJson.time.duration ?: 0
-
-                    def durationMin = (time / 60000).intValue()
-                    def durationSec = ((time % 60000) / 1000).intValue()
-
-                    def message = """
-                    *Playwright Test Execution Summary*
-                    Total: ${total}
-                    ✅ Passed: ${passed}
-                    ❌ Failed: ${failed}
-                    ⚠️ Broken: ${broken}
-                    ⏭ Skipped: ${skipped}
-                    ⏱ Duration: ${durationMin}m ${durationSec}s
-
-                    👉 Full Allure report available in Jenkins UI
-                    """
-
-                    def payload = """{ "text": "${message}" }"""
-
+                    // Extract values using jq
                     sh """
-                    curl -X POST -H 'Content-Type: application/json' \
-                         -d '${payload}' ${GCHAT_WEBHOOK}
+                        PASSED=\$(jq '.statistic.passed' allure-results/merged/widgets/summary.json)
+                        FAILED=\$(jq '.statistic.failed' allure-results/merged/widgets/summary.json)
+                        BROKEN=\$(jq '.statistic.broken' allure-results/merged/widgets/summary.json)
+                        SKIPPED=\$(jq '.statistic.skipped' allure-results/merged/widgets/summary.json)
+                        TOTAL=\$(jq '.statistic.total' allure-results/merged/widgets/summary.json)
+                        DURATION=\$(jq '.time.duration' allure-results/merged/widgets/summary.json)
+        
+                        DURATION_MIN=\$((DURATION / 60000))
+                        DURATION_SEC=\$(((DURATION % 60000) / 1000))
+        
+                        MESSAGE="*Playwright Test Execution Summary*\\n
+                        Total: \$TOTAL\\n
+                        ✅ Passed: \$PASSED\\n
+                        ❌ Failed: \$FAILED\\n
+                        ⚠️ Broken: \$BROKEN\\n
+                        ⏭ Skipped: \$SKIPPED\\n
+                        ⏱ Duration: \${DURATION_MIN}m \${DURATION_SEC}s\\n
+                        👉 Full Allure report available in Jenkins UI"
+        
+                        curl -X POST -H 'Content-Type: application/json' \
+                             -d "{\\"text\\": \\"\$MESSAGE\\"}" ${GCHAT_WEBHOOK}
                     """
                 }
             }
-        }
+        }           
     }
 }
