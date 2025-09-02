@@ -136,17 +136,16 @@ pipeline {
         
         stage('Send Report to Google Chat') {
             steps {
-                sh 'apt-get update && apt-get install -y jq'
-                sh '''
-                  PASSED=$(jq .statistic.passed allure-results/merged/widgets/summary.json)
-                  FAILED=$(jq .statistic.failed allure-results/merged/widgets/summary.json)
-                  curl -X POST -H "Content-Type: application/json" \
-                    -d "{\\"text\\": \\"Playwright Results: Passed=$PASSED, Failed=$FAILED\\"}" \
-                    "$GCHAT_WEBHOOK"
-                '''
-            }
-
-            steps {
+                    sh 'apt-get update && apt-get install -y jq'
+                    sh '''
+                      PASSED=$(jq .statistic.passed allure-results/merged/widgets/summary.json)
+                      FAILED=$(jq .statistic.failed allure-results/merged/widgets/summary.json)
+                      curl -X POST -H "Content-Type: application/json" \
+                        -d "{\\"text\\": \\"Playwright Results: Passed=$PASSED, Failed=$FAILED\\"}" \
+                        "$GCHAT_WEBHOOK"
+                    '''
+                }
+            
                 script {
                     // Extract values using jq
                     sh '''
