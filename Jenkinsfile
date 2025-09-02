@@ -70,50 +70,65 @@ pipeline {
             }
         }
 
-        stage('Copy Allure Results from K8s') {
+        stage('Copy Allure Results from K8s (robust)') {
             steps {
                 script {
                     sh """
-                        # Clean old results
+                        # prepare local dir
                         rm -rf allure-results
                         mkdir -p allure-results/merged
 
-                        # Delete old fetch pod if exists
+                        # cleanup any old helper pod
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
 
-                        # Start a temporary pod with PVC mounted
+                        # create a temporary pod with PVC mounted
                         kubectl run allure-fetch --namespace=${NAMESPACE} \
-                        --image=busybox:1.36 --restart=Never \
-                        --overrides='
-                        {
+                          --image=busybox:1.36 --restart=Never \
+                          --overrides='
+                          {
                             "apiVersion": "v1",
                             "spec": {
-                            "containers": [{
+                              "containers": [{
                                 "name": "allure-fetch",
                                 "image": "busybox:1.36",
                                 "command": ["sleep", "3600"],
                                 "volumeMounts": [{
-                                "mountPath": "/app/allure-results",
-                                "name": "allure-results"
+                                  "mountPath": "/app/allure-results",
+                                  "name": "allure-results"
                                 }]
-                            }],
-                            "volumes": [{
+                              }],
+                              "volumes": [{
                                 "name": "allure-results",
                                 "persistentVolumeClaim": {
-                                "claimName": "${PVC_NAME}"
+                                  "claimName": "${PVC_NAME}"
                                 }
-                            }]
+                              }]
                             }
-                        }'
+                          }'
 
-                        # Wait for pod ready
                         kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
 
-                        # Copy results from PVC via the fetch pod
-                        kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
+                        # Use tar piped through kubectl exec -> local tar to copy CONTENTS (avoids nested folder issues)
+                        kubectl exec --namespace=${NAMESPACE} allure-fetch -- tar -C /app/allure-results -cf - . | tar -C allure-results/merged -xvf - || true
+
+                        # Fallback: try kubectl cp with a trailing dot to copy contents (some K8s versions behave differently)
+                        if [ \$(find allure-results/merged -maxdepth 1 -type f | wc -l) -eq 0 ]; then
+                          kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results/. allure-results/merged || kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged || true
+                        fi
 
                         # Cleanup fetch pod
-                        kubectl delete pod allure-fetch --namespace=${NAMESPACE}
+                        kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
+
+                        # Diagnostics - list what's been copied
+                        echo "---- listing merged directory (top-level) ----"
+                        ls -la allure-results/merged || true
+                        echo "---- json files (first 200) ----"
+                        find allure-results/merged -type f -name '*.json' | sed -n '1,200p' || true
+                        echo "---- xml files (first 200) ----"
+                        find allure-results/merged -type f -name '*.xml' | sed -n '1,200p' || true
+                        SAMPLE=\$(find allure-results/merged -type f \( -name '*.json' -o -name '*.xml' \) | head -1 || true)
+                        echo "SAMPLE FILE -> \$SAMPLE"
+                        [ -n "\$SAMPLE" ] && head -n 200 "\$SAMPLE" | sed -n '1,200p' || true
                     """
                 }
             }
@@ -121,24 +136,12 @@ pipeline {
 
         stage('Publish Allure Report in Jenkins') {
             steps {
+                // publish whatever was copied under allure-results/merged
                 allure([
                     includeProperties: false,
                     jdk: '',
                     results: [[path: 'allure-results/merged']]
                 ])
-            }
-        }
-
-        // Optional but recommended: generate local HTML so we can read summary.json if needed
-        stage('Generate Local Allure HTML (optional)') {
-            steps {
-                sh """
-                    if ! command -v allure >/dev/null 2>&1; then
-                        echo "Allure CLI not found (that is OK, skipping local HTML gen)."
-                    else
-                        allure generate allure-results/merged --clean -o allure-report || true
-                    fi
-                """
             }
         }
 
@@ -148,32 +151,59 @@ pipeline {
                     script {
                         def allureReportUrl = "${env.BUILD_URL}allure/"
 
-                        // Try to ensure jq is available
+                        // Parse results (JSON preferred, fallback to XML/JUnit)
                         sh """
                             set +e
-                            if ! command -v jq >/dev/null 2>&1; then
-                              if command -v apt-get >/dev/null 2>&1; then
-                                sudo apt-get update && sudo apt-get install -y jq
-                              elif command -v yum >/dev/null 2>&1; then
-                                sudo yum install -y jq
-                              elif command -v apk >/dev/null 2>&1; then
-                                sudo apk add jq
-                              else
-                                echo "jq not found and package manager unknown; proceeding without it."
-                              fi
+                            # try to install jq if available (no-op on non-debian agents)
+                            apt-get update -y 2>/dev/null || true
+                            apt-get install -y jq 2>/dev/null || true
+
+                            JSON_COUNT=\$(find allure-results/merged -type f -name '*.json' | wc -l)
+                            XML_COUNT=\$(find allure-results/merged -type f -name '*.xml' | wc -l)
+                            echo "Found JSON=\$JSON_COUNT XML=\$XML_COUNT"
+
+                            if [ "\$JSON_COUNT" -gt 0 ]; then
+                              # use jq - slurp files and count by status
+                              TOTAL=\$(jq -s 'length' allure-results/merged/*.json 2>/dev/null || echo 0)
+                              PASSED=\$(jq -s 'map(select(.status==\"passed\")) | length' allure-results/merged/*.json 2>/dev/null || echo 0)
+                              FAILED=\$(jq -s 'map(select(.status==\"failed\")) | length' allure-results/merged/*.json 2>/dev/null || echo 0)
+                              BROKEN=\$(jq -s 'map(select(.status==\"broken\")) | length' allure-results/merged/*.json 2>/dev/null || echo 0)
+                              SKIPPED=\$(jq -s 'map(select(.status==\"skipped\")) | length' allure-results/merged/*.json 2>/dev/null || echo 0)
+
+                              FAILED_TESTS=\$(jq -r -s 'map(select(.status==\"failed\")) | .[]? | .name' allure-results/merged/*.json 2>/dev/null | head -5)
+                            elif [ "\$XML_COUNT" -gt 0 ]; then
+                              # fallback to parsing junit xml (first testsuite attrs)
+                              TS_LINE=\$(grep -o '<testsuite [^>]*>' allure-results/merged/*.xml | head -1 || true)
+                              TESTS=\$(echo "\$TS_LINE" | grep -o 'tests=\"[0-9]*\"' | grep -o '[0-9]*' || echo 0)
+                              FAILURES=\$(echo "\$TS_LINE" | grep -o 'failures=\"[0-9]*\"' | grep -o '[0-9]*' || echo 0)
+                              ERRORS=\$(echo "\$TS_LINE" | grep -o 'errors=\"[0-9]*\"' | grep -o '[0-9]*' || echo 0)
+                              SKIPPED=\$(echo "\$TS_LINE" | grep -o 'skipped=\"[0-9]*\"' | grep -o '[0-9]*' || echo 0)
+                              PASSED=\$((TESTS - FAILURES - ERRORS - SKIPPED))
+                              TOTAL=\$TESTS
+
+                              FAILED_TESTS=\$(awk -F'\"' '/<testcase /{name=\$2} /<(failure|error)/{print name}' allure-results/merged/*.xml | head -5)
+                            else
+                              TOTAL=0; PASSED=0; FAILED=0; BROKEN=0; SKIPPED=0; FAILED_TESTS=""
                             fi
+
+                            if [ -z "\$FAILED_TESTS" ]; then
+                              FAILED_TESTS="- None"
+                            else
+                              # format for chat (escape newlines)
+                              FAILED_TESTS=\$(echo "\$FAILED_TESTS" | sed 's/^/- /' | sed ':a;N;$!ba;s/\\n/\\\\n/g')
+                            fi
+
+                            # Build JSON message for Google Chat
+                            MESSAGE="{
+                              \\"text\\": \\"🚀 Playwright Test Suite Completed\\\\n🧪 Total: \${TOTAL}\\\\n✅ Passed: \${PASSED}\\\\n❌ Failed: \${FAILED}\\\\n⚠️ Broken: \${BROKEN}\\\\n⏭️ Skipped: \${SKIPPED}\\\\n🔴 Failed Tests:\\\\n\${FAILED_TESTS}\\\\n📊 Allure Report: ${allureReportUrl}\\"
+                            }"
+
+                            curl -s -X POST -H 'Content-Type: application/json' -d "\$MESSAGE" "$GCHAT_URL" || true
                             set -e
                         """
-
-                        // Accurate Allure parsing: ONLY *-result.json have test status
-                        sh """
-                            set +e
-
-                            RESULT_GLOB="allure-results/merged/*-result.json"
-
-                            if ls \$RESULT_GLOB >/dev/null 2>&1; then
-                              TOTAL=\$(ls -1 \$RESULT_GLOB | wc -l | awk '{print \$1}')
-
-                              PASSED=\$(jq -r 'if .status==\"passed\" then 1 else empty end' \$RESULT_GLOB 2>/dev/null | wc -l | awk '{print \$1}')
-                              FAILED=\$(jq -r 'if .status==\"failed\" then 1 else empty end' \$RESULT_GLOB 2>/dev/null | wc -l | awk '{print \$1}')
-                              BROKEN=\$(jq -r 'if .status==\"broken\" then 1 else empty end' \$RESULT_GLOB 2>/dev/null | wc -l |_
+                    }
+                }
+            }
+        }
+    }
+}
