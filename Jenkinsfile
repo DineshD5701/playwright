@@ -75,14 +75,11 @@ pipeline {
             steps {
                 script {
                     sh """
-                        # Clean old results
                         rm -rf allure-results
                         mkdir -p allure-results/merged
-
-                        # Delete old fetch pod if exists
+        
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
-
-                        # Start a temporary pod with PVC mounted
+        
                         kubectl run allure-fetch --namespace=${NAMESPACE} \
                         --image=busybox:1.36 --restart=Never \
                         --overrides='
@@ -106,16 +103,14 @@ pipeline {
                             }]
                             }
                         }'
-
-                        # Wait for pod ready
-                        kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
-
-                        # Copy results from PVC via the fetch pod
+        
+                        kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=300s
+        
                         kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
-
-                        # Cleanup fetch pod
+        
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE}
                     """
+                }
             }
         }
 
@@ -161,3 +156,4 @@ pipeline {
             }
         }
     }
+}
