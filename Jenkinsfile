@@ -2,58 +2,37 @@ pipeline {
     agent any
 
     environment {
-        NAMESPACE = "default"
-        TOTAL_SHARDS = 4
-        KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
-        DOCKER_IMAGE = "dinesh571/playwrights:latest"
-        PVC_NAME = "allure-pvc"
+        NAMESPACE       = "default"
+        TOTAL_SHARDS    = 4
+        DOCKER_IMAGE    = "playwright-local:latest"
+        PVC_NAME        = "allure-pvc"
+        PVC_MOUNT_PATH  = "/app/allure-results"
+        GCHAT_WEBHOOK   = credentials('GCHAT_WEBHOOK')  // stored in Jenkins credentials
     }
 
     stages {
-
-        stage('Build & Push Docker Image') {
-                when {
-        changeset "**/Dockerfile, **/package*.json"
-    }
+        stage('Checkout') {
             steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                        sh '''
-                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-                            docker build -t $DOCKER_IMAGE .
-                            docker push $DOCKER_IMAGE
-                        '''
-                    }
-                }
+                git 'https://github.com/DineshD5701/playwright.git'
             }
         }
 
-        stage('Set Kubeconfig') {
+        stage('Build Docker Image') {
             steps {
-                sh '''
-                    echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
-                '''
-                script {
-                    env.KUBECONFIG = "${pwd()}/kubeconfig"
-                }
-                sh 'kubectl get nodes'
+                sh 'docker build -t ${DOCKER_IMAGE} .'
             }
         }
 
-        stage('Run Playwright Jobs in K8s') {
+        stage('Run Playwright Tests on K8s') {
             steps {
                 script {
-                    // Clean up old jobs
-                    sh '''
-                        for i in $(seq 1 ${TOTAL_SHARDS}); do
-                            kubectl delete job playwright-test-$i --namespace=${NAMESPACE} --ignore-not-found
-                        done
-                    '''
-
-                    // Launch shards
                     for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
                         sh """
-                        sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
+                        sed "s/{{SHARD_ID}}/${i}/g; \
+                             s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; \
+                             s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; \
+                             s|{{PVC_NAME}}|${PVC_NAME}|g; \
+                             s|{{PVC_MOUNT_PATH}}|${PVC_MOUNT_PATH}|g" \
                         k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
                         """
                     }
@@ -61,80 +40,72 @@ pipeline {
             }
         }
 
-        stage('Wait for Jobs to Complete') {
+        stage('Wait for Jobs') {
             steps {
-                sh """
-                    echo "Waiting for Playwright jobs to finish..."
-                    kubectl wait --for=condition=complete --timeout=900s job --all --namespace=${NAMESPACE} || true
-                """
+                sh '''
+                kubectl wait --for=condition=complete --timeout=900s job -l job-group=playwright --namespace=${NAMESPACE}
+                '''
             }
         }
 
-        stage('Copy Allure Results from K8s') {
+        stage('Collect Allure Results') {
+            steps {
+                sh '''
+                rm -rf allure-results
+                kubectl cp ${NAMESPACE}/$(kubectl get pod -n ${NAMESPACE} -l job-name=playwright-test-1 -o jsonpath='{.items[0].metadata.name}'):${PVC_MOUNT_PATH} allure-results
+                '''
+            }
+        }
+
+        stage('Generate Allure Report') {
+            steps {
+                sh 'allure generate allure-results -o allure-report --clean'
+            }
+        }
+
+        stage('Send Report to GChat') {
             steps {
                 script {
+                    def summaryJson = readJSON file: 'allure-report/widgets/summary.json'
+                    def stats = summaryJson.statistic
+
+                    def passed = stats.passed ?: 0
+                    def failed = stats.failed ?: 0
+                    def broken = stats.broken ?: 0
+                    def skipped = stats.skipped ?: 0
+                    def total  = stats.total ?: 0
+                    def time   = summaryJson.time.duration ?: 0
+
+                    // convert ms to min:sec
+                    def durationMin = (time / 60000).intValue()
+                    def durationSec = ((time % 60000) / 1000).intValue()
+
+                    def message = """
+                    *Playwright Test Execution Summary*
+                    Total: ${total}
+                    ✅ Passed: ${passed}
+                    ❌ Failed: ${failed}
+                    ⚠️ Broken: ${broken}
+                    ⏭ Skipped: ${skipped}
+                    ⏱ Duration: ${durationMin}m ${durationSec}s
+
+                    👉 Full report available in Jenkins build artifacts.
+                    """
+
+                    def payload = """{ "text": "${message}" }"""
+
                     sh """
-                        # Clean old results
-                        rm -rf allure-results
-                        mkdir -p allure-results/merged
-
-                        # Delete old fetch pod if exists
-                        kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
-
-                        # Start a temporary pod with PVC mounted
-                        kubectl run allure-fetch --namespace=${NAMESPACE} \
-                        --image=busybox:1.36 --restart=Never \
-                        --overrides='
-                        {
-                            "apiVersion": "v1",
-                            "spec": {
-                            "containers": [{
-                                "name": "allure-fetch",
-                                "image": "busybox:1.36",
-                                "command": ["sleep", "3600"],
-                                "volumeMounts": [{
-                                "mountPath": "/app/allure-results",
-                                "name": "allure-results"
-                                }]
-                            }],
-                            "volumes": [{
-                                "name": "allure-results",
-                                "persistentVolumeClaim": {
-                                "claimName": "${PVC_NAME}"
-                                }
-                            }]
-                            }
-                        }'
-
-                        # Wait for pod ready
-                        kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
-
-                        # Copy results from PVC via the fetch pod
-                        kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
-
-                        # Cleanup fetch pod
-                        kubectl delete pod allure-fetch --namespace=${NAMESPACE}
+                    curl -X POST -H 'Content-Type: application/json' \
+                         -d '${payload}' ${GCHAT_WEBHOOK}
                     """
                 }
             }
         }
+    }
 
-        // stage('Generate Allure Report') {
-        //     steps {
-        //         sh """
-        //             allure generate allure-results/merged --clean -o allure-report || true
-        //         """
-        //     }
-        // }
-
-        stage('Publish Allure Report in Jenkins') {
-            steps {
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    results: [[path: 'allure-results/merged']]
-                ])
-            }
+    post {
+        always {
+            archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
         }
     }
 }
