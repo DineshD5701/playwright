@@ -126,7 +126,7 @@ pipeline {
                         find allure-results/merged -type f -name '*.json' | sed -n '1,200p' || true
                         echo "---- xml files (first 200) ----"
                         find allure-results/merged -type f -name '*.xml' | sed -n '1,200p' || true
-                        SAMPLE=\$(find allure-results/merged -type f \( -name '*.json' -o -name '*.xml' \) | head -1 || true)
+                        find allure-results/merged -type f \( -name "*.json" -o -name "*.xml" \) -exec cp {} allure-results/ \;
                         echo "SAMPLE FILE -> \$SAMPLE"
                         [ -n "\$SAMPLE" ] && head -n 200 "\$SAMPLE" | sed -n '1,200p' || true
                     '''
