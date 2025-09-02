@@ -73,7 +73,7 @@ pipeline {
         stage('Copy Allure Results from K8s (robust)') {
             steps {
                 script {
-                    sh """
+                    sh '''
                         # prepare local dir
                         rm -rf allure-results
                         mkdir -p allure-results/merged
@@ -129,7 +129,7 @@ pipeline {
                         SAMPLE=\$(find allure-results/merged -type f \( -name '*.json' -o -name '*.xml' \) | head -1 || true)
                         echo "SAMPLE FILE -> \$SAMPLE"
                         [ -n "\$SAMPLE" ] && head -n 200 "\$SAMPLE" | sed -n '1,200p' || true
-                    """
+                    '''
                 }
             }
         }
