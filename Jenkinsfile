@@ -124,6 +124,17 @@ pipeline {
             }
         }
 
+        stages {
+            stage('Notify') {
+                steps {
+                    sh '''
+                      curl -X POST -H "Content-Type: application/json" \
+                      -d '{"text": "Playwright tests finished!"}' \
+                      "$GCHAT_WEBHOOK"
+                    '''
+                }
+            }
+        }
         stage('Send Report to Google Chat') {
             steps {
                 script {
