@@ -2,124 +2,162 @@ pipeline {
     agent any
 
     environment {
-        NAMESPACE       = "default"
-        TOTAL_SHARDS    = 4
-        DOCKER_IMAGE    = "dinesh571/playwright:latest"
-        PVC_NAME        = "playwright-pvc"
-        GCHAT_WEBHOOK   = credentials('GCHAT_WEBHOOK')  // stored in Jenkins Credentials
+        NAMESPACE          = "default"
+        TOTAL_SHARDS       = 4
+        KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
+        DOCKER_IMAGE       = "dinesh571/playwright:latest"
+        PVC_NAME           = "allure-pvc"
+        GCHAT_WEBHOOK      = credentials('GCHAT_WEBHOOK') // Jenkins secret
     }
 
     stages {
-        stage('Run Playwright Tests in K8s') {
+
+        stage('Build & Push Docker Image') {
+            when {
+                changeset "Dockerfile, **/Dockerfile, package*.json, **/package*.json"
+            }
             steps {
                 script {
-                    for (int i = 1; i <= TOTAL_SHARDS.toInteger(); i++) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh '''
+                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                            docker build -t $DOCKER_IMAGE .
+                            docker push $DOCKER_IMAGE
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Set Kubeconfig') {
+            steps {
+                sh '''
+                    echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
+                '''
+                script {
+                    env.KUBECONFIG = "${pwd()}/kubeconfig"
+                }
+                sh 'kubectl get nodes'
+            }
+        }
+
+        stage('Run Playwright Jobs in K8s') {
+            steps {
+                script {
+                    // Clean up old jobs
+                    sh '''
+                        for i in $(seq 1 ${TOTAL_SHARDS}); do
+                            kubectl delete job playwright-test-$i --namespace=${NAMESPACE} --ignore-not-found
+                        done
+                    '''
+
+                    // Launch shards
+                    for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
                         sh """
-                        kubectl delete pod playwright-test-${i} --namespace=${NAMESPACE} --ignore-not-found
-                        kubectl apply -f - <<EOF
-apiVersion: v1
-kind: Pod
-metadata:
-  name: playwright-test-${i}
-  namespace: ${NAMESPACE}
-spec:
-  restartPolicy: Never
-  containers:
-  - name: playwright
-    image: ${DOCKER_IMAGE}
-    command: ["npx","playwright","test","--shard","${i}/${TOTAL_SHARDS}","--reporter","line,allure-playwright"]
-    volumeMounts:
-    - name: results
-      mountPath: /app/allure-results
-  volumes:
-  - name: results
-    persistentVolumeClaim:
-      claimName: ${PVC_NAME}
-EOF
+                        sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/allure-results|g" \
+                        k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
                         """
                     }
                 }
             }
         }
 
-        stage('Wait for Test Completion') {
+        stage('Wait for Jobs to Complete') {
+            steps {
+                sh """
+                    echo "Waiting for Playwright jobs to finish..."
+                    kubectl wait --for=condition=complete --timeout=900s job --all --namespace=${NAMESPACE} || true
+                """
+            }
+        }
+
+        stage('Copy Allure Results from K8s') {
             steps {
                 script {
-                    for (int i = 1; i <= TOTAL_SHARDS.toInteger(); i++) {
-                        sh "kubectl wait --for=condition=Ready pod/playwright-test-${i} --namespace=${NAMESPACE} --timeout=900s"
-                        sh "kubectl logs pod/playwright-test-${i} --namespace=${NAMESPACE}"
-                    }
+                    sh """
+                        rm -rf allure-results
+                        mkdir -p allure-results
+
+                        kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
+
+                        kubectl run allure-fetch --namespace=${NAMESPACE} \
+                        --image=busybox:1.36 --restart=Never \
+                        --overrides='
+                        {
+                            "apiVersion": "v1",
+                            "spec": {
+                            "containers": [{
+                                "name": "allure-fetch",
+                                "image": "busybox:1.36",
+                                "command": ["sleep", "3600"],
+                                "volumeMounts": [{
+                                "mountPath": "/allure-results",
+                                "name": "allure-results"
+                                }]
+                            }],
+                            "volumes": [{
+                                "name": "allure-results",
+                                "persistentVolumeClaim": {
+                                "claimName": "${PVC_NAME}"
+                                }
+                            }]
+                            }
+                        }'
+
+                        kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=300s
+
+                        kubectl cp ${NAMESPACE}/allure-fetch:/allure-results allure-results
+
+                        kubectl delete pod allure-fetch --namespace=${NAMESPACE}
+                    """
                 }
             }
         }
 
-        stage('Fetch Allure Results') {
+        stage('Publish Allure Report in Jenkins') {
             steps {
-                sh """
-                kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
-                kubectl apply -f - <<EOF
-apiVersion: v1
-kind: Pod
-metadata:
-  name: allure-fetch
-  namespace: ${NAMESPACE}
-spec:
-  restartPolicy: Never
-  containers:
-  - name: fetch
-    image: alpine:latest
-    command: ["/bin/sh", "-c"]
-    args: ["sleep 30"]
-    volumeMounts:
-    - name: results
-      mountPath: /data
-  volumes:
-  - name: results
-    persistentVolumeClaim:
-      claimName: ${PVC_NAME}
-EOF
-                """
-
-                sh "kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=120s"
-                sh "kubectl cp ${NAMESPACE}/allure-fetch:/data ./allure-results"
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'allure-results']]
+                ])
             }
         }
 
-        stage('Generate Allure Report') {
+        stage('Send Report to Google Chat') {
             steps {
-                sh """
-                npx allure generate allure-results --clean -o allure-report
-                """
+                sh '''
+                    apt-get update && apt-get install -y jq
+
+                    if [ ! -f allure-results/widgets/summary.json ]; then
+                      echo "summary.json not found! Skipping GChat notification."
+                      exit 0
+                    fi
+
+                    PASSED=$(jq '.statistic.passed' allure-results/widgets/summary.json)
+                    FAILED=$(jq '.statistic.failed' allure-results/widgets/summary.json)
+                    BROKEN=$(jq '.statistic.broken' allure-results/widgets/summary.json)
+                    SKIPPED=$(jq '.statistic.skipped' allure-results/widgets/summary.json)
+                    TOTAL=$(jq '.statistic.total' allure-results/widgets/summary.json)
+                    DURATION=$(jq '.time.duration' allure-results/widgets/summary.json)
+
+                    DURATION_MIN=$((DURATION / 60000))
+                    DURATION_SEC=$(((DURATION % 60000) / 1000))
+
+                    MESSAGE="*Playwright Test Execution Summary*\\n
+                    Total: $TOTAL\\n
+                    ✅ Passed: $PASSED\\n
+                    ❌ Failed: $FAILED\\n
+                    ⚠️ Broken: $BROKEN\\n
+                    ⏭ Skipped: $SKIPPED\\n
+                    ⏱ Duration: ${DURATION_MIN}m ${DURATION_SEC}s\\n
+                    👉 Full Allure report available in Jenkins UI"
+
+                    curl -X POST -H "Content-Type: application/json" \
+                         -d "{\\"text\\": \\"$MESSAGE\\"}" \
+                         "$GCHAT_WEBHOOK"
+                '''
             }
-        }
-
-        stage('Send GChat Notification') {
-            steps {
-                sh """
-                apt-get update && apt-get install -y jq curl
-
-                if [ -f allure-report/widgets/summary.json ]; then
-                  PASSED=\$(jq .statistic.passed allure-report/widgets/summary.json)
-                  FAILED=\$(jq .statistic.failed allure-report/widgets/summary.json)
-                  TOTAL=\$(jq .statistic.total allure-report/widgets/summary.json)
-                  MESSAGE="Playwright Test Summary: Total=\$TOTAL, Passed=\$PASSED, Failed=\$FAILED"
-                  curl -X POST -H 'Content-Type: application/json' \
-                    -d "{\\"text\\": \\"\\$MESSAGE\\"}" \
-                    "$GCHAT_WEBHOOK"
-                else
-                  echo "summary.json not found after report generation!"
-                  exit 1
-                fi
-                """
-            }
-        }
-    }
-
-    post {
-        always {
-            junit '**/test-results/*.xml'  // optional if you export junit format
-            archiveArtifacts artifacts: 'allure-results/**', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
         }
     }
 }
