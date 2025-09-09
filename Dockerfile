@@ -21,6 +21,7 @@ WORKDIR /app
 # Copy only package files first for caching
 COPY package*.json ./
 RUN npm ci --omit=dev
+RUN npm install allure-playwright --save-dev
 
 # Copy the rest of the files
 COPY . .
