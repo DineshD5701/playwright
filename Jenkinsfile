@@ -2,22 +2,19 @@ pipeline {
     agent any
 
     environment {
-        NAMESPACE          = "default"
-        TOTAL_SHARDS       = 4
+        NAMESPACE = "default"
+        TOTAL_SHARDS = 4
         KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
-        DOCKER_IMAGE       = "dinesh571/playwright:latest"
-        PVC_NAME           = "allure-pvc"
+        DOCKER_IMAGE = "dinesh571/playwright:latest"
+        PVC_NAME = "allure-pvc"
     }
 
     stages {
+
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    withCredentials([usernamePassword(
-                        credentialsId: 'dockerhub-creds',
-                        usernameVariable: 'DOCKERHUB_USERNAME',
-                        passwordVariable: 'DOCKERHUB_PASSWORD'
-                    )]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                         sh '''
                             echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
                             docker build -t $DOCKER_IMAGE .
@@ -53,11 +50,8 @@ pipeline {
                     // Launch shards
                     for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
                         sh """
-                            sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; \
-                                s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; \
-                                s|{{PVC_NAME}}|${PVC_NAME}|g; \
-                                s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
-                            k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
+                        sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
+                        k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
                         """
                     }
                 }
@@ -86,28 +80,28 @@ pipeline {
 
                         # Start a temporary pod with PVC mounted
                         kubectl run allure-fetch --namespace=${NAMESPACE} \
-                            --image=busybox:1.36 --restart=Never \
-                            --overrides='
-                            {
-                                "apiVersion": "v1",
-                                "spec": {
-                                    "containers": [{
-                                        "name": "allure-fetch",
-                                        "image": "busybox:1.36",
-                                        "command": ["sleep", "3600"],
-                                        "volumeMounts": [{
-                                            "mountPath": "/app/allure-results",
-                                            "name": "allure-results"
-                                        }]
-                                    }],
-                                    "volumes": [{
-                                        "name": "allure-results",
-                                        "persistentVolumeClaim": {
-                                            "claimName": "${PVC_NAME}"
-                                        }
-                                    }]
+                        --image=busybox:1.36 --restart=Never \
+                        --overrides='
+                        {
+                            "apiVersion": "v1",
+                            "spec": {
+                            "containers": [{
+                                "name": "allure-fetch",
+                                "image": "busybox:1.36",
+                                "command": ["sleep", "3600"],
+                                "volumeMounts": [{
+                                "mountPath": "/app/allure-results",
+                                "name": "allure-results"
+                                }]
+                            }],
+                            "volumes": [{
+                                "name": "allure-results",
+                                "persistentVolumeClaim": {
+                                "claimName": "${PVC_NAME}"
                                 }
-                            }'
+                            }]
+                            }
+                        }'
 
                         # Wait for pod ready
                         kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
