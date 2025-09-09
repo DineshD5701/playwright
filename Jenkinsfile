@@ -37,6 +37,42 @@ pipeline {
             }
         }
 
+        stage('Clean Allure PVC') {
+            steps {
+                script {
+                    sh """
+                    # Delete old results from PVC using a temporary pod
+                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --ignore-not-found
+                    kubectl run allure-clean --namespace=${NAMESPACE} \\
+                        --image=busybox:1.36 --restart=Never \\
+                        --overrides='
+                        {
+                            "apiVersion": "v1",
+                            "spec": {
+                                "containers": [{
+                                    "name": "allure-clean",
+                                    "image": "busybox:1.36",
+                                    "command": ["sh", "-c", "rm -rf /app/allure-results/*"],
+                                    "volumeMounts": [{
+                                        "mountPath": "/app/allure-results",
+                                        "name": "allure-results"
+                                    }]
+                                }],
+                                "volumes": [{
+                                    "name": "allure-results",
+                                    "persistentVolumeClaim": {
+                                        "claimName": "${PVC_NAME}"
+                                    }
+                                }]
+                            }
+                        }'
+                    kubectl wait --for=condition=Completed pod/allure-clean --namespace=${NAMESPACE} --timeout=60s || true
+                    kubectl delete pod allure-clean --namespace=${NAMESPACE}
+                    """
+                }
+            }
+        }
+        
         stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
@@ -71,7 +107,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        # Clean old results
+                        # Clean old results in workspace
                         rm -rf allure-results
                         mkdir -p allure-results/merged
 
