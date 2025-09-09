@@ -43,8 +43,8 @@ pipeline {
                     sh """
                     # Delete old results from PVC using a temporary pod
                     kubectl delete pod allure-clean --namespace=${NAMESPACE} --ignore-not-found
-                    kubectl run allure-clean --namespace=${NAMESPACE} \
-                        --image=busybox:1.36 --restart=Never \
+                    kubectl run allure-clean --namespace=${NAMESPACE} \\
+                        --image=busybox:1.36 --restart=Never \\
                         --overrides='
                         {
                             "apiVersion": "v1",
@@ -72,7 +72,7 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
@@ -83,14 +83,10 @@ pipeline {
                         done
                     '''
 
-                    // Launch shards with separate allure-result folders
+                    // Launch shards
                     for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
                         sh """
-                        sed "s/{{SHARD_ID}}/${i}/g; \
-                             s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; \
-                             s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; \
-                             s|{{PVC_NAME}}|${PVC_NAME}|g; \
-                             s|{{PVC_MOUNT_PATH}}|/app/allure-results/shard-${i}|g" \
+                        sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
                         k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
                         """
                     }
@@ -107,7 +103,7 @@ pipeline {
             }
         }
 
-        stage('Copy & Merge Allure Results from K8s') {
+        stage('Copy Allure Results from K8s') {
             steps {
                 script {
                     sh """
@@ -125,21 +121,21 @@ pipeline {
                         {
                             "apiVersion": "v1",
                             "spec": {
-                                "containers": [{
-                                    "name": "allure-fetch",
-                                    "image": "busybox:1.36",
-                                    "command": ["sleep", "3600"],
-                                    "volumeMounts": [{
-                                        "mountPath": "/app/allure-results",
-                                        "name": "allure-results"
-                                    }]
-                                }],
-                                "volumes": [{
-                                    "name": "allure-results",
-                                    "persistentVolumeClaim": {
-                                        "claimName": "${PVC_NAME}"
-                                    }
+                            "containers": [{
+                                "name": "allure-fetch",
+                                "image": "busybox:1.36",
+                                "command": ["sleep", "3600"],
+                                "volumeMounts": [{
+                                "mountPath": "/app/allure-results",
+                                "name": "allure-results"
                                 }]
+                            }],
+                            "volumes": [{
+                                "name": "allure-results",
+                                "persistentVolumeClaim": {
+                                "claimName": "${PVC_NAME}"
+                                }
+                            }]
                             }
                         }'
 
@@ -151,11 +147,6 @@ pipeline {
 
                         # Cleanup fetch pod
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE}
-
-                        # Merge all shard folders into one
-                        mkdir -p allure-results/final
-                        cp -r allure-results/merged/shard-*/* allure-results/final/ || true
-                        ls -R allure-results/final
                     """
                 }
             }
@@ -166,7 +157,7 @@ pipeline {
                 allure([
                     includeProperties: false,
                     jdk: '',
-                    results: [[path: 'allure-results/final']]
+                    results: [[path: 'allure-results/merged']]
                 ])
             }
         }
