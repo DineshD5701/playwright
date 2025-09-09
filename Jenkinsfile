@@ -11,11 +11,38 @@ pipeline {
 
     stages {
 
-        stage('Clean Workspace') {
+        stage('Clean Allure PVC') {
             steps {
                 script {
-                    // Wipe out previous build files including allure-report.zip
-                    deleteDir()
+                    sh """
+                    # Delete old results from PVC using a temporary pod
+                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --ignore-not-found
+                    kubectl run allure-clean --namespace=${NAMESPACE} \\
+                        --image=busybox:1.36 --restart=Never \\
+                        --overrides='
+                        {
+                            "apiVersion": "v1",
+                            "spec": {
+                                "containers": [{
+                                    "name": "allure-clean",
+                                    "image": "busybox:1.36",
+                                    "command": ["sh", "-c", "rm -rf /app/allure-results/*"],
+                                    "volumeMounts": [{
+                                        "mountPath": "/app/allure-results",
+                                        "name": "allure-results"
+                                    }]
+                                }],
+                                "volumes": [{
+                                    "name": "allure-results",
+                                    "persistentVolumeClaim": {
+                                        "claimName": "${PVC_NAME}"
+                                    }
+                                }]
+                            }
+                        }'
+                    kubectl wait --for=condition=Completed pod/allure-clean --namespace=${NAMESPACE} --timeout=60s || true
+                    kubectl delete pod allure-clean --namespace=${NAMESPACE}
+                    """
                 }
             }
         }
@@ -80,7 +107,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        # Clean old results
+                        # Clean old results in workspace
                         rm -rf allure-results
                         mkdir -p allure-results/merged
 
@@ -120,9 +147,6 @@ pipeline {
 
                         # Cleanup fetch pod
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE}
-
-                        # Debug listing (optional, helps troubleshooting)
-                        ls -R allure-results/merged || true
                     """
                 }
             }
@@ -130,16 +154,10 @@ pipeline {
 
         stage('Publish Allure Report in Jenkins') {
             steps {
-                script {
-                    // Ensure no stale report blocks the plugin
-                    sh "rm -rf allure-report allure-report.zip || true"
-                }
                 allure([
                     includeProperties: false,
                     jdk: '',
-                    results: [[path: 'allure-results/merged']],
-                    // cleanResults works only on newer allure plugins
-                    cleanResults: true
+                    results: [[path: 'allure-results/merged']]
                 ])
             }
         }
