@@ -6,10 +6,10 @@ module.exports = defineConfig({
   timeout: 60000,
   retries: 0,
   reporter: [
-    ['line'],
-    ['allure-playwright', { outputFolder: '/app/allure-results' }]
+    ["html"],
+    ["junit", { outputFile: "results.xml" }],
+    ["allure-playwright"],
   ],
-
 
   globalSetup: "./global-setup.js",
 
