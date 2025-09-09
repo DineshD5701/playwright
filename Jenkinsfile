@@ -12,9 +12,6 @@ pipeline {
     stages {
 
         stage('Build & Push Docker Image') {
-                when {
-        changeset "Dockerfile, **/Dockerfile, package*.json, **/package*.json"
-    }
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
@@ -39,6 +36,44 @@ pipeline {
                 sh 'kubectl get nodes'
             }
         }
+
+    stage('Clean Allure PVC') {
+        steps {
+            sh """
+                echo "Cleaning old allure results in PVC..."
+                kubectl delete pod allure-clean --namespace=${NAMESPACE} --ignore-not-found
+
+                kubectl run allure-clean --namespace=${NAMESPACE} \
+                --image=busybox:1.36 --restart=Never \
+                --command -- sh -c 'rm -rf /app/allure-results/* && echo "PVC cleaned"' \
+                --overrides='
+                {
+                    "apiVersion": "v1",
+                    "spec": {
+                    "containers": [{
+                        "name": "allure-clean",
+                        "image": "busybox:1.36",
+                        "command": ["sh", "-c", "rm -rf /app/allure-results/* && sleep 2"],
+                        "volumeMounts": [{
+                        "mountPath": "/app/allure-results",
+                        "name": "allure-results"
+                        }]
+                    }],
+                    "volumes": [{
+                        "name": "allure-results",
+                        "persistentVolumeClaim": {
+                        "claimName": "${PVC_NAME}"
+                        }
+                    }]
+                    }
+                }'
+
+                # Wait until cleanup finishes
+                kubectl wait --for=condition=Ready pod/allure-clean --namespace=${NAMESPACE} --timeout=30s || true
+                kubectl delete pod allure-clean --namespace=${NAMESPACE} --ignore-not-found
+            """
+        }
+    }
 
         stage('Run Playwright Jobs in K8s') {
             steps {
@@ -118,14 +153,6 @@ pipeline {
                 }
             }
         }
-
-        // stage('Generate Allure Report') {
-        //     steps {
-        //         sh """
-        //             allure generate allure-results/merged --clean -o allure-report || true
-        //         """
-        //     }
-        // }
 
         stage('Publish Allure Report in Jenkins') {
             steps {
