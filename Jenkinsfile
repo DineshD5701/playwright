@@ -11,6 +11,15 @@ pipeline {
 
     stages {
 
+        stage('Clean Workspace') {
+            steps {
+                script {
+                    // Wipe out previous build files including allure-report.zip
+                    deleteDir()
+                }
+            }
+        }
+
         stage('Build & Push Docker Image') {
             steps {
                 script {
@@ -111,6 +120,9 @@ pipeline {
 
                         # Cleanup fetch pod
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE}
+
+                        # Debug listing (optional, helps troubleshooting)
+                        ls -R allure-results/merged || true
                     """
                 }
             }
@@ -118,10 +130,16 @@ pipeline {
 
         stage('Publish Allure Report in Jenkins') {
             steps {
+                script {
+                    // Ensure no stale report blocks the plugin
+                    sh "rm -rf allure-report allure-report.zip || true"
+                }
                 allure([
                     includeProperties: false,
                     jdk: '',
-                    results: [[path: 'allure-results/merged']]
+                    results: [[path: 'allure-results/merged']],
+                    // cleanResults works only on newer allure plugins
+                    cleanResults: true
                 ])
             }
         }
