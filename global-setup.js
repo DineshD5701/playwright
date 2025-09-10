@@ -2,29 +2,35 @@
 import { chromium } from '@playwright/test';
 
 async function globalSetup() {
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  const browser = await chromium.launch();
 
-  // Navigate to login
-  await page.goto('https://meesho.kapturecrm.com/login'); // update with real login URL
-
-  // Perform login steps
-  await page.fill('input[placeholder="Username"]', process.env.TEST_USERNAME || 'your_user');
-  await page.fill('input[placeholder="Password"]', process.env.TEST_PASSWORD || 'your_pass');
-
-  // Wait for login to complete
+  // ---- Bigbasket Login ----
+  const bigbasket = await browser.newPage();
+  await bigbasket.goto('https://bigbasket.com/login'); // adjust
+  await bigbasket.fill('[placeholder="Username"]', process.env.BB_USER || 'your_user');
+  await bigbasket.fill('[placeholder="Password"]', process.env.BB_PASS || 'your_pass');
   await Promise.all([
-    page.waitForNavigation({ url: '**/dashboard', waitUntil: 'networkidle', timeout: 20000 }), // adjust post-login URL
-    page.click('button:has-text("Login")')
+    bigbasket.waitForNavigation({ waitUntil: 'networkidle' }),
+    bigbasket.click('button:has-text("Login")')
   ]);
+  await bigbasket.context().storageState({ path: 'auth.json' });
 
-  // Save session state for reuse in tests
-  await page.context().storageState({ path: 'auth.json' });
+  // ---- MeeshoCX Login ----
+  const meesho = await browser.newPage();
+  await meesho.goto('https://meesho.kapturecrm.com/login'); // adjust
+  await meesho.fill('[placeholder="Username"]', process.env.MEESHO_USER || 'your_user');
+  await meesho.fill('[placeholder="Password"]', process.env.MEESHO_PASS || 'your_pass');
+  await Promise.all([
+    meesho.waitForNavigation({ waitUntil: 'networkidle' }),
+    meesho.click('button:has-text("Login")')
+  ]);
+  await meesho.context().storageState({ path: 'meesho-auth.json' });
 
   await browser.close();
 }
 
 export default globalSetup;
+
 
 // const { chromium } = require("@playwright/test");
 // const testdata = require("./Generic/TestData.json");
