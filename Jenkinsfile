@@ -66,7 +66,7 @@ pipeline {
                                 }]
                             }
                         }'
-                    kubectl wait --for=condition=Completed pod/allure-clean --namespace=${NAMESPACE} --timeout=60s || true
+                    #kubectl wait --for=condition=Completed pod/allure-clean --namespace=${NAMESPACE} --timeout=60s || true
                     kubectl delete pod allure-clean --namespace=${NAMESPACE}
                     """
                 }
