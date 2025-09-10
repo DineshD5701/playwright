@@ -68,7 +68,7 @@ pipeline {
                         }'
         
                     echo "Waiting for allure-clean pod to finish..."
-                    kubectl wait --for=condition=Succeeded pod/allure-clean --namespace=${NAMESPACE} --timeout=120s || true
+                    kubectl wait --for=condition=Succeeded pod/allure-clean --namespace=${NAMESPACE} --timeout=60s || true
         
                     echo "Ensure pod is fully terminated..."
                     kubectl delete pod allure-clean --namespace=${NAMESPACE} --wait=true --ignore-not-found
