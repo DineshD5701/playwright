@@ -43,8 +43,8 @@ pipeline {
                     sh """
                     # Delete old results from PVC using a temporary pod
                     kubectl delete pod allure-clean --namespace=${NAMESPACE} --ignore-not-found
-                    kubectl run allure-clean --namespace=${NAMESPACE} \\
-                        --image=busybox:1.36 --restart=Never \\
+                    kubectl run allure-clean --namespace=${NAMESPACE} \
+                        --image=busybox:1.36 --restart=Never \
                         --overrides='
                         {
                             "apiVersion": "v1",
@@ -66,12 +66,17 @@ pipeline {
                                 }]
                             }
                         }'
-                    kubectl wait --for=condition=Completed pod/allure-clean --namespace=${NAMESPACE} --timeout=60s || true
-                    kubectl delete pod allure-clean --namespace=${NAMESPACE}
+        
+                    echo "Waiting for allure-clean pod to finish..."
+                    kubectl wait --for=condition=Succeeded pod/allure-clean --namespace=${NAMESPACE} --timeout=120s || true
+        
+                    echo "Ensure pod is fully terminated..."
+                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --wait=true --ignore-not-found
                     """
                 }
             }
         }
+
         
         stage('Run Playwright Jobs in K8s') {
             steps {
