@@ -4,9 +4,9 @@ pipeline {
     environment {
         NAMESPACE = "default"
         TOTAL_SHARDS = 4
-        KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
         DOCKER_IMAGE = "dinesh571/playwright:latest"
         PVC_NAME = "allure-pvc"
+        KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
     }
 
     stages {
@@ -14,9 +14,9 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh '''
-                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                             docker build -t $DOCKER_IMAGE .
                             docker push $DOCKER_IMAGE
                         '''
@@ -37,57 +37,15 @@ pipeline {
             }
         }
 
-        stage('Clean Allure PVC') {
-            steps {
-                script {
-                    sh """
-                    # Delete old results from PVC using a temporary pod
-                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --ignore-not-found
-                    kubectl run allure-clean --namespace=${NAMESPACE} \
-                        --image=busybox:1.36 --restart=Never \
-                        --overrides='
-                        {
-                            "apiVersion": "v1",
-                            "spec": {
-                                "containers": [{
-                                    "name": "allure-clean",
-                                    "image": "busybox:1.36",
-                                    "command": ["sh", "-c", "rm -rf /app/allure-results/*"],
-                                    "volumeMounts": [{
-                                        "mountPath": "/app/allure-results",
-                                        "name": "allure-results"
-                                    }]
-                                }],
-                                "volumes": [{
-                                    "name": "allure-results",
-                                    "persistentVolumeClaim": {
-                                        "claimName": "${PVC_NAME}"
-                                    }
-                                }]
-                            }
-                        }'
-        
-                    echo "Waiting for allure-clean pod to finish..."
-                    kubectl wait --for=condition=Succeeded pod/allure-clean --namespace=${NAMESPACE} --timeout=60s || true
-        
-                    echo "Ensure pod is fully terminated..."
-                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --wait=true --ignore-not-found
-                    """
-                }
-            }
-        }
-
-        
         stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
-                    // Clean up old jobs
+                    // Cleanup old jobs
                     sh '''
                         for i in $(seq 1 ${TOTAL_SHARDS}); do
                             kubectl delete job playwright-test-$i --namespace=${NAMESPACE} --ignore-not-found
                         done
                     '''
-
                     // Launch shards
                     for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
                         sh """
@@ -102,7 +60,7 @@ pipeline {
         stage('Wait for Jobs to Complete') {
             steps {
                 sh """
-                    echo "Waiting for Playwright jobs to finish..."
+                    echo "⏳ Waiting for Playwright jobs to finish..."
                     kubectl wait --for=condition=complete --timeout=900s job --all --namespace=${NAMESPACE} || true
                 """
             }
@@ -112,14 +70,10 @@ pipeline {
             steps {
                 script {
                     sh """
-                        # Clean old results in workspace
                         rm -rf allure-results
                         mkdir -p allure-results/merged
-
-                        # Delete old fetch pod if exists
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
 
-                        # Start a temporary pod with PVC mounted
                         kubectl run allure-fetch --namespace=${NAMESPACE} \
                         --image=busybox:1.36 --restart=Never \
                         --overrides='
@@ -144,26 +98,60 @@ pipeline {
                             }
                         }'
 
-                        # Wait for pod ready
                         kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
-
-                        # Copy results from PVC via the fetch pod
                         kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
-
-                        # Cleanup fetch pod
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE}
                     """
                 }
             }
         }
 
-        stage('Publish Allure Report in Jenkins') {
+        stage('Publish Allure Report') {
             steps {
                 allure([
                     includeProperties: false,
                     jdk: '',
                     results: [[path: 'allure-results/merged']]
                 ])
+            }
+        }
+
+        stage('Notify Google Chat') {
+            steps {
+                withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
+                    script {
+                        // Collect results summary from Allure or fallback dummy values
+                        def total = sh(script: "grep -o '\"total\": [0-9]*' allure-results/merged/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
+                        def failed = sh(script: "grep -o '\"failed\": [0-9]*' allure-results/merged/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
+                        def broken = sh(script: "grep -o '\"broken\": [0-9]*' allure-results/merged/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
+                        def skipped = sh(script: "grep -o '\"skipped\": [0-9]*' allure-results/merged/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
+                        def passed = sh(script: "grep -o '\"passed\": [0-9]*' allure-results/merged/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
+
+                        if (!total) { total = "0" }
+                        if (!failed) { failed = "0" }
+                        if (!broken) { broken = "0" }
+                        if (!skipped) { skipped = "0" }
+                        if (!passed) { passed = "0" }
+
+                        def reportUrl = "${env.BUILD_URL}allure"
+                        def status = currentBuild.currentResult
+
+                        sh """
+                        curl -X POST -H 'Content-Type: application/json' \
+                        -d '{
+                          "text": "🚀 *Playwright Test Suite Completed* 🚀\\n
+                          🧪 *Total:* ${total}\\n
+                          ✅ *Passed:* ${passed}\\n
+                          ❌ *Failed:* ${failed}\\n
+                          ⚠️ *Broken:* ${broken}\\n
+                          ⏭️ *Skipped:* ${skipped}\\n
+                          🔗 *Report:* ${reportUrl}\\n
+                          📊 *Status:* ${status}"
+                        }' \
+                        $GCHAT_WEBHOOK
+                        """
+                    }
+                }
             }
         }
     }
