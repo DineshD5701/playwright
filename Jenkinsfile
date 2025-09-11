@@ -11,19 +11,19 @@ pipeline {
 
     stages {
 
-        stage('Build & Push Docker Image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh '''
-                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                            docker build -t $DOCKER_IMAGE .
-                            docker push $DOCKER_IMAGE
-                        '''
-                    }
-                }
-            }
-        }
+        // stage('Build & Push Docker Image') {
+        //     steps {
+        //         script {
+        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+        //                 sh '''
+        //                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+        //                     docker build -t $DOCKER_IMAGE .
+        //                     docker push $DOCKER_IMAGE
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Set Kubeconfig') {
             steps {
@@ -121,11 +121,11 @@ pipeline {
                 withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
                     script {
                         // Collect results summary from Allure or fallback dummy values
-                        def total = sh(script: "grep -o '\"total\": [0-9]*' allure-results/merged/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
-                        def failed = sh(script: "grep -o '\"failed\": [0-9]*' allure-results/merged/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
-                        def broken = sh(script: "grep -o '\"broken\": [0-9]*' allure-results/merged/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
-                        def skipped = sh(script: "grep -o '\"skipped\": [0-9]*' allure-results/merged/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
-                        def passed = sh(script: "grep -o '\"passed\": [0-9]*' allure-results/merged/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
+                        def total = sh(script: "grep -o '\"total\": [0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
+                        def failed = sh(script: "grep -o '\"failed\": [0-9]*' allure-results/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
+                        def broken = sh(script: "grep -o '\"broken\": [0-9]*' allure-results/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
+                        def skipped = sh(script: "grep -o '\"skipped\": [0-9]*' allure-results/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
+                        def passed = sh(script: "grep -o '\"passed\": [0-9]*' allure-results/widgets/summary.json | grep -o '[0-9]*'", returnStdout: true).trim()
 
                         if (!total) { total = "0" }
                         if (!failed) { failed = "0" }
