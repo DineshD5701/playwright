@@ -23,9 +23,9 @@ module.exports = defineConfig({
         headless: true,
         viewport: { width: 1000, height: 600 },
         storageState: "auth.json",
-        screenshot: "only-on-failure",
-        video: "retain-on-failure",
-        trace: "retain-on-failure",
+        screenshot: "off",
+        video: "off",
+        trace: "off",
       },
     },
     {
