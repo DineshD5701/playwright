@@ -125,9 +125,8 @@ pipeline {
                 ])
             }
         }
-    }
 
-        stage('Share Allure Report') {
+            stage('Share Allure Report') {
             steps {
                 script {
                     def reportUrl = "${env.BUILD_URL}allure"  // Allure plugin serves report here
@@ -141,6 +140,7 @@ pipeline {
                         --data '${payload}' \
                         https://chat.googleapis.com/v1/spaces/AAQAd4smdEA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=YDUnIOtCMz0BHRJJ2ECAEQTSji29soI4EwsCHyiLAyc
                     """
+                }
             }
         }
     }
