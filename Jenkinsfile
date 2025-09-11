@@ -126,7 +126,7 @@ pipeline {
                     def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
                     def passed = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
     
-                    def reportUrl = "${env.BUILD_URL}allure"
+                    def reportUrl = "https://7503742845ed.ngrok-free.app/job/${env.JOB_NAME}/${env.BUILD_NUMBER}/allure"
                     def status = currentBuild.currentResult
     
                     // Send notification safely
@@ -137,10 +137,9 @@ pipeline {
                     }" \
                     "$GCHAT_WEBHOOK"
                     '''
+                    }
                 }
             }
         }
-    }
-    
     }
 }
