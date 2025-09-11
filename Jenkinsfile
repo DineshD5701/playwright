@@ -126,4 +126,22 @@ pipeline {
             }
         }
     }
+
+        stage('Share Allure Report') {
+            steps {
+                script {
+                    def reportUrl = "${env.BUILD_URL}allure"  // Allure plugin serves report here
+                    def payload = """{
+                        "text": "✅ Playwright tests completed! View Allure Report: ${reportUrl}"
+                    }"""
+
+                    // Example for Slack
+                    sh """
+                        curl -X POST -H 'Content-type: application/json' \
+                        --data '${payload}' \
+                        https://hooks.slack.com/services/XXXX/YYYY/ZZZZ
+                    """
+            }
+        }
+    }
 }
