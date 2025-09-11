@@ -126,20 +126,21 @@ pipeline {
             }
         }
 
-            stage('Share Allure Report') {
+        stage('Notify GChat') {
             steps {
-                script {
-                    def reportUrl = "${env.BUILD_URL}allure"  // Allure plugin serves report here
-                    def payload = """{
-                        "text": "✅ Playwright tests completed! View Allure Report: ${reportUrl}"
-                    }"""
+                withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
+                    script {
+                        def jobUrl = env.BUILD_URL
+                        def allureReportUrl = "${jobUrl}allure"  // Jenkins Allure report URL
 
-                    // Example for Slack
-                    sh """
-                        curl -X POST -H 'Content-type: application/json' \
-                        --data '${payload}' \
-                        https://chat.googleapis.com/v1/spaces/AAQAd4smdEA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=YDUnIOtCMz0BHRJJ2ECAEQTSji29soI4EwsCHyiLAyc
-                    """
+                        sh """
+                        curl -X POST -H 'Content-Type: application/json' \
+                        -d '{
+                              "text": "✅ Playwright Pipeline finished!\\nAllure Report: ${allureReportUrl}"
+                            }' \
+                        $GCHAT_WEBHOOK
+                        """
+                    }
                 }
             }
         }
