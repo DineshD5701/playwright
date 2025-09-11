@@ -128,15 +128,35 @@ pipeline {
 
         stage('Notify GChat') {
             steps {
-                withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
+                withCredentials([string(credentialsId: 'gchat-webhook', variable: 'GCHAT_WEBHOOK')]) {
                     script {
                         def jobUrl = env.BUILD_URL
                         def allureReportUrl = "${jobUrl}allure"  // Jenkins Allure report URL
+                        def status = currentBuild.currentResult  // SUCCESS / FAILURE / UNSTABLE
 
                         sh """
                         curl -X POST -H 'Content-Type: application/json' \
                         -d '{
-                              "text": "✅ Playwright Pipeline finished!\\nAllure Report: ${allureReportUrl}"
+                              "cards": [{
+                                "header": {
+                                  "title": "Playwright Pipeline",
+                                  "subtitle": "Build #${env.BUILD_NUMBER} - ${status}"
+                                },
+                                "sections": [{
+                                  "widgets": [{
+                                    "buttons": [{
+                                      "textButton": {
+                                        "text": "View Allure Report",
+                                        "onClick": {
+                                          "openLink": {
+                                            "url": "${allureReportUrl}"
+                                          }
+                                        }
+                                      }
+                                    }]
+                                  }]
+                                }]
+                              }]
                             }' \
                         $GCHAT_WEBHOOK
                         """
@@ -144,5 +164,6 @@ pipeline {
                 }
             }
         }
+
     }
 }
