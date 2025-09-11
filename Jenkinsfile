@@ -128,7 +128,7 @@ pipeline {
 
         stage('Notify GChat') {
             steps {
-                withCredentials([string(credentialsId: 'gchat-webhook', variable: 'GCHAT_WEBHOOK')]) {
+                withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
                     script {
                         def jobUrl = env.BUILD_URL
                         def allureReportUrl = "${jobUrl}allure"  // Jenkins Allure report URL
