@@ -1,0 +1,4 @@
+Refresher option not visible or selector invalid
+Handling login popup
+Waiting for TICKET_DETAILS button...
+✅ Validation successful
