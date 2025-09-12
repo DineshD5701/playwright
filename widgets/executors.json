@@ -1,1 +1,1 @@
-[{"name":"Jenkins","type":"jenkins","url":"http://localhost:8080/","buildOrder":163,"buildName":"github-playwright #163","buildUrl":"http://localhost:8080/job/github-playwright/163/","reportName":"AllureReport","reportUrl":"http://localhost:8080/job/github-playwright/163/allure"}]
+[{"name":"Jenkins","type":"jenkins","url":"http://localhost:8080/","buildOrder":173,"buildName":"github-playwright #173","buildUrl":"http://localhost:8080/job/github-playwright/173/","reportName":"AllureReport","reportUrl":"http://localhost:8080/job/github-playwright/173/allure"}]
