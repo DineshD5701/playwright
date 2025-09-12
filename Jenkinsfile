@@ -172,11 +172,11 @@ pipeline {
                             string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
                 script {
                     // Install Netlify CLI if not already installed
-                    sh '''
+                    sh """
                     if ! command -v netlify >/dev/null 2>&1; then
                     npm install -g netlify-cli
                     fi
-                    '''
+                    """
 
                     // Deploy Allure report to Netlify
                     def deployUrl = sh(
