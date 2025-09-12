@@ -200,13 +200,13 @@ pipeline {
                         def reportUrl = "https://dineshd5701.github.io/playwright/"
                         def status = currentBuild.currentResult
 
-                        sh """
+                        sh '''
                         curl -X POST -H 'Content-Type: application/json' \
                         -d '{
                           "text": "🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ${total}\\\\n✅ *Passed:* ${passed}\\\\n❌ *Failed:* ${failed}\\\\n⚠️ *Broken:* ${broken}\\\\n⏭️ *Skipped:* ${skipped}\\\\n📊 *Status:* ${status}\\\\n🔗 *Report:* ${reportUrl}"
                         }' \
                         $GCHAT_WEBHOOK
-                        """
+                        '''
                     }
                 }
             }
