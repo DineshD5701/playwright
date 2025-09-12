@@ -156,7 +156,6 @@ pipeline {
                 }
             }
         }
-
         stage('Publish Allure Report in Jenkins') {
             steps {
                 allure([
@@ -166,7 +165,6 @@ pipeline {
                 ])
             }
         }
-    }
 
         stage('Publish to GitHub Pages') {
             steps {
@@ -176,12 +174,12 @@ pipeline {
                           git config --global user.email "ci-bot@example.com"
                           git config --global user.name "CI Bot"
                           rm -rf gh-pages
-                          git clone https://${GIT_USER}:${GIT_PASS}@github.com/<your-username>/<your-repo>.git -b gh-pages gh-pages
+                          git clone https://${GIT_USER}:${GIT_PASS}@github.com/dineshd5701/playwright.git -b gh-pages gh-pages
                           rm -rf gh-pages/*
                           cp -r allure-report/* gh-pages/
                           cd gh-pages
                           git add .
-                          git commit -m "Update Allure Report for Build #${BUILD_NUMBER}"
+                          git commit -m "Update Allure Report for Build #${BUILD_NUMBER}" || echo "No changes to commit"
                           git push origin gh-pages
                         """
                     }
@@ -191,35 +189,29 @@ pipeline {
 
         stage('Notify Google Chat') {
             steps {
-            withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
-                script {
-                    // Extract test summary safely (fallback to 0 if missing)
-                    def total = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def failed = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def broken = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def passed = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
+                    script {
+                        def total = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def failed = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def broken = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def passed = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
 
-                    def reportUrl = "https://dineshd5701.github.io/playwright/" 
-                    def status = currentBuild.currentResult
+                        def reportUrl = "https://dineshd5701.github.io/playwright/"
+                        def status = currentBuild.currentResult
 
-                    // Send notification to Google Chat
-                    sh """
-                    curl -X POST -H 'Content-Type: application/json' \
-                    -d '{
-                    "text": "🚀 *Playwright Test Suite Completed* 🚀\\n
-                    🧪 *Total:* ${total}\\n
-                    ✅ *Passed:* ${passed}\\n
-                    ❌ *Failed:* ${failed}\\n
-                    ⚠️ *Broken:* ${broken}\\n
-                    ⏭️ *Skipped:* ${skipped}\\n
-                    📊 *Status:* ${status}\\n
-                    🔗 *Report:* ${reportUrl}"
-                    }' \
-                    $GCHAT_WEBHOOK
-                    """
-                        }
+                        sh """
+                        curl -X POST -H 'Content-Type: application/json' \
+                        -d '{
+                          "text": "🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ${total}\\\\n✅ *Passed:* ${passed}\\\\n❌ *Failed:* ${failed}\\\\n⚠️ *Broken:* ${broken}\\\\n⏭️ *Skipped:* ${skipped}\\\\n📊 *Status:* ${status}\\\\n🔗 *Report:* ${reportUrl}"
+                        }' \
+                        $GCHAT_WEBHOOK
+                        """
                     }
                 }
             }
         }
+    }
+}
+
+
