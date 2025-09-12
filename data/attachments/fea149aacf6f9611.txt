@@ -9,6 +9,7 @@
 Error: page.click: Test ended.
 Call log:
   - waiting for locator('//button[@datatracking="PAST_TICKET"]')
+    - locator resolved to <button role="tab" tabindex="-1" type="button" aria-selected="false" data-tabkeys="PAST_TICKET" datatracking="PAST_TICKET" class="MuiButtonBase-root MuiTab-root jss829 MuiTab-textColorInherit text-cyan-500">…</button>
 
     at ElementClass.waitAndClick (/app/Generic/ElemenetClass.js:34:28)
     at TicketDetailsPage.doMoreTicketsTab (/app/Pages/TicketDetailsPage.js:135:29)
