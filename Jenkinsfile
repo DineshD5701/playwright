@@ -11,19 +11,19 @@ pipeline {
 
     stages {
 
-        stage('Build & Push Docker Image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                        sh '''
-                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-                            docker build -t $DOCKER_IMAGE .
-                            docker push $DOCKER_IMAGE
-                        '''
-                    }
-                }
-            }
-        }
+        // stage('Build & Push Docker Image') {
+        //     steps {
+        //         script {
+        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+        //                 sh '''
+        //                     echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+        //                     docker build -t $DOCKER_IMAGE .
+        //                     docker push $DOCKER_IMAGE
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Set Kubeconfig') {
             steps {
@@ -36,47 +36,6 @@ pipeline {
                 sh 'kubectl get nodes'
             }
         }
-
-        stage('Clean Allure PVC') {
-            steps {
-                script {
-                    sh """
-                    # Delete old results from PVC using a temporary pod
-                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --ignore-not-found
-                    kubectl run allure-clean --namespace=${NAMESPACE} \
-                        --image=busybox:1.36 --restart=Never \
-                        --overrides='
-                        {
-                            "apiVersion": "v1",
-                            "spec": {
-                                "containers": [{
-                                    "name": "allure-clean",
-                                    "image": "busybox:1.36",
-                                    "command": ["sh", "-c", "rm -rf /app/allure-results/*"],
-                                    "volumeMounts": [{
-                                        "mountPath": "/app/allure-results",
-                                        "name": "allure-results"
-                                    }]
-                                }],
-                                "volumes": [{
-                                    "name": "allure-results",
-                                    "persistentVolumeClaim": {
-                                        "claimName": "${PVC_NAME}"
-                                    }
-                                }]
-                            }
-                        }'
-        
-                    echo "Waiting for allure-clean pod to finish..."
-                    kubectl wait --for=condition=Succeeded pod/allure-clean --namespace=${NAMESPACE} --timeout=60s || true
-        
-                    echo "Ensure pod is fully terminated..."
-                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --wait=true --ignore-not-found
-                    """
-                }
-            }
-        }
-
         
         stage('Run Playwright Jobs in K8s') {
             steps {
@@ -201,11 +160,11 @@ pipeline {
                         def status = currentBuild.currentResult
 
                         sh '''
-                        curl -X POST -H 'Content-Type: application/json' \
-                        -d '{
-                          "text": "🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ${total}\\\\n✅ *Passed:* ${passed}\\\\n❌ *Failed:* ${failed}\\\\n⚠️ *Broken:* ${broken}\\\\n⏭️ *Skipped:* ${skipped}\\\\n📊 *Status:* ${status}\\\\n🔗 *Report:* ${reportUrl}"
-                        }' \
-                        $GCHAT_WEBHOOK
+                        curl -X POST -H "Content-Type: application/json" \
+                        -d "{
+                        \\"text\\": \\"🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ''' + total + '''\\\\n✅ *Passed:* ''' + passed + '''\\\\n❌ *Failed:* ''' + failed + '''\\\\n⚠️ *Broken:* ''' + broken + '''\\\\n⏭️ *Skipped:* ''' + skipped + '''\\\\n📊 *Status:* ''' + status + '''\\\\n🔗 *Report:* ''' + reportUrl + '''\\"
+                        }" \
+                        "$GCHAT_WEBHOOK"
                         '''
                     }
                 }
