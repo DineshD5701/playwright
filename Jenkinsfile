@@ -166,48 +166,38 @@ pipeline {
             }
         }
 
-        stage('Publish to GitHub Pages') {
-            steps {
+        stage('Publish Allure Report to Netlify') {
+            withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN'),
+                            string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-                        sh """
-                          git config --global user.email "ci-bot@example.com"
-                          git config --global user.name "CI Bot"
-                          rm -rf gh-pages
-                          git clone https://${GIT_USER}:${GIT_PASS}@github.com/dineshd5701/playwright.git -b gh-pages gh-pages
-                          rm -rf gh-pages/*
-                          cp -r allure-report/* gh-pages/
-                          cd gh-pages
-                          git add .
-                          git commit -m "Update Allure Report for Build #${BUILD_NUMBER}" || echo "No changes to commit"
-                          git push origin gh-pages
-                        """
-                    }
-                }
-            }
-        }
+                    // Install Netlify CLI if not already installed
+                    sh '''
+                    if ! command -v netlify >/dev/null 2>&1; then
+                    npm install -g netlify-cli
+                    fi
+                    '''
 
-        stage('Notify Google Chat') {
-            steps {
-                withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
-                    script {
-                        def total = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                        def failed = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                        def broken = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                        def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                        def passed = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                    // Deploy Allure report to Netlify
+                    def deployUrl = sh(
+                        script: "netlify deploy --dir=allure-report --prod --auth $NETLIFY_AUTH_TOKEN --json | jq -r '.url'",
+                        returnStdout: true
+                    ).trim()
 
-                        def reportUrl = "https://dineshd5701.github.io/playwright/"
-                        def status = currentBuild.currentResult
+                    def status = currentBuild.currentResult
+                    def total   = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                    def failed  = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                    def broken  = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                    def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                    def passed  = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
 
-                        sh '''
-                        curl -X POST -H "Content-Type: application/json" \
-                        -d "{
-                        \\"text\\": \\"🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ''' + total + '''\\\\n✅ *Passed:* ''' + passed + '''\\\\n❌ *Failed:* ''' + failed + '''\\\\n⚠️ *Broken:* ''' + broken + '''\\\\n⏭️ *Skipped:* ''' + skipped + '''\\\\n📊 *Status:* ''' + status + '''\\\\n🔗 *Report:* ''' + reportUrl + '''\\"
-                        }" \
-                        "$GCHAT_WEBHOOK"
-                        '''
-                    }
+                    // Send Google Chat notification
+                    sh """
+                    curl -X POST -H "Content-Type: application/json" \
+                    -d "{
+                    \\"text\\": \\"🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ${total}\\\\n✅ *Passed:* ${passed}\\\\n❌ *Failed:* ${failed}\\\\n⚠️ *Broken:* ${broken}\\\\n⏭️ *Skipped:* ${skipped}\\\\n📊 *Status:* ${status}\\\\n🔗 *Report:* ${deployUrl}\\"
+                    }" \
+                    "$GCHAT_WEBHOOK"
+                    """
                 }
             }
         }
