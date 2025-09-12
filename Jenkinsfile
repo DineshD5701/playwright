@@ -11,19 +11,19 @@ pipeline {
 
     stages {
 
-        // stage('Build & Push Docker Image') {
-        //     steps {
-        //         script {
-        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-        //                 sh '''
-        //                     echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-        //                     docker build -t $DOCKER_IMAGE .
-        //                     docker push $DOCKER_IMAGE
-        //                 '''
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build & Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh '''
+                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                            docker build -t $DOCKER_IMAGE .
+                            docker push $DOCKER_IMAGE
+                        '''
+                    }
+                }
+            }
+        }
 
         stage('Set Kubeconfig') {
             steps {
@@ -166,40 +166,47 @@ pipeline {
             }
         }
 
-        stage('Publish Allure Report to Netlify') {
-            steps{
-            withCredentials([
-                string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN'),
-                string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')
-            ]) {
+        stage('Publish to GitHub Pages') {
+            steps {
                 script {
-                    // Deploy Allure report to Netlify and capture the site URL
-                    def deployOutput = sh(
-                        script: "netlify deploy --create-site 'playwright-report-${env.BUILD_NUMBER}' --auth $NETLIFY_AUTH_TOKEN --dir=allure-report --prod --json",
-                        returnStdout: true
-                    ).trim()
-        
-                    // Extract the deploy URL using Groovy JSON parser
-                    def deployJson = readJSON text: deployOutput
-                    def deployUrl = deployJson.url
-        
-                    // Collect test summary from Allure
-                    def total   = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def failed  = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def broken  = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def passed  = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-        
-                    def status = currentBuild.currentResult
-        
-                    // Send Google Chat notification
-                    sh """
-                    curl -X POST -H "Content-Type: application/json" \
-                    -d '{
-                        "text": "🚀 *Playwright Test Suite Completed* 🚀\\n🧪 *Total:* ${total}\\n✅ *Passed:* ${passed}\\n❌ *Failed:* ${failed}\\n⚠️ *Broken:* ${broken}\\n⏭️ *Skipped:* ${skipped}\\n📊 *Status:* ${status}\\n🔗 *Report:* ${deployUrl}"
-                    }' \
-                    "$GCHAT_WEBHOOK"
-                    """
+                    withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                        sh """
+                          git config --global user.email "ci-bot@example.com"
+                          git config --global user.name "CI Bot"
+                          rm -rf gh-pages
+                          git clone https://${GIT_USER}:${GIT_PASS}@github.com/dineshd5701/playwright.git -b gh-pages gh-pages
+                          rm -rf gh-pages/*
+                          cp -r allure-report/* gh-pages/
+                          cd gh-pages
+                          git add .
+                          git commit -m "Update Allure Report for Build #${BUILD_NUMBER}" || echo "No changes to commit"
+                          git push origin gh-pages
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Notify Google Chat') {
+            steps {
+                withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
+                    script {
+                        def total = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def failed = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def broken = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def passed = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+
+                        def reportUrl = "https://dineshd5701.github.io/playwright/"
+                        def status = currentBuild.currentResult
+
+                        sh '''
+                        curl -X POST -H 'Content-Type: application/json' \
+                        -d '{
+                          "text": "🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ${total}\\\\n✅ *Passed:* ${passed}\\\\n❌ *Failed:* ${failed}\\\\n⚠️ *Broken:* ${broken}\\\\n⏭️ *Skipped:* ${skipped}\\\\n📊 *Status:* ${status}\\\\n🔗 *Report:* ${reportUrl}"
+                        }' \
+                        $GCHAT_WEBHOOK
+                        '''
                     }
                 }
             }
