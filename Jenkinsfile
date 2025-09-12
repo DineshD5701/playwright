@@ -167,26 +167,22 @@ pipeline {
         }
 
         stage('Publish Allure Report to Netlify') {
-            steps{
-            withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN'),
-                             string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
-        
+            withCredentials([
+                string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN'),
+                string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')
+            ]) {
                 script {
-                    // Deploy Allure report to Netlify and capture CLI output
+                    // Deploy Allure report to Netlify and capture the site URL
                     def deployOutput = sh(
-                        script: "netlify deploy --dir=allure-report --prod --auth=$NETLIFY_AUTH_TOKEN",
+                        script: "netlify deploy --create-site 'playwright-report-${env.BUILD_NUMBER}' --auth $NETLIFY_AUTH_TOKEN --dir=allure-report --prod --json",
                         returnStdout: true
                     ).trim()
         
-                    // Extract deployed site URL from CLI output
-                    def deployUrl = sh(
-                        script: "echo '${deployOutput}' | grep -Eo 'https://[a-zA-Z0-9.-]+\\.netlify\\.app' | tail -1",
-                        returnStdout: true
-                    ).trim()
+                    // Extract the deploy URL using Groovy JSON parser
+                    def deployJson = readJSON text: deployOutput
+                    def deployUrl = deployJson.url
         
-                    echo "Netlify URL: ${deployUrl}"
-        
-                    // Collect Allure test results
+                    // Collect test summary from Allure
                     def total   = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
                     def failed  = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
                     def broken  = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
@@ -198,15 +194,15 @@ pipeline {
                     // Send Google Chat notification
                     sh """
                     curl -X POST -H "Content-Type: application/json" \
-                    -d "{
-                    \\"text\\": \\"🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ${total}\\\\n✅ *Passed:* ${passed}\\\\n❌ *Failed:* ${failed}\\\\n⚠️ *Broken:* ${broken}\\\\n⏭️ *Skipped:* ${skipped}\\\\n📊 *Status:* ${status}\\\\n🔗 *Report:* ${deployUrl}\\"
-                    }" \
+                    -d '{
+                        "text": "🚀 *Playwright Test Suite Completed* 🚀\\n🧪 *Total:* ${total}\\n✅ *Passed:* ${passed}\\n❌ *Failed:* ${failed}\\n⚠️ *Broken:* ${broken}\\n⏭️ *Skipped:* ${skipped}\\n📊 *Status:* ${status}\\n🔗 *Report:* ${deployUrl}"
+                    }' \
                     "$GCHAT_WEBHOOK"
                     """
-                    }
                 }
             }
         }
+
     }
 }
 
