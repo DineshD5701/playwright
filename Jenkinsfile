@@ -11,19 +11,19 @@ pipeline {
 
     stages {
 
-        stage('Build & Push Docker Image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                        sh '''
-                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-                            docker build -t $DOCKER_IMAGE .
-                            docker push $DOCKER_IMAGE
-                        '''
-                    }
-                }
-            }
-        }
+        // stage('Build & Push Docker Image') {
+        //     steps {
+        //         script {
+        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+        //                 sh '''
+        //                     echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+        //                     docker build -t $DOCKER_IMAGE .
+        //                     docker push $DOCKER_IMAGE
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Set Kubeconfig') {
             steps {
@@ -167,41 +167,46 @@ pipeline {
         }
 
         stage('Publish Allure Report to Netlify') {
-            steps{
-            withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN'),
-                            string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
-                script {
-                    // Install Netlify CLI if not already installed
-                    sh """
-                    if ! command -v netlify >/dev/null 2>&1; then
-                    npm install -g netlify-cli
-                    fi
-                    """
-
-                    // Deploy Allure report to Netlify
-                    def deployUrl = sh(
-                        script: "netlify deploy --dir=allure-report --prod --auth $NETLIFY_AUTH_TOKEN --json | jq -r '.url'",
-                        returnStdout: true
-                    ).trim()
-
-                    def status = currentBuild.currentResult
-                    def total   = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def failed  = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def broken  = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-                    def passed  = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-
-                    // Send Google Chat notification
-                    sh """
-                    curl -X POST -H "Content-Type: application/json" \
-                    -d "{
-                    \\"text\\": \\"🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ${total}\\\\n✅ *Passed:* ${passed}\\\\n❌ *Failed:* ${failed}\\\\n⚠️ *Broken:* ${broken}\\\\n⏭️ *Skipped:* ${skipped}\\\\n📊 *Status:* ${status}\\\\n🔗 *Report:* ${deployUrl}\\"
-                    }" \
-                    "$GCHAT_WEBHOOK"
-                    """
+            steps {
+                withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN'),
+                                 string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
+                    script {
+                        // Ensure latest Netlify CLI
+                        sh 'npm install -g netlify-cli@latest'
+        
+                        // Try JSON deploy first
+                        def deployUrl = sh(
+                            script: "netlify deploy --dir=allure-report --prod --auth=$NETLIFY_AUTH_TOKEN --json 2>/dev/null | jq -r '.url' || true",
+                            returnStdout: true
+                        ).trim()
+        
+                        // If JSON failed, fallback to parsing plain output
+                        if (!deployUrl || deployUrl == "null") {
+                            echo "Falling back to plain text parsing..."
+                            deployUrl = sh(
+                                script: "netlify deploy --dir=allure-report --prod --auth=$NETLIFY_AUTH_TOKEN | grep -Eo 'https://[a-zA-Z0-9.-]+.netlify.app' | tail -1",
+                                returnStdout: true
+                            ).trim()
+                        }
+        
+                        def status  = currentBuild.currentResult
+                        def total   = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def failed  = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def broken  = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                        def passed  = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+        
+                        // Send Google Chat notification
+                        sh """
+                        curl -X POST -H "Content-Type: application/json" \
+                        -d "{
+                        \\"text\\": \\"🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ${total}\\\\n✅ *Passed:* ${passed}\\\\n❌ *Failed:* ${failed}\\\\n⚠️ *Broken:* ${broken}\\\\n⏭️ *Skipped:* ${skipped}\\\\n📊 *Status:* ${status}\\\\n🔗 *Report:* ${deployUrl}\\"
+                        }" \
+                        "$GCHAT_WEBHOOK"
+                        """
                     }
                 }
-            }   
+            }
         }
     }
 }
