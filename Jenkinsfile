@@ -102,8 +102,9 @@ pipeline {
 		        }' \
 		        $GCHAT_WEBHOOK
 		        """
+		            }
 		        }
-		    }
-        }
-	}
+            }
+	    }
+    }
 }
