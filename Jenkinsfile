@@ -7,7 +7,6 @@ pipeline {
         KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
         DOCKER_IMAGE = "dinesh571/playwright:latest"
         PVC_NAME = "allure-pvc"
-        REPORT_URL = "https://7503742845ed.ngrok-free.app/job/${JOB_NAME}/${BUILD_NUMBER}/allure"
     }
 
     stages {
@@ -15,42 +14,159 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh """
-                          echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                          docker build -t $DOCKER_IMAGE .
-                          docker push $DOCKER_IMAGE
-                        """
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh '''
+                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                            docker build -t $DOCKER_IMAGE .
+                            docker push $DOCKER_IMAGE
+                        '''
                     }
                 }
             }
         }
 
-        stage('Run Tests on Kubernetes') {
+        stage('Set Kubeconfig') {
             steps {
+                sh '''
+                    echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
+                '''
                 script {
-                    withCredentials([file(credentialsId: 'KUBECONFIG_CONTENT', variable: 'KUBECONFIG_FILE')]) {
-                        sh """
-                          export KUBECONFIG=$KUBECONFIG_FILE
-                          kubectl apply -f k8s/playwright-job.yml -n $NAMESPACE
-                          kubectl wait --for=condition=complete job/playwright-tests -n $NAMESPACE --timeout=600s
-                        """
-                    }
+                    env.KUBECONFIG = "${pwd()}/kubeconfig"
                 }
+                sh 'kubectl get nodes'
             }
         }
 
-        stage('Generate Allure Report') {
+        stage('Clean Allure PVC') {
             steps {
                 script {
                     sh """
-                      mkdir -p allure-results
-                      kubectl cp $NAMESPACE/\$(kubectl get pods -n $NAMESPACE | grep allure | awk '{print \$1}'):/app/allure-results ./allure-results -n $NAMESPACE
-                      allure generate allure-results --clean -o allure-report
+                    # Delete old results from PVC using a temporary pod
+                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --ignore-not-found
+                    kubectl run allure-clean --namespace=${NAMESPACE} \
+                        --image=busybox:1.36 --restart=Never \
+                        --overrides='
+                        {
+                            "apiVersion": "v1",
+                            "spec": {
+                                "containers": [{
+                                    "name": "allure-clean",
+                                    "image": "busybox:1.36",
+                                    "command": ["sh", "-c", "rm -rf /app/allure-results/*"],
+                                    "volumeMounts": [{
+                                        "mountPath": "/app/allure-results",
+                                        "name": "allure-results"
+                                    }]
+                                }],
+                                "volumes": [{
+                                    "name": "allure-results",
+                                    "persistentVolumeClaim": {
+                                        "claimName": "${PVC_NAME}"
+                                    }
+                                }]
+                            }
+                        }'
+        
+                    echo "Waiting for allure-clean pod to finish..."
+                    kubectl wait --for=condition=Succeeded pod/allure-clean --namespace=${NAMESPACE} --timeout=60s || true
+        
+                    echo "Ensure pod is fully terminated..."
+                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --wait=true --ignore-not-found
                     """
                 }
             }
         }
+
+        
+        stage('Run Playwright Jobs in K8s') {
+            steps {
+                script {
+                    // Clean up old jobs
+                    sh '''
+                        for i in $(seq 1 ${TOTAL_SHARDS}); do
+                            kubectl delete job playwright-test-$i --namespace=${NAMESPACE} --ignore-not-found
+                        done
+                    '''
+
+                    // Launch shards
+                    for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
+                        sh """
+                        sed "s/{{SHARD_ID}}/${i}/g; s/{{TOTAL_SHARDS}}/${TOTAL_SHARDS}/g; s|{{DOCKER_IMAGE}}|${DOCKER_IMAGE}|g; s|{{PVC_NAME}}|${PVC_NAME}|g; s|{{PVC_MOUNT_PATH}}|/app/allure-results|g" \
+                        k8s/playwright-job.yml | kubectl apply --namespace=${NAMESPACE} -f -
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Wait for Jobs to Complete') {
+            steps {
+                sh """
+                    echo "Waiting for Playwright jobs to finish..."
+                    kubectl wait --for=condition=complete --timeout=900s job --all --namespace=${NAMESPACE} || true
+                """
+            }
+        }
+
+        stage('Copy Allure Results from K8s') {
+            steps {
+                script {
+                    sh """
+                        # Clean old results in workspace
+                        rm -rf allure-results
+                        mkdir -p allure-results/merged
+
+                        # Delete old fetch pod if exists
+                        kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
+
+                        # Start a temporary pod with PVC mounted
+                        kubectl run allure-fetch --namespace=${NAMESPACE} \
+                        --image=busybox:1.36 --restart=Never \
+                        --overrides='
+                        {
+                            "apiVersion": "v1",
+                            "spec": {
+                            "containers": [{
+                                "name": "allure-fetch",
+                                "image": "busybox:1.36",
+                                "command": ["sleep", "3600"],
+                                "volumeMounts": [{
+                                "mountPath": "/app/allure-results",
+                                "name": "allure-results"
+                                }]
+                            }],
+                            "volumes": [{
+                                "name": "allure-results",
+                                "persistentVolumeClaim": {
+                                "claimName": "${PVC_NAME}"
+                                }
+                            }]
+                            }
+                        }'
+
+                        # Wait for pod ready
+                        kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
+
+                        # Copy results from PVC via the fetch pod
+                        kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
+
+                        # Cleanup fetch pod
+                        kubectl delete pod allure-fetch --namespace=${NAMESPACE}
+                    """
+                }
+            }
+        }
+
+        stage('Publish Allure Report in Jenkins') {
+            steps {
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'allure-results/merged']]
+                ])
+            }
+        }
+    }
 
         stage('Publish to GitHub Pages') {
             steps {
@@ -107,4 +223,3 @@ pipeline {
             }
 	    }
     }
-}
