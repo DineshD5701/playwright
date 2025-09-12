@@ -167,6 +167,7 @@ pipeline {
         }
 
         stage('Publish Allure Report to Netlify') {
+            steps{
             withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN'),
                             string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
                 script {
@@ -198,8 +199,9 @@ pipeline {
                     }" \
                     "$GCHAT_WEBHOOK"
                     """
+                    }
                 }
-            }
+            }   
         }
     }
 }
