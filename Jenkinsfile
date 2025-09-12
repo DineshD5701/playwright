@@ -11,19 +11,19 @@ pipeline {
 
     stages {
 
-        // stage('Build & Push Docker Image') {
-        //     steps {
-        //         script {
-        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-        //                 sh '''
-        //                     echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-        //                     docker build -t $DOCKER_IMAGE .
-        //                     docker push $DOCKER_IMAGE
-        //                 '''
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build & Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh '''
+                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                            docker build -t $DOCKER_IMAGE .
+                            docker push $DOCKER_IMAGE
+                        '''
+                    }
+                }
+            }
+        }
 
         stage('Set Kubeconfig') {
             steps {
@@ -201,11 +201,11 @@ pipeline {
                         def status = currentBuild.currentResult
 
                         sh '''
-                        curl -X POST -H 'Content-Type: application/json' \
-                        -d '{
-                          "text": "🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ${total}\\\\n✅ *Passed:* ${passed}\\\\n❌ *Failed:* ${failed}\\\\n⚠️ *Broken:* ${broken}\\\\n⏭️ *Skipped:* ${skipped}\\\\n📊 *Status:* ${status}\\\\n🔗 *Report:* ${reportUrl}"
-                        }' \
-                        $GCHAT_WEBHOOK
+                        curl -X POST -H "Content-Type: application/json" \
+                        -d "{
+                        \\"text\\": \\"🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ''' + total + '''\\\\n✅ *Passed:* ''' + passed + '''\\\\n❌ *Failed:* ''' + failed + '''\\\\n⚠️ *Broken:* ''' + broken + '''\\\\n⏭️ *Skipped:* ''' + skipped + '''\\\\n📊 *Status:* ''' + status + '''\\\\n🔗 *Report:* ''' + reportUrl + '''\\"
+                        }" \
+                        "$GCHAT_WEBHOOK"
                         '''
                     }
                 }
