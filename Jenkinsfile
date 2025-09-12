@@ -189,37 +189,37 @@ pipeline {
             }
         }
 
-	stage('Notify Google Chat') {
-	    steps {
-		withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
-		    script {
-		        // Extract test summary safely (fallback to 0 if missing)
-		        def total = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-		        def failed = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-		        def broken = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-		        def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-		        def passed = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+        stage('Notify Google Chat') {
+            steps {
+            withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
+                script {
+                    // Extract test summary safely (fallback to 0 if missing)
+                    def total = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                    def failed = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                    def broken = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                    def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+                    def passed = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
 
-		        def reportUrl = "https://dineshd5701.github.io/playwright/" 
-		        def status = currentBuild.currentResult
+                    def reportUrl = "https://dineshd5701.github.io/playwright/" 
+                    def status = currentBuild.currentResult
 
-		        // Send notification to Google Chat
-		        sh """
-		        curl -X POST -H 'Content-Type: application/json' \
-		        -d '{
-		          "text": "🚀 *Playwright Test Suite Completed* 🚀\\n
-		          🧪 *Total:* ${total}\\n
-		          ✅ *Passed:* ${passed}\\n
-		          ❌ *Failed:* ${failed}\\n
-		          ⚠️ *Broken:* ${broken}\\n
-		          ⏭️ *Skipped:* ${skipped}\\n
-		          📊 *Status:* ${status}\\n
-		          🔗 *Report:* ${reportUrl}"
-		        }' \
-		        $GCHAT_WEBHOOK
-		        """
-		            }
-		        }
+                    // Send notification to Google Chat
+                    sh """
+                    curl -X POST -H 'Content-Type: application/json' \
+                    -d '{
+                    "text": "🚀 *Playwright Test Suite Completed* 🚀\\n
+                    🧪 *Total:* ${total}\\n
+                    ✅ *Passed:* ${passed}\\n
+                    ❌ *Failed:* ${failed}\\n
+                    ⚠️ *Broken:* ${broken}\\n
+                    ⏭️ *Skipped:* ${skipped}\\n
+                    📊 *Status:* ${status}\\n
+                    🔗 *Report:* ${reportUrl}"
+                    }' \
+                    $GCHAT_WEBHOOK
+                    """
+                        }
+                    }
+                }
             }
-	    }
-    }
+        }
