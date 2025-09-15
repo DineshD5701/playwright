@@ -25,7 +25,7 @@ module.exports = defineConfig({
         storageState: "auth.json",
         screenshot: "off",
         video: "off",
-        trace: "off",
+        trace: "retain-on-failure",
       },
     },
     {
