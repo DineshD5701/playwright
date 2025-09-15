@@ -16,7 +16,7 @@ spec:
               value: "{{TOTAL_SHARDS}}"
           volumeMounts:
             - name: allure-results
-              mountPath: {{PVC_MOUNT_PATH}}
+              mountPath: /app/allure-results
       volumes:
         - name: allure-results
           persistentVolumeClaim:
