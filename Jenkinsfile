@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         NAMESPACE = "default"
-        TOTAL_SHARDS = 1
+        TOTAL_SHARDS = 4 
         KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
         DOCKER_IMAGE = "dinesh571/playwright:latest"
         PVC_NAME = "allure-pvc"
