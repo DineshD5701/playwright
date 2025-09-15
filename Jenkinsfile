@@ -36,47 +36,6 @@ pipeline {
                 sh 'kubectl get nodes'
             }
         }
-
-        stage('Clean Allure PVC') {
-            steps {
-                script {
-                    sh """
-                    # Delete old results from PVC using a temporary pod
-                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --ignore-not-found
-                    kubectl run allure-clean --namespace=${NAMESPACE} \
-                        --image=busybox:1.36 --restart=Never \
-                        --overrides='
-                        {
-                            "apiVersion": "v1",
-                            "spec": {
-                                "containers": [{
-                                    "name": "allure-clean",
-                                    "image": "busybox:1.36",
-                                    "command": ["sh", "-c", "rm -rf /app/allure-results/*"],
-                                    "volumeMounts": [{
-                                        "mountPath": "/app/allure-results",
-                                        "name": "allure-results"
-                                    }]
-                                }],
-                                "volumes": [{
-                                    "name": "allure-results",
-                                    "persistentVolumeClaim": {
-                                        "claimName": "${PVC_NAME}"
-                                    }
-                                }]
-                            }
-                        }'
-        
-                    echo "Waiting for allure-clean pod to finish..."
-                    kubectl wait --for=condition=Succeeded pod/allure-clean --namespace=${NAMESPACE} --timeout=60s || true
-        
-                    echo "Ensure pod is fully terminated..."
-                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --wait=true --ignore-not-found
-                    """
-                }
-            }
-        }
-
         
         stage('Run Playwright Jobs in K8s') {
             steps {
@@ -104,6 +63,7 @@ pipeline {
                 sh """
                     echo "Waiting for Playwright jobs to finish..."
                     kubectl wait --for=condition=complete --timeout=900s job --all --namespace=${NAMESPACE} || true
+                    sleep 30
                 """
             }
         }
@@ -156,56 +116,60 @@ pipeline {
                 }
             }
         }
-        // stage('Publish Allure Report in Jenkins') {
-        //     steps {
-        //         allure([
-        //             includeProperties: false,
-        //             jdk: '',
-        //             results: [[path: 'allure-results/merged']]
-        //         ])
-        //     }
-        // }
+        stage('Publish Allure Report in Jenkins') {
+            steps {
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'allure-results/merged']]
+                ])
+            }
+        }
 
-        // stage('Publish Allure Report to Netlify') {
-        //     steps{
-        //     withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN'),
-        //                      string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
-        
+        // stage('Publish to GitHub Pages') {
+        //     steps {
         //         script {
-        //             // Deploy Allure report to Netlify and capture CLI output
-        //             def deployOutput = sh(
-        //                 script: "netlify deploy --dir=allure-report --prod --auth=$NETLIFY_AUTH_TOKEN",
-        //                 returnStdout: true
-        //             ).trim()
-        
-        //             // Extract deployed site URL from CLI output
-        //             def deployUrl = sh(
-        //                 script: "echo '${deployOutput}' | grep -Eo 'https://[a-zA-Z0-9.-]+\\.netlify\\.app' | tail -1",
-        //                 returnStdout: true
-        //             ).trim()
-        
-        //             echo "Netlify URL: ${deployUrl}"
-        
-        //             // Collect Allure test results
-        //             def total   = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-        //             def failed  = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-        //             def broken  = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-        //             def skipped = sh(script: "grep -o '\"skipped\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-        //             def passed  = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
-        
-        //             def status = currentBuild.currentResult
-        
-        //             // Send Google Chat notification
-        //             sh """
-        //             curl -X POST -H "Content-Type: application/json" \
-        //             -d "{
-        //             \\"text\\": \\"🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ${total}\\\\n✅ *Passed:* ${passed}\\\\n❌ *Failed:* ${failed}\\\\n⚠️ *Broken:* ${broken}\\\\n⏭️ *Skipped:* ${skipped}\\\\n📊 *Status:* ${status}\\\\n🔗 *Report:* ${deployUrl}\\"
-        //             }" \
-        //             "$GCHAT_WEBHOOK"
-        //             """
+        //             withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+        //                 sh """
+        //                   git config --global user.email "ci-bot@example.com"
+        //                   git config --global user.name "CI Bot"
+        //                   rm -rf gh-pages
+        //                   git clone https://${GIT_USER}:${GIT_PASS}@github.com/dineshd5701/playwright.git -b gh-pages gh-pages
+        //                   rm -rf gh-pages/*
+        //                   cp -r allure-report/* gh-pages/
+        //                   cd gh-pages
+        //                   git add .
+        //                   git commit -m "Update Allure Report for Build #${BUILD_NUMBER}" || echo "No changes to commit"
+        //                   git push origin gh-pages
+        //                 """
         //             }
         //         }
         //     }
         // }
+
+        // stage('Notify Google Chat') {
+        //     steps {
+        //         withCredentials([string(credentialsId: 'GCHAT_WEBHOOK', variable: 'GCHAT_WEBHOOK')]) {
+        //             script {
+        //                 def total = sh(script: "grep -o '\"total\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+        //                 def failed = sh(script: "grep -o '\"failed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+        //                 def broken = sh(script: "grep -o '\"broken\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+        //                 def passed = sh(script: "grep -o '\"passed\":[0-9]*' allure-report/widgets/summary.json | grep -o '[0-9]*' || echo 0", returnStdout: true).trim()
+
+        //                 def reportUrl = "https://dineshd5701.github.io/playwright/"
+        //                 def status = currentBuild.currentResult
+
+        //                 sh '''
+        //                 curl -X POST -H "Content-Type: application/json" \
+        //                 -d "{
+        //                 \\"text\\": \\"🚀 *Playwright Test Suite Completed* 🚀\\\\n🧪 *Total:* ''' + total + '''\\\\n✅ *Passed:* ''' + passed + '''\\\\n❌ *Failed:* ''' + failed + '''\\\\n⚠️ *Broken:* ''' + broken + '''\\\\n📊 *Status:* ''' + status + '''\\\\n🔗 *Report:* ''' + reportUrl + '''\\"
+        //                 }" \
+        //                 "$GCHAT_WEBHOOK"
+        //                 '''
+        //             }
+        //         }
+        //     }
+        }
     }
 }
+
