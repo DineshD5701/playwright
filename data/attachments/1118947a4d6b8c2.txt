@@ -1,0 +1,330 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e6]:
+  - banner [ref=e7]:
+    - generic [ref=e9]:
+      - paragraph [ref=e10]:
+        - generic [ref=e11]:
+          - generic [ref=e13]: Stable
+          - generic [ref=e14]: v5.2.52
+      - generic [ref=e15]:
+        - button "Report a bug" [ref=e16] [cursor=pointer]:
+          - img [ref=e19] [cursor=pointer]
+        - button "Give us a feedback" [ref=e22] [cursor=pointer]:
+          - img [ref=e24] [cursor=pointer]
+        - paragraph [ref=e31]: 15-09-2025 05:50:10 am +00:00
+  - banner [ref=e32]:
+    - generic [ref=e33]:
+      - button [ref=e34] [cursor=pointer]:
+        - generic [ref=e36] [cursor=pointer]: menu
+      - paragraph [ref=e39]: Tickets
+      - generic [ref=e40]:
+        - button "26" [ref=e41] [cursor=pointer]:
+          - generic [ref=e43] [cursor=pointer]:
+            - img [ref=e45] [cursor=pointer]
+            - generic [ref=e53] [cursor=pointer]: "26"
+        - button "KM Portal" [ref=e55] [cursor=pointer]:
+          - generic [ref=e58] [cursor=pointer]:
+            - img [ref=e59] [cursor=pointer]
+            - text: KM Portal
+        - button "close" [ref=e61] [cursor=pointer]:
+          - generic [ref=e63] [cursor=pointer]:
+            - img [ref=e65] [cursor=pointer]
+            - generic [ref=e69] [cursor=pointer]: close
+        - generic [ref=e75] [cursor=pointer]:
+          - checkbox "Not Ava..." [ref=e78] [cursor=pointer]
+          - generic [ref=e80] [cursor=pointer]: Not Ava...
+        - button "Kapture QA User" [ref=e82] [cursor=pointer]:
+          - generic [ref=e84] [cursor=pointer]:
+            - img [ref=e85] [cursor=pointer]
+            - generic [ref=e87] [cursor=pointer]:
+              - paragraph [ref=e88] [cursor=pointer]: Kapture QA User
+              - img [ref=e90] [cursor=pointer]
+        - button [ref=e94] [cursor=pointer]:
+          - img [ref=e97] [cursor=pointer]
+  - generic [ref=e111]:
+    - generic [ref=e112]:
+      - navigation [ref=e115]:
+        - generic [ref=e117]:
+          - generic [ref=e118]: Views
+          - img [ref=e121] [cursor=pointer]
+        - region "scrollable content" [ref=e130]:
+          - generic [ref=e133]:
+            - button "Overall" [expanded] [ref=e134] [cursor=pointer]:
+              - paragraph [ref=e136] [cursor=pointer]: Overall
+            - region [ref=e140]:
+              - generic [ref=e141]:
+                - button "Unassigned" [ref=e142] [cursor=pointer]
+                - button "All Pending" [ref=e146] [cursor=pointer]
+                - button "All Complete" [ref=e150] [cursor=pointer]
+                - button "All Junk" [ref=e154] [cursor=pointer]
+                - button "Assigned to me" [ref=e158] [cursor=pointer]
+                - button "Created by me" [ref=e162] [cursor=pointer]
+                - button "Completed by me" [ref=e166] [cursor=pointer]
+      - button [ref=e170] [cursor=pointer]:
+        - img [ref=e172] [cursor=pointer]
+    - main [ref=e174]:
+      - generic [ref=e175]:
+        - generic [ref=e178]:
+          - generic [ref=e180]:
+            - generic [ref=e182] [cursor=pointer]:
+              - checkbox [ref=e183] [cursor=pointer]
+              - img [ref=e184] [cursor=pointer]
+            - generic: "0"
+          - generic [ref=e186]:
+            - generic [ref=e188]:
+              - button "Search" [ref=e189] [cursor=pointer]:
+                - img [ref=e191] [cursor=pointer]
+              - textbox "Search tickets..." [ref=e194]
+            - generic [ref=e195]:
+              - generic [ref=e196]: Show
+              - generic [ref=e197]:
+                - button "50" [ref=e198] [cursor=pointer]
+                - textbox: "50"
+                - img
+              - generic [ref=e199]: 1 - 50
+              - generic [ref=e200]: of
+              - generic [ref=e201]: "115"
+          - generic [ref=e202]:
+            - generic [ref=e203]:
+              - button [disabled]:
+                - generic:
+                  - img
+              - textbox "naked" [ref=e205]: "0"
+              - paragraph [ref=e206]:
+                - text: of
+                - generic [ref=e207]: "2"
+              - button [ref=e208] [cursor=pointer]:
+                - img [ref=e210] [cursor=pointer]
+            - button "last conversation" [ref=e213] [cursor=pointer]:
+              - generic [ref=e215] [cursor=pointer]:
+                - img [ref=e217] [cursor=pointer]
+                - paragraph [ref=e219] [cursor=pointer]: last conversation
+                - img [ref=e220] [cursor=pointer]
+            - img [ref=e223] [cursor=pointer]
+            - generic [ref=e225]:
+              - button "Compact View" [ref=e226] [cursor=pointer]:
+                - img [ref=e229] [cursor=pointer]
+              - button "Expanded View" [ref=e231] [cursor=pointer]:
+                - img [ref=e234] [cursor=pointer]
+        - table [ref=e239]:
+          - rowgroup [ref=e240]:
+            - generic [ref=e243]:
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12" [ref=e245] [cursor=pointer]:
+                - generic [ref=e246] [cursor=pointer]:
+                  - generic [ref=e249] [cursor=pointer]:
+                    - checkbox [ref=e250] [cursor=pointer]
+                    - img [ref=e251] [cursor=pointer]
+                  - generic [ref=e255] [cursor=pointer]:
+                    - generic [ref=e258] [cursor=pointer]:
+                      - generic [ref=e260]: S
+                      - generic [ref=e261] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e263] [cursor=pointer]:
+                      - img [ref=e267] [cursor=pointer]
+                      - generic [ref=e276]: CUSTOMER SUPPORT
+                    - img [ref=e281] [cursor=pointer]
+                    - generic [ref=e286]: RES
+                    - generic [ref=e289] [cursor=pointer]: flag
+                    - generic [ref=e293]: L
+                    - generic [ref=e296]: PENDING
+                    - paragraph [ref=e300] [cursor=pointer]: Sep 12
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12" [ref=e302] [cursor=pointer]:
+                - generic [ref=e303] [cursor=pointer]:
+                  - generic [ref=e306] [cursor=pointer]:
+                    - checkbox [ref=e307] [cursor=pointer]
+                    - img [ref=e308] [cursor=pointer]
+                  - generic [ref=e312] [cursor=pointer]:
+                    - generic [ref=e315] [cursor=pointer]:
+                      - generic [ref=e317]: S
+                      - generic [ref=e318] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e320] [cursor=pointer]:
+                      - img [ref=e324] [cursor=pointer]
+                      - generic [ref=e333]: CUSTOMER SUPPORT
+                    - img [ref=e338] [cursor=pointer]
+                    - generic [ref=e343]: RES
+                    - generic [ref=e346] [cursor=pointer]: flag
+                    - generic [ref=e350]: L
+                    - generic [ref=e353]: PENDING
+                    - paragraph [ref=e357] [cursor=pointer]: Sep 12
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12" [ref=e359] [cursor=pointer]:
+                - generic [ref=e360] [cursor=pointer]:
+                  - generic [ref=e363] [cursor=pointer]:
+                    - checkbox [ref=e364] [cursor=pointer]
+                    - img [ref=e365] [cursor=pointer]
+                  - generic [ref=e369] [cursor=pointer]:
+                    - generic [ref=e372] [cursor=pointer]:
+                      - generic [ref=e374]: S
+                      - generic [ref=e375] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e377] [cursor=pointer]:
+                      - img [ref=e381] [cursor=pointer]
+                      - generic [ref=e390]: CUSTOMER SUPPORT
+                    - img [ref=e395] [cursor=pointer]
+                    - generic [ref=e400]: RES
+                    - generic [ref=e403] [cursor=pointer]: flag
+                    - generic [ref=e407]: L
+                    - generic [ref=e410]: PENDING
+                    - paragraph [ref=e414] [cursor=pointer]: Sep 12
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12" [ref=e416] [cursor=pointer]:
+                - generic [ref=e417] [cursor=pointer]:
+                  - generic [ref=e420] [cursor=pointer]:
+                    - checkbox [ref=e421] [cursor=pointer]
+                    - img [ref=e422] [cursor=pointer]
+                  - generic [ref=e426] [cursor=pointer]:
+                    - generic [ref=e429] [cursor=pointer]:
+                      - generic [ref=e431]: S
+                      - generic [ref=e432] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e434] [cursor=pointer]:
+                      - img [ref=e438] [cursor=pointer]
+                      - generic [ref=e447]: CUSTOMER SUPPORT
+                    - img [ref=e452] [cursor=pointer]
+                    - generic [ref=e457]: RES
+                    - generic [ref=e460] [cursor=pointer]: flag
+                    - generic [ref=e464]: L
+                    - generic [ref=e467]: PENDING
+                    - paragraph [ref=e471] [cursor=pointer]: Sep 12
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12" [ref=e473] [cursor=pointer]:
+                - generic [ref=e474] [cursor=pointer]:
+                  - generic [ref=e477] [cursor=pointer]:
+                    - checkbox [ref=e478] [cursor=pointer]
+                    - img [ref=e479] [cursor=pointer]
+                  - generic [ref=e483] [cursor=pointer]:
+                    - generic [ref=e486] [cursor=pointer]:
+                      - generic [ref=e488]: S
+                      - generic [ref=e489] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e491] [cursor=pointer]:
+                      - img [ref=e495] [cursor=pointer]
+                      - generic [ref=e504]: CUSTOMER SUPPORT
+                    - img [ref=e509] [cursor=pointer]
+                    - generic [ref=e514]: RES
+                    - generic [ref=e517] [cursor=pointer]: flag
+                    - generic [ref=e521]: L
+                    - generic [ref=e524]: PENDING
+                    - paragraph [ref=e528] [cursor=pointer]: Sep 12
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12" [ref=e530] [cursor=pointer]:
+                - generic [ref=e531] [cursor=pointer]:
+                  - generic [ref=e534] [cursor=pointer]:
+                    - checkbox [ref=e535] [cursor=pointer]
+                    - img [ref=e536] [cursor=pointer]
+                  - generic [ref=e540] [cursor=pointer]:
+                    - generic [ref=e543] [cursor=pointer]:
+                      - generic [ref=e545]: S
+                      - generic [ref=e546] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e548] [cursor=pointer]:
+                      - img [ref=e552] [cursor=pointer]
+                      - generic [ref=e561]: CUSTOMER SUPPORT
+                    - img [ref=e566] [cursor=pointer]
+                    - generic [ref=e571]: RES
+                    - generic [ref=e574] [cursor=pointer]: flag
+                    - generic [ref=e578]: L
+                    - generic [ref=e581]: PENDING
+                    - paragraph [ref=e585] [cursor=pointer]: Sep 12
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 11" [ref=e587] [cursor=pointer]:
+                - generic [ref=e588] [cursor=pointer]:
+                  - generic [ref=e591] [cursor=pointer]:
+                    - checkbox [ref=e592] [cursor=pointer]
+                    - img [ref=e593] [cursor=pointer]
+                  - generic [ref=e597] [cursor=pointer]:
+                    - generic [ref=e600] [cursor=pointer]:
+                      - generic [ref=e602]: S
+                      - generic [ref=e603] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e605] [cursor=pointer]:
+                      - img [ref=e609] [cursor=pointer]
+                      - generic [ref=e618]: CUSTOMER SUPPORT
+                    - img [ref=e623] [cursor=pointer]
+                    - generic [ref=e628]: RES
+                    - generic [ref=e631] [cursor=pointer]: flag
+                    - generic [ref=e635]: L
+                    - generic [ref=e638]: PENDING
+                    - paragraph [ref=e642] [cursor=pointer]: Sep 11
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 11" [ref=e644] [cursor=pointer]:
+                - generic [ref=e645] [cursor=pointer]:
+                  - generic [ref=e648] [cursor=pointer]:
+                    - checkbox [ref=e649] [cursor=pointer]
+                    - img [ref=e650] [cursor=pointer]
+                  - generic [ref=e654] [cursor=pointer]:
+                    - generic [ref=e657] [cursor=pointer]:
+                      - generic [ref=e659]: S
+                      - generic [ref=e660] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e662] [cursor=pointer]:
+                      - img [ref=e666] [cursor=pointer]
+                      - generic [ref=e675]: CUSTOMER SUPPORT
+                    - img [ref=e680] [cursor=pointer]
+                    - generic [ref=e685]: RES
+                    - generic [ref=e688] [cursor=pointer]: flag
+                    - generic [ref=e692]: L
+                    - generic [ref=e695]: PENDING
+                    - paragraph [ref=e699] [cursor=pointer]: Sep 11
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 11" [ref=e701] [cursor=pointer]:
+                - generic [ref=e702] [cursor=pointer]:
+                  - generic [ref=e705] [cursor=pointer]:
+                    - checkbox [ref=e706] [cursor=pointer]
+                    - img [ref=e707] [cursor=pointer]
+                  - generic [ref=e711] [cursor=pointer]:
+                    - generic [ref=e714] [cursor=pointer]:
+                      - generic [ref=e716]: S
+                      - generic [ref=e717] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e719] [cursor=pointer]:
+                      - img [ref=e723] [cursor=pointer]
+                      - generic [ref=e732]: CUSTOMER SUPPORT
+                    - img [ref=e737] [cursor=pointer]
+                    - generic [ref=e742]: RES
+                    - generic [ref=e745] [cursor=pointer]: flag
+                    - generic [ref=e749]: L
+                    - generic [ref=e752]: PENDING
+                    - paragraph [ref=e756] [cursor=pointer]: Sep 11
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 11" [ref=e758] [cursor=pointer]:
+                - generic [ref=e759] [cursor=pointer]:
+                  - generic [ref=e762] [cursor=pointer]:
+                    - checkbox [ref=e763] [cursor=pointer]
+                    - img [ref=e764] [cursor=pointer]
+                  - generic [ref=e768] [cursor=pointer]:
+                    - generic [ref=e771] [cursor=pointer]:
+                      - generic [ref=e773]: S
+                      - generic [ref=e774] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e776] [cursor=pointer]:
+                      - img [ref=e780] [cursor=pointer]
+                      - generic [ref=e789]: CUSTOMER SUPPORT
+                    - img [ref=e794] [cursor=pointer]
+                    - generic [ref=e799]: RES
+                    - generic [ref=e802] [cursor=pointer]: flag
+                    - generic [ref=e806]: L
+                    - generic [ref=e809]: PENDING
+                    - paragraph [ref=e813] [cursor=pointer]: Sep 11
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 11" [ref=e815] [cursor=pointer]:
+                - generic [ref=e816] [cursor=pointer]:
+                  - generic [ref=e819] [cursor=pointer]:
+                    - checkbox [ref=e820] [cursor=pointer]
+                    - img [ref=e821] [cursor=pointer]
+                  - generic [ref=e825] [cursor=pointer]:
+                    - generic [ref=e828] [cursor=pointer]:
+                      - generic [ref=e830]: S
+                      - generic [ref=e831] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e833] [cursor=pointer]:
+                      - img [ref=e837] [cursor=pointer]
+                      - generic [ref=e846]: CUSTOMER SUPPORT
+                    - img [ref=e851] [cursor=pointer]
+                    - generic [ref=e856]: RES
+                    - generic [ref=e859] [cursor=pointer]: flag
+                    - generic [ref=e863]: L
+                    - generic [ref=e866]: PENDING
+                    - paragraph [ref=e870] [cursor=pointer]: Sep 11
+              - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 11" [ref=e872] [cursor=pointer]:
+                - generic [ref=e873] [cursor=pointer]:
+                  - generic [ref=e876] [cursor=pointer]:
+                    - checkbox [ref=e877] [cursor=pointer]
+                    - img [ref=e878] [cursor=pointer]
+                  - generic [ref=e882] [cursor=pointer]:
+                    - generic [ref=e885] [cursor=pointer]:
+                      - generic [ref=e887]: S
+                      - generic [ref=e888] [cursor=pointer]: shankar.lamani@kapturecrm.com
+                    - generic [ref=e890] [cursor=pointer]:
+                      - img [ref=e894] [cursor=pointer]
+                      - generic [ref=e903]: CUSTOMER SUPPORT
+                    - img [ref=e908] [cursor=pointer]
+                    - generic [ref=e913]: RES
+                    - generic [ref=e916] [cursor=pointer]: flag
+                    - generic [ref=e920]: L
+                    - generic [ref=e923]: PENDING
+                    - paragraph [ref=e927] [cursor=pointer]: Sep 11
+```
