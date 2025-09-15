@@ -112,7 +112,7 @@ pipeline {
                 script {
                     sh """
                         # Clean old results in workspace
-                        rm -rf allure-results
+                        rm -rf /app/allure-results
                         mkdir -p allure-results/merged
 
                         # Delete old fetch pod if exists
