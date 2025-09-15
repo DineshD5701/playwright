@@ -1,0 +1,51 @@
+Error during ticket assignment: page.waitForSelector: Test timeout of 60000ms exceeded.
+Call log:
+  - waiting for locator('span[title=\'Ticket ID: 736149704013\'] input[type=\'checkbox\']') to be visible
+
+    at TicketListPage.doTicketAssignment (/app/Pages/TicketListPage.js:171:23)
+    at /app/tests/bigbasket-tests/13_BigbasketTAssignmentTicket.spec.js:11:24 {
+  [Symbol(step)]: {
+    location: {
+      file: '/app/Pages/TicketListPage.js',
+      line: 171,
+      column: 23,
+      function: 'TicketListPage.doTicketAssignment'
+    },
+    category: 'pw:api',
+    title: "Wait for selector locator('span[title=\\'Ticket ID: 736149704013\\'] input[type=\\'checkbox\\']')",
+    apiName: 'page.waitForSelector',
+    params: {
+      selector: "span[title='Ticket ID: 736149704013'] input[type='checkbox']",
+      state: 'visible',
+      timeout: 0
+    },
+    group: undefined,
+    stepId: 'pw:api@42',
+    boxedStack: undefined,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [TestInfoImpl],
+      _stepId: 'pw:api@42',
+      _title: "Wait for selector locator('span[title=\\'Ticket ID: 736149704013\\'] input[type=\\'checkbox\\']')",
+      _parentStep: undefined,
+      skip: [Function (anonymous)]
+    },
+    recoverFromStepError: [AsyncFunction: recoverFromStepError],
+    complete: [Function: complete],
+    endWallTime: 1757916631889,
+    error: {
+      message: 'Error: page.waitForSelector: Test timeout of 60000ms exceeded.\n' +
+        'Call log:\n' +
+        "\x1B[2m  - waiting for locator('span[title=\\'Ticket ID: 736149704013\\'] input[type=\\'checkbox\\']') to be visible\x1B[22m\n",
+      stack: 'Error: page.waitForSelector: Test timeout of 60000ms exceeded.\n' +
+        'Call log:\n' +
+        "\x1B[2m  - waiting for locator('span[title=\\'Ticket ID: 736149704013\\'] input[type=\\'checkbox\\']') to be visible\x1B[22m\n" +
+        '\n' +
+        '    at TicketListPage.doTicketAssignment (/app/Pages/TicketListPage.js:171:23)\n' +
+        '    at /app/tests/bigbasket-tests/13_BigbasketTAssignmentTicket.spec.js:11:24',
+      cause: undefined
+    }
+  }
+}
