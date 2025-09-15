@@ -1,0 +1,39 @@
+❌ Error interacting with TICKET_DETAILS button: page.waitForLoadState: Test timeout of 60000ms exceeded.
+    at TicketListPage.doValiadationForSearchTicket (/app/Pages/TicketListPage.js:100:23)
+    at /app/tests/bigbasket-tests/11_BigbasketSideConversation.spec.js:13:24 {
+  [Symbol(step)]: {
+    location: {
+      file: '/app/Pages/TicketListPage.js',
+      line: 100,
+      column: 23,
+      function: 'TicketListPage.doValiadationForSearchTicket'
+    },
+    category: 'pw:api',
+    title: 'Wait for load state "networkidle"',
+    apiName: 'page.waitForLoadState',
+    params: { info: [Object] },
+    group: undefined,
+    stepId: 'pw:api@43',
+    boxedStack: undefined,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [TestInfoImpl],
+      _stepId: 'pw:api@43',
+      _title: 'Wait for load state "networkidle"',
+      _parentStep: undefined,
+      skip: [Function (anonymous)]
+    },
+    recoverFromStepError: [AsyncFunction: recoverFromStepError],
+    complete: [Function: complete],
+    endWallTime: 1757918011381,
+    error: {
+      message: 'Error: page.waitForLoadState: Test timeout of 60000ms exceeded.',
+      stack: 'Error: page.waitForLoadState: Test timeout of 60000ms exceeded.\n' +
+        '    at TicketListPage.doValiadationForSearchTicket (/app/Pages/TicketListPage.js:100:23)\n' +
+        '    at /app/tests/bigbasket-tests/11_BigbasketSideConversation.spec.js:13:24',
+      cause: undefined
+    }
+  }
+}

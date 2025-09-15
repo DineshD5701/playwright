@@ -1,0 +1,646 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e6]:
+    - banner [ref=e7]:
+      - generic [ref=e9]:
+        - paragraph [ref=e10]:
+          - generic [ref=e11]:
+            - generic [ref=e13]: Stable
+            - generic [ref=e14]: v5.2.52
+        - generic [ref=e15]:
+          - button "Report a bug" [ref=e16] [cursor=pointer]:
+            - img [ref=e19] [cursor=pointer]
+          - button "Give us a feedback" [ref=e22] [cursor=pointer]:
+            - img [ref=e24] [cursor=pointer]
+          - paragraph [ref=e31]: 15-09-2025 06:38:16 am +00:00
+    - banner [ref=e32]:
+      - generic [ref=e33]:
+        - button [ref=e34] [cursor=pointer]:
+          - generic [ref=e36] [cursor=pointer]: menu
+        - paragraph [ref=e39]: Tickets
+        - generic [ref=e40]:
+          - button "KM Portal" [ref=e42] [cursor=pointer]:
+            - generic [ref=e45] [cursor=pointer]:
+              - img [ref=e46] [cursor=pointer]
+              - text: KM Portal
+          - button "close" [ref=e48] [cursor=pointer]:
+            - generic [ref=e50] [cursor=pointer]:
+              - img [ref=e52] [cursor=pointer]
+              - generic [ref=e56] [cursor=pointer]: close
+          - generic [ref=e62] [cursor=pointer]:
+            - checkbox "Not Ava..." [ref=e65] [cursor=pointer]
+            - generic [ref=e67] [cursor=pointer]: Not Ava...
+          - button "Kapture QA User" [ref=e69] [cursor=pointer]:
+            - generic [ref=e71] [cursor=pointer]:
+              - img [ref=e72] [cursor=pointer]
+              - generic [ref=e74] [cursor=pointer]:
+                - paragraph [ref=e75] [cursor=pointer]: Kapture QA User
+                - img [ref=e77] [cursor=pointer]
+          - button [ref=e81] [cursor=pointer]:
+            - img [ref=e84] [cursor=pointer]
+    - generic [ref=e94]:
+      - generic [ref=e95]:
+        - generic [ref=e98]:
+          - banner [ref=e99]:
+            - generic [ref=e102]:
+              - button "Go back" [ref=e103] [cursor=pointer]:
+                - img [ref=e105] [cursor=pointer]
+              - button "assigned to me" [ref=e108] [cursor=pointer]:
+                - generic [ref=e109] [cursor=pointer]: assigned to me
+          - generic [ref=e112]:
+            - button "Search" [ref=e113] [cursor=pointer]:
+              - img [ref=e115] [cursor=pointer]
+            - textbox "Search" [ref=e118]
+          - list [ref=e120]:
+            - button "s l Jan 08 8mo" [ref=e121] [cursor=pointer]:
+              - generic [ref=e122] [cursor=pointer]:
+                - img [ref=e125] [cursor=pointer]
+                - paragraph [ref=e128] [cursor=pointer]: s l
+                - generic [ref=e129] [cursor=pointer]:
+                  - paragraph [ref=e130] [cursor=pointer]: Jan 08
+                  - paragraph [ref=e133] [cursor=pointer]:
+                    - img [ref=e135] [cursor=pointer]
+                    - text: 8mo
+            - button "s l Jan 06" [ref=e138] [cursor=pointer]:
+              - generic [ref=e139] [cursor=pointer]:
+                - img [ref=e142] [cursor=pointer]
+                - paragraph [ref=e145] [cursor=pointer]: s l
+                - paragraph [ref=e147] [cursor=pointer]: Jan 06
+        - button [ref=e148] [cursor=pointer]:
+          - img [ref=e150] [cursor=pointer]
+      - main [ref=e152]:
+        - generic [ref=e153]:
+          - generic [ref=e156]:
+            - generic [ref=e157]:
+              - tablist [ref=e163]:
+                - tab [ref=e164] [cursor=pointer]:
+                  - img [ref=e167] [cursor=pointer]
+                - tab [selected] [ref=e171] [cursor=pointer]:
+                  - img [ref=e175] [cursor=pointer]
+                - tab [ref=e177] [cursor=pointer]:
+                  - img [ref=e181] [cursor=pointer]
+              - tablist [ref=e193]:
+                - tab "DETAILS" [selected] [ref=e194] [cursor=pointer]:
+                  - generic [ref=e196] [cursor=pointer]:
+                    - img [ref=e198] [cursor=pointer]
+                    - generic [ref=e203] [cursor=pointer]: DETAILS
+                - tab [ref=e204] [cursor=pointer]:
+                  - img [ref=e208] [cursor=pointer]
+                - tab [ref=e211] [cursor=pointer]:
+                  - img [ref=e215] [cursor=pointer]
+                - tab [ref=e217] [cursor=pointer]:
+                  - img [ref=e221] [cursor=pointer]
+                - tab [ref=e224] [cursor=pointer]:
+                  - img [ref=e228] [cursor=pointer]
+                - tab [ref=e230] [cursor=pointer]:
+                  - img [ref=e234] [cursor=pointer]
+                - tab [ref=e236] [cursor=pointer]:
+                  - img [ref=e240] [cursor=pointer]
+                - tab [ref=e242] [cursor=pointer]:
+                  - img [ref=e246] [cursor=pointer]
+                - tab [ref=e248] [cursor=pointer]:
+                  - img [ref=e252] [cursor=pointer]
+                - tab [ref=e254] [cursor=pointer]:
+                  - img [ref=e258] [cursor=pointer]
+            - generic [ref=e261]:
+              - region [ref=e263]:
+                - generic [ref=e265]:
+                  - generic [ref=e266]:
+                    - generic [ref=e267]:
+                      - generic [ref=e268]: BB BOT
+                      - generic [ref=e269]:
+                        - paragraph [ref=e271]: Hi, s l! Welcome to bigbasket support.
+                        - paragraph [ref=e272]:
+                          - generic "Monday, January 6, 2025 1:23 PM" [ref=e273]: Jan 6th 25, 1:23:21 pm
+                    - generic "BB BOT" [ref=e275]: BB
+                  - generic [ref=e278]:
+                    - paragraph [ref=e280]: What can we help you with today?
+                    - paragraph [ref=e281]:
+                      - generic "Monday, January 6, 2025 1:23 PM" [ref=e282]: Jan 6th 25, 1:23:21 pm
+                  - generic [ref=e283]:
+                    - generic "s l" [ref=e285]: S
+                    - generic [ref=e286]:
+                      - generic [ref=e287]: s l
+                      - generic [ref=e288]:
+                        - paragraph [ref=e290]: Others
+                        - paragraph [ref=e291]:
+                          - generic "Monday, January 6, 2025 1:23 PM" [ref=e292]: Jan 6th 25, 1:23:22 pm
+                  - generic [ref=e293]:
+                    - generic [ref=e294]:
+                      - generic [ref=e295]: BB BOT
+                      - generic [ref=e296]:
+                        - paragraph [ref=e298]: Select an option to proceed
+                        - paragraph [ref=e299]:
+                          - generic "Monday, January 6, 2025 1:23 PM" [ref=e300]: Jan 6th 25, 1:23:23 pm
+                    - generic "BB BOT" [ref=e302]: BB
+                  - generic [ref=e303]:
+                    - generic "s l" [ref=e305]: S
+                    - generic [ref=e306]:
+                      - generic [ref=e307]: s l
+                      - generic [ref=e308]:
+                        - paragraph [ref=e310]: I have another query/issue
+                        - paragraph [ref=e311]:
+                          - generic "Monday, January 6, 2025 1:23 PM" [ref=e312]: Jan 6th 25, 1:23:26 pm
+                  - generic [ref=e313]:
+                    - generic [ref=e314]:
+                      - generic [ref=e315]: BB BOT
+                      - generic [ref=e316]:
+                        - paragraph [ref=e318]: Please provide details about the issue you are facing, and we will respond or connect you to one of our customer support agents based on your query.
+                        - paragraph [ref=e319]:
+                          - generic "Monday, January 6, 2025 1:23 PM" [ref=e320]: Jan 6th 25, 1:23:27 pm
+                    - generic "BB BOT" [ref=e322]: BB
+                  - generic [ref=e323]:
+                    - generic "s l" [ref=e325]: S
+                    - generic [ref=e326]:
+                      - generic [ref=e327]: s l
+                      - generic [ref=e328]:
+                        - paragraph [ref=e330]: Connect to agent
+                        - paragraph [ref=e331]:
+                          - generic "Monday, January 6, 2025 1:23 PM" [ref=e332]: Jan 6th 25, 1:23:31 pm
+                  - generic [ref=e333]:
+                    - generic [ref=e334]:
+                      - generic [ref=e335]: BB BOT
+                      - generic [ref=e336]:
+                        - paragraph [ref=e338]: Please wait while we connect you to an agent.
+                        - paragraph [ref=e339]:
+                          - generic "Monday, January 6, 2025 1:23 PM" [ref=e340]: Jan 6th 25, 1:23:33 pm
+                    - generic "BB BOT" [ref=e342]: BB
+                  - generic [ref=e343]:
+                    - generic [ref=e344]:
+                      - generic [ref=e345]: A Usha
+                      - generic [ref=e346]:
+                        - paragraph [ref=e348]: Hi.
+                        - paragraph [ref=e349]:
+                          - generic "Monday, January 6, 2025 1:23 PM" [ref=e350]: Jan 6th 25, 1:23:45 pm
+                    - generic "A Usha" [ref=e352]: A
+                  - generic [ref=e353]: This conversation is marked as closed.
+                  - generic [ref=e354]:
+                    - generic [ref=e355]:
+                      - generic [ref=e356]: BB BOT
+                      - generic [ref=e357]:
+                        - paragraph [ref=e359]: Hi, s l! Welcome to bigbasket support.
+                        - paragraph [ref=e360]:
+                          - generic "Tuesday, January 7, 2025 5:06 PM" [ref=e361]: Jan 7th 25, 5:06:07 pm
+                    - generic "BB BOT" [ref=e363]: BB
+                  - generic [ref=e366]:
+                    - paragraph [ref=e368]: What can we help you with today?
+                    - paragraph [ref=e369]:
+                      - generic "Tuesday, January 7, 2025 5:06 PM" [ref=e370]: Jan 7th 25, 5:06:07 pm
+                  - generic [ref=e371]:
+                    - generic "s l" [ref=e373]: S
+                    - generic [ref=e374]:
+                      - generic [ref=e375]: s l
+                      - generic [ref=e376]:
+                        - paragraph [ref=e378]: Others
+                        - paragraph [ref=e379]:
+                          - generic "Tuesday, January 7, 2025 5:06 PM" [ref=e380]: Jan 7th 25, 5:06:09 pm
+                  - generic [ref=e381]:
+                    - generic [ref=e382]:
+                      - generic [ref=e383]: BB BOT
+                      - generic [ref=e384]:
+                        - paragraph [ref=e386]: Select an option to proceed
+                        - paragraph [ref=e387]:
+                          - generic "Tuesday, January 7, 2025 5:06 PM" [ref=e388]: Jan 7th 25, 5:06:09 pm
+                    - generic "BB BOT" [ref=e390]: BB
+                  - generic [ref=e391]:
+                    - generic "s l" [ref=e393]: S
+                    - generic [ref=e394]:
+                      - generic [ref=e395]: s l
+                      - generic [ref=e396]:
+                        - paragraph [ref=e398]: I have another query/issue
+                        - paragraph [ref=e399]:
+                          - generic "Tuesday, January 7, 2025 5:06 PM" [ref=e400]: Jan 7th 25, 5:06:11 pm
+                  - generic [ref=e401]:
+                    - generic [ref=e402]:
+                      - generic [ref=e403]: BB BOT
+                      - generic [ref=e404]:
+                        - paragraph [ref=e406]: Please provide details about the issue you are facing, and we will respond or connect you to one of our customer support agents based on your query.
+                        - paragraph [ref=e407]:
+                          - generic "Tuesday, January 7, 2025 5:06 PM" [ref=e408]: Jan 7th 25, 5:06:11 pm
+                    - generic "BB BOT" [ref=e410]: BB
+                  - generic [ref=e411]:
+                    - generic "s l" [ref=e413]: S
+                    - generic [ref=e414]:
+                      - generic [ref=e415]: s l
+                      - generic [ref=e416]:
+                        - paragraph [ref=e418]: Connect to agent
+                        - paragraph [ref=e419]:
+                          - generic "Tuesday, January 7, 2025 5:06 PM" [ref=e420]: Jan 7th 25, 5:06:15 pm
+                  - generic [ref=e421]:
+                    - generic [ref=e422]:
+                      - generic [ref=e423]: BB BOT
+                      - generic [ref=e424]:
+                        - paragraph [ref=e426]: I'm here to help! It seems like you'd like to connect with an agent. Let me arrange that for you. Please hold on for a moment.
+                        - paragraph [ref=e427]:
+                          - generic "Tuesday, January 7, 2025 5:06 PM" [ref=e428]: Jan 7th 25, 5:06:19 pm
+                    - generic "BB BOT" [ref=e430]: BB
+                  - generic [ref=e431]:
+                    - generic "s l" [ref=e433]: S
+                    - generic [ref=e434]:
+                      - generic [ref=e435]: s l
+                      - generic [ref=e436]:
+                        - paragraph [ref=e438]: Test
+                        - paragraph [ref=e439]:
+                          - generic "Tuesday, January 7, 2025 5:06 PM" [ref=e440]: Jan 7th 25, 5:06:45 pm
+                  - generic [ref=e443]:
+                    - paragraph [ref=e445]: Ggg
+                    - paragraph [ref=e446]:
+                      - generic "Tuesday, January 7, 2025 5:06 PM" [ref=e447]: Jan 7th 25, 5:06:51 pm
+                  - generic [ref=e450]:
+                    - paragraph [ref=e452]: Cggg
+                    - paragraph [ref=e453]:
+                      - generic "Tuesday, January 7, 2025 5:06 PM" [ref=e454]: Jan 7th 25, 5:06:54 pm
+                  - generic [ref=e457]:
+                    - paragraph [ref=e459]: Fggji
+                    - paragraph [ref=e460]:
+                      - generic "Tuesday, January 7, 2025 5:07 PM" [ref=e461]: Jan 7th 25, 5:07:01 pm
+                  - generic [ref=e464]:
+                    - paragraph [ref=e466]: Hiihhg
+                    - paragraph [ref=e467]:
+                      - generic "Tuesday, January 7, 2025 5:07 PM" [ref=e468]: Jan 7th 25, 5:07:04 pm
+                  - generic [ref=e469]:
+                    - generic [ref=e470]:
+                      - generic [ref=e471]: Bigbasket
+                      - generic [ref=e472]:
+                        - paragraph [ref=e474]: test
+                        - paragraph [ref=e475]:
+                          - generic "Tuesday, January 7, 2025 5:07 PM" [ref=e476]: Jan 7th 25, 5:07:07 pm
+                    - generic "Bigbasket" [ref=e478]: BI
+                  - generic [ref=e481]:
+                    - paragraph [ref=e483]: Hi, s l
+                    - paragraph [ref=e484]:
+                      - generic "Tuesday, January 7, 2025 5:07 PM" [ref=e485]: Jan 7th 25, 5:07:10 pm
+                  - generic [ref=e488]:
+                    - paragraph [ref=e490]: How may I assist you today?
+                    - paragraph [ref=e491]:
+                      - generic "Tuesday, January 7, 2025 5:07 PM" [ref=e492]: Jan 7th 25, 5:07:14 pm
+                  - generic [ref=e495]:
+                    - generic [ref=e496]:
+                      - generic [ref=e497] [cursor=pointer]:
+                        - img "Loading..." [ref=e499] [cursor=pointer]
+                        - img "jpg file.jpg"
+                        - generic [ref=e500] [cursor=pointer]:
+                          - generic [ref=e501] [cursor=pointer]: jpg file.jpg
+                          - link [ref=e502] [cursor=pointer]:
+                            - /url: https://kapture-p.storage.googleapis.com/494/chat_ticket_attachment/0125/17362498615370ddas1kne0q/jpg_file.jpg
+                            - generic [ref=e503] [cursor=pointer]: download_2
+                      - paragraph [ref=e504]: jpg file.jpg
+                    - paragraph [ref=e505]:
+                      - generic "Tuesday, January 7, 2025 5:07 PM" [ref=e506]: Jan 7th 25, 5:07:42 pm
+                  - generic [ref=e509]:
+                    - generic [ref=e510]:
+                      - generic [ref=e511] [cursor=pointer]:
+                        - img "Loading..." [ref=e513] [cursor=pointer]
+                        - img "png - Copy (2).png"
+                        - generic [ref=e514] [cursor=pointer]:
+                          - generic [ref=e515] [cursor=pointer]: png - Copy (2).png
+                          - link [ref=e516] [cursor=pointer]:
+                            - /url: https://kapture-p.storage.googleapis.com/494/chat_ticket_attachment/0125/17362498615390u6xkzd9ksb/png_-_Copy_(2).png
+                            - generic [ref=e517] [cursor=pointer]: download_2
+                      - paragraph [ref=e518]: png - Copy (2).png
+                    - paragraph [ref=e519]:
+                      - generic "Tuesday, January 7, 2025 5:07 PM" [ref=e520]: Jan 7th 25, 5:07:42 pm
+                  - generic [ref=e521]: This conversation is marked as closed.
+                  - generic [ref=e522]:
+                    - generic [ref=e523]:
+                      - generic [ref=e524]: BB BOT
+                      - generic [ref=e525]:
+                        - paragraph [ref=e527]: Hi, s l! Welcome to bigbasket support.
+                        - paragraph [ref=e528]:
+                          - generic "Wednesday, January 8, 2025 12:33 AM" [ref=e529]: Jan 8th 25, 12:33:46 am
+                    - generic "BB BOT" [ref=e531]: BB
+                  - generic [ref=e534]:
+                    - paragraph [ref=e536]: What can we help you with today?
+                    - paragraph [ref=e537]:
+                      - generic "Wednesday, January 8, 2025 12:33 AM" [ref=e538]: Jan 8th 25, 12:33:47 am
+                  - generic [ref=e539]:
+                    - generic "s l" [ref=e541]: S
+                    - generic [ref=e542]:
+                      - generic [ref=e543]: s l
+                      - generic [ref=e544]:
+                        - paragraph [ref=e546]: Others
+                        - paragraph [ref=e547]:
+                          - generic "Wednesday, January 8, 2025 12:33 AM" [ref=e548]: Jan 8th 25, 12:33:48 am
+                  - generic [ref=e549]:
+                    - generic [ref=e550]:
+                      - generic [ref=e551]: BB BOT
+                      - generic [ref=e552]:
+                        - paragraph [ref=e554]: Select an option to proceed
+                        - paragraph [ref=e555]:
+                          - generic "Wednesday, January 8, 2025 12:33 AM" [ref=e556]: Jan 8th 25, 12:33:48 am
+                    - generic "BB BOT" [ref=e558]: BB
+                  - generic [ref=e559]:
+                    - generic "s l" [ref=e561]: S
+                    - generic [ref=e562]:
+                      - generic [ref=e563]: s l
+                      - generic [ref=e564]:
+                        - paragraph [ref=e566]: I have another query/issue
+                        - paragraph [ref=e567]:
+                          - generic "Wednesday, January 8, 2025 12:33 AM" [ref=e568]: Jan 8th 25, 12:33:50 am
+                  - generic [ref=e569]:
+                    - generic [ref=e570]:
+                      - generic [ref=e571]: BB BOT
+                      - generic [ref=e572]:
+                        - paragraph [ref=e574]: Please provide details about the issue you are facing, and we will respond or connect you to one of our customer support agents based on your query.
+                        - paragraph [ref=e575]:
+                          - generic "Wednesday, January 8, 2025 12:33 AM" [ref=e576]: Jan 8th 25, 12:33:50 am
+                    - generic "BB BOT" [ref=e578]: BB
+                  - generic [ref=e579]:
+                    - generic "s l" [ref=e581]: S
+                    - generic [ref=e582]:
+                      - generic [ref=e583]: s l
+                      - generic [ref=e584]:
+                        - paragraph [ref=e586]: Connect to agent
+                        - paragraph [ref=e587]:
+                          - generic "Wednesday, January 8, 2025 12:33 AM" [ref=e588]: Jan 8th 25, 12:33:54 am
+                  - generic [ref=e589]:
+                    - generic [ref=e590]:
+                      - generic [ref=e591]: BB BOT
+                      - generic [ref=e592]:
+                        - paragraph [ref=e594]: I'm here to help! It seems like you wish to connect with an agent. Let me know if there's anything specific I can assist you with before doing so. If not, I'll be happy to connect you to an agent right away.
+                        - paragraph [ref=e595]:
+                          - generic "Wednesday, January 8, 2025 12:34 AM" [ref=e596]: Jan 8th 25, 12:34:02 am
+                    - generic "BB BOT" [ref=e598]: BB
+                  - generic [ref=e599]:
+                    - generic "s l" [ref=e601]: S
+                    - generic [ref=e602]:
+                      - generic [ref=e603]: s l
+                      - generic [ref=e604]:
+                        - paragraph [ref=e606]: Connect to agent
+                        - paragraph [ref=e607]:
+                          - generic "Wednesday, January 8, 2025 12:34 AM" [ref=e608]: Jan 8th 25, 12:34:19 am
+                  - generic [ref=e609]:
+                    - generic [ref=e610]:
+                      - generic [ref=e611]: BB BOT
+                      - generic [ref=e612]:
+                        - paragraph [ref=e614]: Please wait while we connect you to an agent.
+                        - paragraph [ref=e615]:
+                          - generic "Wednesday, January 8, 2025 12:34 AM" [ref=e616]: Jan 8th 25, 12:34:24 am
+                    - generic "BB BOT" [ref=e618]: BB
+                  - generic [ref=e619]: This conversation is marked as closed.
+                  - generic [ref=e620]:
+                    - generic [ref=e621]:
+                      - generic [ref=e622]: Bigbasket
+                      - generic [ref=e623]:
+                        - paragraph [ref=e625]: tesr
+                        - paragraph [ref=e626]:
+                          - generic "Wednesday, January 8, 2025 12:34 AM" [ref=e627]: Jan 8th 25, 12:34:51 am
+                    - generic "Bigbasket" [ref=e629]: BI
+                  - generic [ref=e632]:
+                    - paragraph [ref=e634]: How may I assist you today?
+                    - paragraph [ref=e635]:
+                      - generic "Wednesday, January 8, 2025 12:34 AM" [ref=e636]: Jan 8th 25, 12:34:53 am
+                  - generic [ref=e637]:
+                    - generic [ref=e638]:
+                      - generic [ref=e639]: Bigbasket
+                      - generic [ref=e640]:
+                        - paragraph [ref=e642]: Welcome to Bigbasket Customer Support.
+                        - paragraph [ref=e643]:
+                          - generic "Wednesday, January 8, 2025 12:35 AM" [ref=e644]: Jan 8th 25, 12:35:00 am
+                    - generic "Bigbasket" [ref=e646]: BI
+                  - generic [ref=e649]:
+                    - paragraph [ref=e651]: How may I assist you today?
+                    - paragraph [ref=e652]:
+                      - generic "Wednesday, January 8, 2025 12:35 AM" [ref=e653]: Jan 8th 25, 12:35:03 am
+                  - generic [ref=e654]:
+                    - generic "s l" [ref=e656]: S
+                    - generic [ref=e657]:
+                      - generic [ref=e658]: s l
+                      - generic [ref=e659]:
+                        - paragraph [ref=e661]: Hyhshhs
+                        - paragraph [ref=e662]:
+                          - generic "Wednesday, January 8, 2025 12:35 AM" [ref=e663]: Jan 8th 25, 12:35:06 am
+                  - generic [ref=e666]:
+                    - paragraph [ref=e668]: Jsjdjjd
+                    - paragraph [ref=e669]:
+                      - generic "Wednesday, January 8, 2025 12:35 AM" [ref=e670]: Jan 8th 25, 12:35:07 am
+                  - generic [ref=e673]:
+                    - paragraph [ref=e675]: Ndncn
+                    - paragraph [ref=e676]:
+                      - generic "Wednesday, January 8, 2025 12:35 AM" [ref=e677]: Jan 8th 25, 12:35:08 am
+                  - generic [ref=e680]:
+                    - paragraph [ref=e682]: Yyy
+                    - paragraph [ref=e683]:
+                      - generic "Wednesday, January 8, 2025 12:35 AM" [ref=e684]: Jan 8th 25, 12:35:11 am
+                  - generic [ref=e685]:
+                    - generic [ref=e686]:
+                      - generic [ref=e687]: Bigbasket
+                      - generic [ref=e688]:
+                        - generic [ref=e689]:
+                          - generic [ref=e690] [cursor=pointer]:
+                            - img "Loading..." [ref=e692] [cursor=pointer]
+                            - img "Screenshot (1993).png"
+                            - generic [ref=e693] [cursor=pointer]:
+                              - generic [ref=e694] [cursor=pointer]: Screenshot (1993).png
+                              - link [ref=e695] [cursor=pointer]:
+                                - /url: https://kapture-p.storage.googleapis.com/494/chat_ticket_attachment/0125/173627672517702z97en5wn8/Screenshot_(1993).png
+                                - generic [ref=e696] [cursor=pointer]: download_2
+                          - paragraph [ref=e697]: Screenshot (1993).png
+                        - paragraph [ref=e698]:
+                          - generic "Wednesday, January 8, 2025 12:35 AM" [ref=e699]: Jan 8th 25, 12:35:28 am
+                    - generic "Bigbasket" [ref=e701]: BI
+                  - generic [ref=e702]: This conversation is marked as closed.
+                  - generic [ref=e703]:
+                    - generic [ref=e704]:
+                      - generic [ref=e705]: BB BOT
+                      - generic [ref=e706]:
+                        - paragraph [ref=e708]: Hi, s l! Welcome to bigbasket support.
+                        - paragraph [ref=e709]:
+                          - generic "Wednesday, January 8, 2025 1:17 PM" [ref=e710]: Jan 8th 25, 1:17:31 pm
+                    - generic "BB BOT" [ref=e712]: BB
+                  - generic [ref=e715]:
+                    - paragraph [ref=e717]: What can we help you with today?
+                    - paragraph [ref=e718]:
+                      - generic "Wednesday, January 8, 2025 1:17 PM" [ref=e719]: Jan 8th 25, 1:17:31 pm
+                  - generic [ref=e720]:
+                    - generic "s l" [ref=e722]: S
+                    - generic [ref=e723]:
+                      - generic [ref=e724]: s l
+                      - generic [ref=e725]:
+                        - paragraph [ref=e727]: Others
+                        - paragraph [ref=e728]:
+                          - generic "Wednesday, January 8, 2025 1:17 PM" [ref=e729]: Jan 8th 25, 1:17:33 pm
+                  - generic [ref=e730]:
+                    - generic [ref=e731]:
+                      - generic [ref=e732]: BB BOT
+                      - generic [ref=e733]:
+                        - paragraph [ref=e735]: Select an option to proceed
+                        - paragraph [ref=e736]:
+                          - generic "Wednesday, January 8, 2025 1:17 PM" [ref=e737]: Jan 8th 25, 1:17:33 pm
+                    - generic "BB BOT" [ref=e739]: BB
+                  - generic [ref=e740]:
+                    - generic [ref=e741]:
+                      - generic [ref=e742]: BB BOT
+                      - generic [ref=e743]:
+                        - paragraph [ref=e745]: Hi, s l! Welcome to bigbasket support.
+                        - paragraph [ref=e746]:
+                          - generic "Wednesday, January 8, 2025 1:17 PM" [ref=e747]: Jan 8th 25, 1:17:40 pm
+                    - generic "BB BOT" [ref=e749]: BB
+                  - generic [ref=e752]:
+                    - paragraph [ref=e754]: What can we help you with today?
+                    - paragraph [ref=e755]:
+                      - generic "Wednesday, January 8, 2025 1:17 PM" [ref=e756]: Jan 8th 25, 1:17:40 pm
+                  - generic [ref=e757]:
+                    - generic "s l" [ref=e759]: S
+                    - generic [ref=e760]:
+                      - generic [ref=e761]: s l
+                      - generic [ref=e762]:
+                        - paragraph [ref=e764]: I have another query/issue
+                        - paragraph [ref=e765]:
+                          - generic "Wednesday, January 8, 2025 1:17 PM" [ref=e766]: Jan 8th 25, 1:17:40 pm
+                  - generic [ref=e767]:
+                    - generic [ref=e768]:
+                      - generic [ref=e769]: BB BOT
+                      - generic [ref=e770]:
+                        - paragraph [ref=e772]: Please provide details about the issue you are facing, and we will respond or connect you to one of our customer support agents based on your query.
+                        - paragraph [ref=e773]:
+                          - generic "Wednesday, January 8, 2025 1:17 PM" [ref=e774]: Jan 8th 25, 1:17:41 pm
+                    - generic "BB BOT" [ref=e776]: BB
+                  - generic [ref=e777]:
+                    - generic "s l" [ref=e779]: S
+                    - generic [ref=e780]:
+                      - generic [ref=e781]: s l
+                      - generic [ref=e782]:
+                        - paragraph [ref=e784]: Connect to agent
+                        - paragraph [ref=e785]:
+                          - generic "Wednesday, January 8, 2025 1:17 PM" [ref=e786]: Jan 8th 25, 1:17:46 pm
+                  - generic [ref=e787]:
+                    - generic [ref=e788]:
+                      - generic [ref=e789]: BB BOT
+                      - generic [ref=e790]:
+                        - paragraph [ref=e792]: I'm here to help! Let me know if there's anything specific you need assistance with, and I'll do my best to help you. If you still wish to connect to an agent, please let me know.
+                        - paragraph [ref=e793]:
+                          - generic "Wednesday, January 8, 2025 1:17 PM" [ref=e794]: Jan 8th 25, 1:17:48 pm
+                    - generic "BB BOT" [ref=e796]: BB
+                  - generic [ref=e797]:
+                    - generic [ref=e798]:
+                      - generic [ref=e799]: Kapture QA User
+                      - generic [ref=e800]:
+                        - paragraph [ref=e802]: Test from QA
+                        - paragraph [ref=e803]:
+                          - generic "Wednesday, January 8, 2025 4:19 PM" [ref=e804]: Jan 8th 25, 4:19:09 pm
+                          - paragraph [ref=e805]:
+                            - generic [ref=e806]: done
+                    - generic "Kapture QA User" [ref=e808]: KA
+                - generic [ref=e813]:
+                  - textbox "Hit enter to send message and Hit Shift+Enter to move to the next line." [ref=e815]
+                  - generic [ref=e817]:
+                    - img [ref=e819] [cursor=pointer]
+                    - button "Transliterate Messages" [ref=e821] [cursor=pointer]:
+                      - img [ref=e824] [cursor=pointer]
+              - region "scrollable content" [ref=e847]:
+                - generic [ref=e849]:
+                  - generic [ref=e850]:
+                    - generic [ref=e852]: "Call Ticket : 736149704013"
+                    - generic [ref=e853]:
+                      - generic [ref=e854]:
+                        - generic [ref=e856]: SL
+                        - generic [ref=e857]:
+                          - generic [ref=e858] [cursor=pointer]:
+                            - paragraph [ref=e859] [cursor=pointer]: Name
+                            - generic [ref=e860] [cursor=pointer]:
+                              - text: ":"
+                              - generic [ref=e861] [cursor=pointer]: S L
+                          - generic [ref=e862] [cursor=pointer]:
+                            - paragraph [ref=e863] [cursor=pointer]: Email
+                            - generic [ref=e864] [cursor=pointer]:
+                              - text: ":"
+                              - generic [ref=e865] [cursor=pointer]: shankarlamani8@gmail.com
+                          - generic [ref=e866] [cursor=pointer]:
+                            - paragraph [ref=e867] [cursor=pointer]: Phone
+                            - generic [ref=e868] [cursor=pointer]:
+                              - text: ":"
+                              - generic [ref=e869] [cursor=pointer]: "8861872771"
+                              - generic [ref=e871] [cursor=pointer]:
+                                - button "Make a manual call" [ref=e873] [cursor=pointer]:
+                                  - img [ref=e876] [cursor=pointer]
+                                - button "Send SMS" [ref=e881] [cursor=pointer]:
+                                  - img [ref=e884] [cursor=pointer]
+                                - button "Send WhatsApp Message" [ref=e887] [cursor=pointer]:
+                                  - img [ref=e890] [cursor=pointer]
+                        - button [ref=e893] [cursor=pointer]:
+                          - img [ref=e896] [cursor=pointer]
+                      - generic [ref=e898]:
+                        - generic [ref=e900]:
+                          - generic [ref=e901] [cursor=pointer]:
+                            - paragraph [ref=e902] [cursor=pointer]: Ticket ID
+                            - generic [ref=e903] [cursor=pointer]:
+                              - text: ":"
+                              - link "736149704013" [ref=e904] [cursor=pointer]:
+                                - /url: /employee/assigned-tickets.html?detail=5/598481262/736149704013
+                                - generic [ref=e905] [cursor=pointer]: "736149704013"
+                          - generic [ref=e907] [cursor=pointer]:
+                            - paragraph [ref=e908] [cursor=pointer]: Priority
+                            - generic [ref=e909] [cursor=pointer]:
+                              - text: ":"
+                              - button "High" [ref=e911] [cursor=pointer]:
+                                - generic [ref=e912] [cursor=pointer]:
+                                  - text: High
+                                  - generic [ref=e913] [cursor=pointer]: arrow_drop_down
+                          - generic [ref=e914] [cursor=pointer]:
+                            - paragraph [ref=e915] [cursor=pointer]: Status
+                            - generic [ref=e916] [cursor=pointer]:
+                              - text: ":"
+                              - button "Complete" [ref=e918] [cursor=pointer]:
+                                - generic [ref=e919] [cursor=pointer]:
+                                  - text: Complete
+                                  - generic [ref=e920] [cursor=pointer]: arrow_drop_down
+                          - generic [ref=e921] [cursor=pointer]:
+                            - paragraph [ref=e922] [cursor=pointer]: Current Sub Status
+                            - generic [ref=e923] [cursor=pointer]:
+                              - text: ":"
+                              - button "Resolved" [ref=e924] [cursor=pointer]:
+                                - generic [ref=e925] [cursor=pointer]: Resolved
+                        - button [ref=e928] [cursor=pointer]:
+                          - img [ref=e931] [cursor=pointer]
+                  - button "Customer Information" [ref=e944] [cursor=pointer]:
+                    - paragraph [ref=e947] [cursor=pointer]: Customer Information
+                    - img [ref=e951] [cursor=pointer]
+                  - button "Ticket Information" [ref=e955] [cursor=pointer]:
+                    - paragraph [ref=e958] [cursor=pointer]: Ticket Information
+                    - img [ref=e962] [cursor=pointer]
+                  - button "Attachments" [ref=e966] [cursor=pointer]:
+                    - generic [ref=e968] [cursor=pointer]:
+                      - paragraph [ref=e969] [cursor=pointer]: Attachments
+                      - button "Add Attachment" [ref=e970] [cursor=pointer]:
+                        - generic [ref=e971] [cursor=pointer]: add
+                    - img [ref=e975] [cursor=pointer]
+          - generic [ref=e978]:
+            - generic [ref=e980]:
+              - button "Transaction and Payment" [ref=e981] [cursor=pointer]:
+                - img [ref=e983] [cursor=pointer]
+              - button "HUB Details" [ref=e988] [cursor=pointer]:
+                - img [ref=e990] [cursor=pointer]
+              - button "Refund/Credit/Debit" [ref=e992] [cursor=pointer]:
+                - img [ref=e994] [cursor=pointer]
+              - button "View Orders" [ref=e998] [cursor=pointer]:
+                - img [ref=e1000] [cursor=pointer]
+            - button "Fastlane" [ref=e1004] [cursor=pointer]:
+              - img [ref=e1006] [cursor=pointer]
+            - generic "Quick Actions" [ref=e1013]:
+              - button "Ticket Quick Actions" [ref=e1014] [cursor=pointer]:
+                - generic [ref=e1016] [cursor=pointer]:
+                  - generic [ref=e1017] [cursor=pointer]: electric_bolt
+                  - generic [ref=e1018] [cursor=pointer]: electric_bolt
+              - menu:
+                - generic:
+                  - generic: Compose Email
+                  - menuitem:
+                    - generic:
+                      - img
+                - generic:
+                  - generic: Side Conversation
+                  - menuitem:
+                    - generic:
+                      - img
+                - generic:
+                  - generic: Update Customer
+                  - menuitem:
+                    - generic:
+                      - generic:
+                        - img
+  - button "Open Agent assistant" [ref=e1019] [cursor=pointer]:
+    - img [ref=e1022] [cursor=pointer]
+```
