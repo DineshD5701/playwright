@@ -63,7 +63,7 @@ pipeline {
                 sh """
                     echo "Waiting for Playwright jobs to finish..."
                     kubectl wait --for=condition=complete --timeout=900s job --all --namespace=${NAMESPACE} || true
-                    sleep 30
+                    sleep 10
                 """
             }
         }
