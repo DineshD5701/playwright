@@ -40,7 +40,7 @@ pipeline {
             stage('Ensure Allure PVC') {
                 steps{
                 sh """
-                    kubectl apply -f k8s/allure-pvc.yaml --namespace=${NAMESPACE}
+                    kubectl apply -f k8s/allure-pvc.yml --namespace=${NAMESPACE}
                 """
             }
         }
