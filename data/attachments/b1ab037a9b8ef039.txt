@@ -1,0 +1,34 @@
+# Test info
+
+- Name: BigBasket Search Test by Email ID
+- Location: /app/tests/bigbasket-tests/05_BigbasketTicketSearchByEmailID.spec.js:6:5
+
+# Error details
+
+```
+Error: page.goto: Test timeout of 60000ms exceeded.
+Call log:
+  - navigating to "https://bigbasket.kapdesk.com/nui/", waiting until "networkidle"
+
+    at /app/tests/bigbasket-tests/05_BigbasketTicketSearchByEmailID.spec.js:7:14
+```
+
+# Test source
+
+```ts
+   1 | import { test, expect } from "@playwright/test";
+   2 | import BaseClass from "../../Generic/BaseClass";
+   3 | import TicketListPage from "../../Pages/TicketListPage";
+   4 | const testdata = require("../../Generic/TestData.json");
+   5 |
+   6 | test("BigBasket Search Test by Email ID", async ({ page }) => {
+>  7 |   await page.goto(testdata["BigbasketNUIURL"], { waitUntil: "networkidle" });
+     |              ^ Error: page.goto: Test timeout of 60000ms exceeded.
+   8 |   const ticketListPage = new TicketListPage(page);
+   9 |   await ticketListPage.doSearchTicketWithEmailID(testdata.BigbasketTicketID1);
+  10 |   await ticketListPage.doExpendView();
+  11 |   await ticketListPage.doClickOnSearchTciket();
+  12 |   await ticketListPage.doValiadationForSearchTicket();
+  13 | });
+  14 |
+```

@@ -1,0 +1,191 @@
+# Test info
+
+- Name: Bigbasket info Tab test
+- Location: /app/tests/bigbasket-tests/07_BigbasketoInfoTab.spec.js:7:5
+
+# Error details
+
+```
+Error: locator.waitFor: Test timeout of 60000ms exceeded.
+Call log:
+  - waiting for locator('//input[@placeholder="Search tickets..."]') to be visible
+
+    at TicketListPage.doSearchTicketWithTicketID (/app/Pages/TicketListPage.js:70:32)
+    at /app/tests/bigbasket-tests/07_BigbasketoInfoTab.spec.js:10:24
+```
+
+# Test source
+
+```ts
+   1 | import BaseClass from "../Generic/BaseClass";
+   2 | const { test, expect } = require("@playwright/test");
+   3 | const testdata = require("../Generic/TestData.json");
+   4 | import ElementClass from "../Generic/ElemenetClass";
+   5 | import {
+   6 |   searchTextBox,
+   7 |   expendView,
+   8 |   clickOnSearchTicket,
+   9 |   ticketCheckBox,
+   10 |   assignButton,
+   11 |   assignTicketsubmitButton,
+   12 |   assignRemarkTextBox,
+   13 |   selectQueueOption,
+   14 |   selectQueueButton,
+   15 |   comppletedByMe,
+   16 |   assignedToMeTab,
+   17 |   AllJunks,
+   18 |   allCompletedTab,
+   19 |   allPendingTab,
+   20 |   unAssignedTab,
+   21 |   handleLoginPopUp,
+   22 |   hanleLoginPopUpRefresherOption,
+   23 |   handleLoginPopUpLunchOption,
+   24 |   hanleLoginPopUpTrainingOption,
+   25 |   hanleLoginPopUpBriefingOption,
+   26 | } from "../PageElements/TicketListPageElements";
+   27 | import { ticketDetailsTab } from "../PageElements/TicketListPageElements";
+   28 | import {
+   29 |   advanceFilterButton,
+   30 |   advanceFilterSubmitButton,
+   31 | } from "../PageElements/TicketListPageElements";
+   32 |
+   33 | class TicketListPage {
+   34 |   constructor(page) {
+   35 |     this.page = page;
+   36 |     this.elementClass = new ElementClass(page);
+   37 |     this.ticketDetailsTab = page.locator(ticketDetailsTab);
+   38 |     // this.searchTextBox = page.locator(
+   39 |     //   "//input[@placeholder='Search tickets...']"
+   40 |     // );
+   41 |     // this.expendView = page.locator("//button[@title='Expanded View']");
+   42 |     // this.clickOnSearchTicket = page.locator(
+   43 |     //   "(//div[@component='[object Object]'])[1]"
+   44 |     // );
+   45 |     // this.ticketDetailsTab = page.locator(
+   46 |     //   '//button[@data-tabkeys="TICKET_DETAILS"]'
+   47 |     // );
+   48 |     this.notificationCrossIcon = page.locator('(//span[text()="close"])[2]');
+   49 |     // this.ticketCheckBox = page.locator(
+   50 |     //   "span[title='Ticket ID: 736149704013'] input[type='checkbox']"
+   51 |     // );
+   52 |     //this.assignButton = page.locator("//span[text()='Assign']");
+   53 |     this.selectQueueButton = page.locator('//div[@label="Select Queue"]');
+   54 |     this.selectQueueOption = page.locator('//div[@title="QAChatbot (Me)"]');
+   55 |     this.assignRemarkTextBox = page.locator(
+   56 |       '//textarea[@id="assign-ticket-remarks"]'
+   57 |     );
+   58 |     this.assignTicketsubmitButton = page.locator("//span[text()='Submit']");
+   59 |     this.advanceFilterButton = page.locator('//span[@title="Advanced Filter"]');
+   60 |     this.advanceFilterSubmitButton = page.locator('//span[text()="Submit"]');
+   61 |   }
+   62 |
+   63 |   // Search ticket with ticket ID
+   64 |   async doSearchTicketWithTicketID(ticketID) {
+   65 |     console.log("Waiting for input field to appear...");
+   66 |
+   67 |     // Convert the selector string to a Locator object inside the method
+   68 |     const searchTextBoxLocator = this.page.locator(searchTextBox);
+   69 |     // Wait for the input field to be visible and enabled
+>  70 |     await searchTextBoxLocator.waitFor({ state: "visible" }); // Wait for visibility
+      |                                ^ Error: locator.waitFor: Test timeout of 60000ms exceeded.
+   71 |     await expect(searchTextBoxLocator).toBeEnabled(); // Ensure the input field is enabled
+   72 |     console.log("Input field is ready. Filling the ticket ID...");
+   73 |
+   74 |     // Perform the fill operation
+   75 |     //await this.searchTextBox.fill(ticketID);
+   76 |     await this.elementClass.waitAndFill(searchTextBox, ticketID);
+   77 |     await searchTextBoxLocator.press("Enter", { timeout: 60000 }); // Increase timeout to 60 seconds if necessary
+   78 |     console.log("pressed enter key");
+   79 |   }
+   80 |
+   81 |   //expend View
+   82 |   async doExpendView() {
+   83 |     //await this.expendView.click();
+   84 |     await this.elementClass.waitAndClick(expendView);
+   85 |     console.log("ExpendView method is executed");
+   86 |   }
+   87 |
+   88 |   //To click on search ticket
+   89 |   async doClickOnSearchTciket() {
+   90 |     // await clickOnSearchTicket.waitFor({ state: "visible" });
+   91 |     await this.elementClass.waitAndClick(clickOnSearchTicket);
+   92 |     console.log("clickOnSearchTicket method is executed");
+   93 |   }
+   94 |
+   95 |   // validation for search Ticket
+   96 |   async doValiadationForSearchTicket() {
+   97 |     console.log("Waiting for TICKET_DETAILS button...");
+   98 |     try {
+   99 |       // Wait for page load and network idle
+  100 |       await this.page.waitForLoadState("networkidle");
+  101 |
+  102 |       // Define the locator (assuming XPath is used)
+  103 |       const ticketDetailsTabLocator = this.page.locator(
+  104 |         '//button[@data-tabkeys="TICKET_DETAILS"]'
+  105 |       );
+  106 |
+  107 |       // Wait for the element to be visible
+  108 |       await ticketDetailsTabLocator.waitFor({
+  109 |         state: "visible",
+  110 |         timeout: 5000,
+  111 |       });
+  112 |       console.log("TICKET_DETAILS button is now visible!");
+  113 |
+  114 |       // Optional check before clicking
+  115 |       if (await ticketDetailsTabLocator.isVisible()) {
+  116 |         console.log("TICKET_DETAILS element is visible");
+  117 |         await ticketDetailsTabLocator.click();
+  118 |         console.log("Clicked on the TICKET_DETAILS button!");
+  119 |       } else {
+  120 |         console.log("TICKET_DETAILS element is not visible");
+  121 |       }
+  122 |     } catch (error) {
+  123 |       console.error("❌ Error interacting with TICKET_DETAILS button:", error);
+  124 |     }
+  125 |
+  126 |     console.log("✅ Validation successful");
+  127 |   }
+  128 |
+  129 |   // Search ticket with PhoneNumber
+  130 |   async doSearchTicketWithPhoneNumber(
+  131 |     PhoneNumber = testdata.BigbasketPhoneNumber
+  132 |   ) {
+  133 |     console.log("Waiting for input field to appear...");
+  134 |
+  135 |     // Convert the selector string to a Locator object inside the method
+  136 |     const searchTextBoxLocator = this.page.locator(searchTextBox);
+  137 |     // Wait for the input field to be visible and enabled
+  138 |     await searchTextBoxLocator.waitFor({ state: "visible" }); // Wait for visibility
+  139 |     await expect(searchTextBoxLocator).toBeEnabled(); // Ensure the input field is enabled
+  140 |     console.log("Input field is ready. Filling the ticket ID...");
+  141 |
+  142 |     // Perform the fill operation
+  143 |     //await this.searchTextBox.fill(ticketID);
+  144 |     await this.elementClass.waitAndFill(searchTextBox, PhoneNumber);
+  145 |     await searchTextBoxLocator.press("Enter", { timeout: 60000 }); // Increase timeout to 60 seconds if necessary
+  146 |     console.log("pressed enter key");
+  147 |   }
+  148 |
+  149 |   // Search ticket with E-mailId
+  150 |   async doSearchTicketWithEmailID(EmailID = testdata.BigbasketEamilID) {
+  151 |     console.log("Waiting for input field to appear...");
+  152 |
+  153 |     // Convert the selector string to a Locator object inside the method
+  154 |     const searchTextBoxLocator = this.page.locator(searchTextBox);
+  155 |     // Wait for the input field to be visible and enabled
+  156 |     await searchTextBoxLocator.waitFor({ state: "visible" }); // Wait for visibility
+  157 |     await expect(searchTextBoxLocator).toBeEnabled(); // Ensure the input field is enabled
+  158 |     console.log("Input field is ready. Filling the ticket ID...");
+  159 |
+  160 |     // Perform the fill operation
+  161 |     //await this.searchTextBox.fill(ticketID);
+  162 |     await this.elementClass.waitAndFill(searchTextBox, EmailID);
+  163 |     await searchTextBoxLocator.press("Enter", { timeout: 60000 }); // Increase timeout to 60 seconds if necessary
+  164 |     console.log("pressed enter key");
+  165 |   }
+  166 |
+  167 |   //ticket assignment
+  168 |   async doTicketAssignment() {
+  169 |     try {
+  170 |       console.log("Waiting for ticket checkbox...");
+```

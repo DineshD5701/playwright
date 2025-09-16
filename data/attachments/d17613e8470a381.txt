@@ -1,0 +1,214 @@
+# Test info
+
+- Name: Bigbasket MoreTickets Test
+- Location: /app/tests/bigbasket-tests/08_BigbasketMoreTickets.spec.js:7:5
+
+# Error details
+
+```
+Error: page.goto: Test timeout of 60000ms exceeded.
+Call log:
+  - navigating to "https://bigbasket.kapdesk.com/nui/", waiting until "networkidle"
+
+    at /app/tests/bigbasket-tests/08_BigbasketMoreTickets.spec.js:8:14
+```
+
+# Page snapshot
+
+```yaml
+- banner:
+  - paragraph: Stable v5.2.52
+  - button "Report a bug":
+    - img
+  - button "Give us a feedback":
+    - img
+  - paragraph: 15-09-2025 11:37:11 am +00:00
+- banner:
+  - button
+  - paragraph: Tickets
+  - button "26":
+    - img
+    - text: "26"
+  - button "KM Portal"
+  - button "close":
+    - img
+    - text: close
+  - checkbox "Not Ava..."
+  - text: Not Ava...
+  - button "Kapture QA User":
+    - img
+    - paragraph: Kapture QA User
+    - img
+  - button:
+    - img
+- navigation:
+  - text: Views
+  - img
+  - region "scrollable content":
+    - button "Overall" [expanded]:
+      - paragraph: Overall
+    - region:
+      - button "Unassigned"
+      - button "All Pending"
+      - button "All Complete"
+      - button "All Junk"
+      - button "Assigned to me"
+      - button "Created by me"
+      - button "Completed by me"
+- button
+- main:
+  - checkbox
+  - img
+  - text: "0"
+  - button "Search":
+    - img
+  - textbox "Search tickets..."
+  - text: Show
+  - button "50"
+  - text: 1 - 50 of 116
+  - button [disabled]
+  - textbox "naked": "0"
+  - paragraph: of 2
+  - button
+  - button "last conversation":
+    - img
+    - paragraph: last conversation
+  - img
+  - button "Compact View":
+    - img
+  - button "Expanded View":
+    - img
+  - table:
+    - rowgroup:
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING 8:01":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: 8:01
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: Sep 12
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: Sep 12
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: Sep 12
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: Sep 12
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: Sep 12
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 12":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: Sep 12
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 11":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: Sep 11
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 11":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: Sep 11
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 11":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: Sep 11
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 11":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: Sep 11
+      - checkbox "S shankar.lamani@kapturecrm.com CUSTOMER SUPPORT test RES L PENDING Sep 11":
+        - checkbox
+        - img
+        - text: S shankar.lamani@kapturecrm.com
+        - img
+        - text: CUSTOMER SUPPORT test
+        - img
+        - text: RES L PENDING
+        - paragraph: Sep 11
+```
+
+# Test source
+
+```ts
+   1 | import { test, expect } from "@playwright/test";
+   2 | import BaseClass from "../../Generic/BaseClass";
+   3 | import TicketListPage from "../../Pages/TicketListPage";
+   4 | import TicketDetailspage from "../../Pages/TicketDetailsPage";
+   5 | const testdata = require("../../Generic/TestData.json");
+   6 |
+   7 | test("Bigbasket MoreTickets Test", async ({ page }) => {
+>  8 |   await page.goto(testdata["BigbasketNUIURL"], { waitUntil: "networkidle" });
+     |              ^ Error: page.goto: Test timeout of 60000ms exceeded.
+   9 |   const ticketListPage = new TicketListPage(page);
+  10 |   await ticketListPage.doSearchTicketWithTicketID(testdata.BigbasketTicketID1);
+  11 |   await ticketListPage.doExpendView();
+  12 |   await ticketListPage.doClickOnSearchTciket();
+  13 |   await ticketListPage.doValiadationForSearchTicket();
+  14 |   const ticketDetailsPage = new TicketDetailspage(page);
+  15 |   ticketDetailsPage.doMoreTicketsTab();
+  16 | });
+  17 |
+```

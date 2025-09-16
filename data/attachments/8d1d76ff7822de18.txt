@@ -1,0 +1,200 @@
+# Test info
+
+- Name: BigBasket Ticket assignment
+- Location: /app/tests/bigbasket-tests/13_BigbasketTAssignmentTicket.spec.js:6:5
+
+# Error details
+
+```
+Error: locator.click: Test timeout of 60000ms exceeded.
+Call log:
+  - waiting for locator('//div[@label="Select Queue"]')
+
+    at ElementClass.doDropdownHandler (/app/Generic/ElemenetClass.js:83:28)
+    at TicketListPage.doTicketAssignment (/app/Pages/TicketListPage.js:189:25)
+    at /app/tests/bigbasket-tests/13_BigbasketTAssignmentTicket.spec.js:11:3
+```
+
+# Page snapshot
+
+```yaml
+- paragraph:
+  - text: Oops. Something went wrong here. Contact our
+  - link "support team":
+    - /url: "mailto:joel.dsouza@kapturecrm.com?subject=New UI error encountered&body=\n    in Pe\n    in rt\n    in ae\n    in div\n    in main\n    in div\n    in div\n    in div\n    in div\n    in St\n    in Connect(St)\n    in withRouter(Connect(St))\n    in ForwardRef\n    in div\n    in div\n    in div\n    in E\n    in Connect(E)\n    in withRouter(Connect(E))\n    in ForwardRef\n    in s\n    in n\n    in n\n    in Suspense\n    in s\n    in Da\n    in div\n    in ForwardRef\n    in r\n    in withRouter(r)\n    in ForwardRef\n    in Connect(Component)\n    in Connect(Component)\n    in div\n    in div\n    in div\n    in Suspense\n    in s\n    in div\n    in Unknown\n    in Connect(Component)\n    in withRouter(Connect(Component))\n    in ke\n    in ke\n    in Connect(Component)\n    in withRouter(Connect(Component))\n    in ForwardRef\n    in Ee\n    in Connect(Ee)\n    in withRouter(Connect(Ee))\n    in Y\n    in ua\n    in s\n    in t\n    in Suspense\n    in s\n    in n\n    in Unknown\n    in i\n    in Ye\n    in Connect(Ye)\n    in ForwardRef\n    in t\n    in i\n    in Ko\n    in t\n    in gt"
+  - text: here with a screenshot of the below expanded error. We will be right on it for a fix once we receive.
+- group:
+  - text: Click here to toggle/hide more info.--- 2025-09-15 09:52:14
+  - paragraph: "TypeError: V is not iterable"
+  - paragraph: in Pe in rt in ae in div in main in div in div in div in div in St in Connect(St) in withRouter(Connect(St)) in ForwardRef in div in div in div in E in Connect(E) in withRouter(Connect(E)) in ForwardRef in s in n in n in Suspense in s in Da in div in ForwardRef in r in withRouter(r) in ForwardRef in Connect(Component) in Connect(Component) in div in div in div in Suspense in s in div in Unknown in Connect(Component) in withRouter(Connect(Component)) in ke in ke in Connect(Component) in withRouter(Connect(Component)) in ForwardRef in Ee in Connect(Ee) in withRouter(Connect(Ee)) in Y in ua in s in t in Suspense in s in n in Unknown in i in Ye in Connect(Ye) in ForwardRef in t in i in Ko in t in gt
+```
+
+# Test source
+
+```ts
+   1 | import { expect } from "@playwright/test";
+   2 | import BaseClass from "../Generic/BaseClass";
+   3 |
+   4 | class ElementClass {
+   5 |   constructor(page) {
+   6 |     this.page = page;
+   7 |   }
+   8 |
+   9 |   async open(url) {
+   10 |     return await this.page.goto(url);
+   11 |   }
+   12 |
+   13 |   async getTitle() {
+   14 |     return await this.page.title();
+   15 |   }
+   16 |
+   17 |   async pause() {
+   18 |     return await this.page.pause();
+   19 |   }
+   20 |
+   21 |   async getUrl() {
+   22 |     return this.page.url();
+   23 |   }
+   24 |
+   25 |   async wait(time) {
+   26 |     return this.page.waitForTimeout(time);
+   27 |   }
+   28 |
+   29 |   async waitForPageLoad() {
+   30 |     return await this.page.waitForLoadState("domcontentloaded");
+   31 |   }
+   32 |
+   33 |   async waitAndClick(selector) {
+   34 |     return await this.page.click(selector);
+   35 |   }
+   36 |
+   37 |   async waitAndHardClick(selector) {
+   38 |     return await this.page.$eval(selector, (element) => element.click());
+   39 |   }
+   40 |
+   41 |   async waitAndFill(selector, text) {
+   42 |     return await this.page.fill(selector, text);
+   43 |   }
+   44 |
+   45 |   async keyPress(selector, key) {
+   46 |     return await this.page.press(selector, key);
+   47 |   }
+   48 |
+   49 |   async takeScreenShot() {
+   50 |     return expect(await this.page.screenshot()).toMatchSnapshot(
+   51 |       "MyScreenShot.png"
+   52 |     );
+   53 |   }
+   54 |
+   55 |   async verifyElementText(selector, text) {
+   56 |     const textValue = await this.page.textContent(selector);
+   57 |     return expect(textValue.trim()).toBe(text);
+   58 |   }
+   59 |
+   60 |   async verifyElementContainsText(selector, text) {
+   61 |     const locatorText = await this.page.locator(selector);
+   62 |     return await expect(locatorText).toContainText(text);
+   63 |   }
+   64 |
+   65 |   async verifyJSElementValue(selector, text) {
+   66 |     const textValue = await this.page.$eval(
+   67 |       selector,
+   68 |       (element) => element.value
+   69 |     );
+   70 |     return expect(textValue.trim()).toBe(text);
+   71 |   }
+   72 |
+   73 |   async OLDselectValueFromDropdown(selector, text) {
+   74 |     const dropdown = await this.page.locator(selector);
+   75 |     return await dropdown.selectOption({ value: text });
+   76 |   }
+   77 |
+   78 |   async doDropdownHandler(dropdownSelector, dropDownOptionElement) {
+   79 |     console.log("Dropdown Selector:", dropdownSelector);
+   80 |     console.log("Option Selector:", dropDownOptionElement);
+   81 |
+   82 |     // Step 1: Locate and click the dropdown to open it
+>  83 |     await dropdownSelector.click();
+      |                            ^ Error: locator.click: Test timeout of 60000ms exceeded.
+   84 |
+   85 |     // Step 2: Locate the desired option by text
+   86 |     await dropDownOptionElement.click();
+   87 |   }
+   88 |
+   89 |   async verifyElementAttribute(selector, attribute, value) {
+   90 |     const textValue = await this.page.getAttribute(selector, attribute);
+   91 |     return expect(textValue.trim()).toBe(value);
+   92 |   }
+   93 |
+   94 |   async getFirstElementFromTheList(selector) {
+   95 |     const rows = await this.page.locator(selector);
+   96 |     const count = await rows.count();
+   97 |     for (let i = 0; i < count; ++i) {
+   98 |       const firstItem = await rows.nth(0).textContent();
+   99 |       return firstItem;
+  100 |     }
+  101 |   }
+  102 |
+  103 |   async getLastElementFromTheList(selector) {
+  104 |     const rows = await this.page.locator(selector);
+  105 |     const count = await rows.count();
+  106 |     for (let i = 0; i < count; ++i) {
+  107 |       const lastItem = await rows.nth(5).textContent();
+  108 |       return lastItem;
+  109 |     }
+  110 |   }
+  111 |
+  112 |   async clickAllElements(selector) {
+  113 |     const rows = await this.page.locator(selector);
+  114 |     const count = 2;
+  115 |     for (let i = 0; i < count; ++i) {
+  116 |       await rows.nth(i).click();
+  117 |     }
+  118 |   }
+  119 |
+  120 |   async clickAllLinksInNewTabs(selector) {
+  121 |     const rows = this.page.locator(selector);
+  122 |     const count = rows.count();
+  123 |     for (i in range(count)) {
+  124 |       await rows.nth(i).click((modifiers = ["Control", "Shift"]));
+  125 |     }
+  126 |   }
+  127 |
+  128 |   async isElementVisible(selector, errorMessage) {
+  129 |     const element = this.page.locator(selector);
+  130 |     try {
+  131 |       const isVisible = await element.isVisible();
+  132 |       expect(isVisible).toBeTruthy();
+  133 |     } catch (error) {
+  134 |       throw new Error(`${errorMessage}`);
+  135 |     }
+  136 |   }
+  137 |
+  138 |   async isElementNotVisible(selector) {
+  139 |     const element = this.page.locator(selector);
+  140 |     return expect(element).toBeHidden;
+  141 |   }
+  142 |
+  143 |   async isElementEnabled(selector, errorMessage) {
+  144 |     const element = this.page.locator(selector);
+  145 |     try {
+  146 |       const isEnabled = await element.isEnabled();
+  147 |       expect(isEnabled).toBeTruthy();
+  148 |     } catch (error) {
+  149 |       throw new Error(`${errorMessage}`);
+  150 |     }
+  151 |   }
+  152 |
+  153 |   async isElementChecked(selector, errorMessage) {
+  154 |     const element = this.page.locator(selector);
+  155 |     try {
+  156 |       const isChecked = await element.isChecked();
+  157 |       expect(isChecked).toBeTruthy();
+  158 |     } catch (error) {
+  159 |       throw new Error(`${errorMessage}`);
+  160 |     }
+  161 |   }
+  162 | }
+  163 | export default ElementClass;
+  164 |
+```

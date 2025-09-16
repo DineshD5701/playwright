@@ -1,0 +1,53 @@
+# Test info
+
+- Name: MeeshoCX MoreTickets Test
+- Location: /app/tests/meeshocx-tests/01_MeeshoCXTicketSearchByPhoneNumber.spec.js:7:5
+
+# Error details
+
+```
+Error: page.goto: Test timeout of 60000ms exceeded.
+Call log:
+  - navigating to "https://meesho.kapturecrm.com/nui/", waiting until "networkidle"
+
+    at /app/tests/meeshocx-tests/01_MeeshoCXTicketSearchByPhoneNumber.spec.js:11:14
+```
+
+# Page snapshot
+
+```yaml
+- img "logo"
+- heading "Welcome to Kapture CRM!" [level=3]
+- heading "Kapture's all-in-one Customer Service platform has all the tools your teams need to deliver better and intelligent customer service." [level=6]
+- heading "LOGIN TO YOUR ACCOUNT" [level=6]
+```
+
+# Test source
+
+```ts
+   1 | import { test, expect } from "@playwright/test";
+   2 | import MeeshoCXBaseClass from "../../Generic/MeeshoCXBaseClass";
+   3 | import TicketListPage from "../../Pages/TicketListPage";
+   4 | import TicketDetailspage from "../../Pages/TicketDetailsPage";
+   5 | const testdata = require("../../Generic/TestData.json");
+   6 |
+   7 | test("MeeshoCX MoreTickets Test", async ({ page }) => {
+   8 |   // // Call login via BaseClass
+   9 |   // const base = new MeeshoCXBaseClass(page);
+  10 |   // await base.setUp();
+> 11 |   await page.goto(testdata["MeeshoCXNUIURL"], { waitUntil: "networkidle" });
+     |              ^ Error: page.goto: Test timeout of 60000ms exceeded.
+  12 |   const ticketListPage = new TicketListPage(page);
+  13 |   await ticketListPage.doHandleLoginPopup();
+  14 |   console.log("Handling login popup");
+  15 |   await ticketListPage.doValiadationForSearchTicket(
+  16 |     testdata.MeeshoCXPhoneNumber
+  17 |   );
+  18 |   await ticketListPage.doExpendView();
+  19 |   await ticketListPage.doClickOnSearchTciket();
+  20 |   await ticketListPage.doValiadationForSearchTicket();
+  21 |   const ticketDetailsPage = new TicketDetailspage(page);
+  22 |   await ticketDetailsPage.doMoreTicketsTab();
+  23 | });
+  24 |
+```

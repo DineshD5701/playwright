@@ -1,1 +1,1 @@
-[{"name":"Jenkins","type":"jenkins","url":"http://localhost:8080/","buildOrder":183,"buildName":"github-playwright #183","buildUrl":"http://localhost:8080/job/github-playwright/183/","reportName":"AllureReport","reportUrl":"http://localhost:8080/job/github-playwright/183/allure"}]
+[{"name":"Jenkins","type":"jenkins","url":"http://localhost:8080/","buildOrder":88,"buildName":"scripted_pipeline #88","buildUrl":"http://localhost:8080/job/scripted_pipeline/88/","reportName":"AllureReport","reportUrl":"http://localhost:8080/job/scripted_pipeline/88/allure"}]
