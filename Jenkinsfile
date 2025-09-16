@@ -115,6 +115,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Publish Allure Report in Jenkins') {
             steps {
                 allure([
