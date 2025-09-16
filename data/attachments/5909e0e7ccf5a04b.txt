@@ -1,0 +1,34 @@
+❌ Error interacting with TICKET_DETAILS button: page.waitForLoadState: Test timeout of 60000ms exceeded.
+    at TicketListPage.doValiadationForSearchTicket (/app/Pages/TicketListPage.js:100:23)
+    at /app/tests/bigbasket-tests/07_BigbasketoInfoTab.spec.js:13:24 {
+  [Symbol(step)]: {
+    stepId: 'pw:api@15',
+    location: {
+      file: '/app/Pages/TicketListPage.js',
+      line: 100,
+      column: 23,
+      function: 'TicketListPage.doValiadationForSearchTicket'
+    },
+    category: 'pw:api',
+    title: 'page.waitForLoadState',
+    apiName: 'page.waitForLoadState',
+    params: { info: [Object] },
+    boxedStack: undefined,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [TestInfoImpl],
+      _stepId: 'pw:api@15'
+    },
+    complete: [Function: complete],
+    endWallTime: 1758009751488,
+    error: {
+      message: 'Error: page.waitForLoadState: Test timeout of 60000ms exceeded.',
+      stack: 'Error: page.waitForLoadState: Test timeout of 60000ms exceeded.\n' +
+        '    at TicketListPage.doValiadationForSearchTicket (/app/Pages/TicketListPage.js:100:23)\n' +
+        '    at /app/tests/bigbasket-tests/07_BigbasketoInfoTab.spec.js:13:24',
+      cause: undefined
+    }
+  }
+}

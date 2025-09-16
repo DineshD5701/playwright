@@ -1,0 +1,42 @@
+# Test info
+
+- Name: BigBasket Search Test by PhoneNumber 
+- Location: /app/tests/bigbasket-tests/04_BigbasketTicketSearchByPhoneNumber.spec.js:6:5
+
+# Error details
+
+```
+Error: page.goto: Test timeout of 60000ms exceeded.
+Call log:
+  - navigating to "https://bigbasket.kapdesk.com/nui/", waiting until "networkidle"
+
+    at /app/tests/bigbasket-tests/04_BigbasketTicketSearchByPhoneNumber.spec.js:7:14
+```
+
+# Page snapshot
+
+```yaml
+- img "logo"
+```
+
+# Test source
+
+```ts
+   1 | import { test, expect } from "@playwright/test";
+   2 | import BaseClass from "../../Generic/BaseClass";
+   3 | import TicketListPage from "../../Pages/TicketListPage";
+   4 | const testdata = require("../../Generic/TestData.json");
+   5 |
+   6 | test("BigBasket Search Test by PhoneNumber ", async ({ page }) => {
+>  7 |   await page.goto(testdata["BigbasketNUIURL"], { waitUntil: "networkidle" });
+     |              ^ Error: page.goto: Test timeout of 60000ms exceeded.
+   8 |   const ticketListPage = new TicketListPage(page);
+   9 |   await ticketListPage.doSearchTicketWithPhoneNumber(
+  10 |     testdata.BigbasketTicketID1
+  11 |   );
+  12 |   await ticketListPage.doExpendView();
+  13 |   await ticketListPage.doClickOnSearchTciket();
+  14 |   await ticketListPage.doValiadationForSearchTicket();
+  15 | });
+  16 |
+```
