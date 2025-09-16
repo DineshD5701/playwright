@@ -37,6 +37,14 @@ pipeline {
             }
         }
         
+            stage('Ensure Allure PVC') {
+                steps{
+                sh """
+                    kubectl apply -f k8s/allure-pvc.yaml --namespace=${NAMESPACE}
+                """
+            }
+        }
+
         stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
@@ -115,6 +123,7 @@ pipeline {
                 }
             }
         }
+
         stage('Publish Allure Report in Jenkins') {
             steps {
                 allure([
@@ -132,14 +141,14 @@ pipeline {
                         sh """
                           git config --global user.email "ci-bot@example.com"
                           git config --global user.name "CI Bot"
-                          rm -rf gh-pages
-                          git clone https://${GIT_USER}:${GIT_PASS}@github.com/dineshd5701/playwright.git -b gh-pages gh-pages
-                          rm -rf gh-pages/*
-                          cp -r allure-report/* gh-pages/
-                          cd gh-pages
+                          rm -rf playwright-allure-report
+                          git clone https://${GIT_USER}:${GIT_PASS}@github.com/dineshd5701/playwright.git -b playwright-allure-report playwright-allure-report
+                          rm -rf playwright-allure-report/*
+                          cp -r allure-report/* playwright-allure-report/
+                          cd playwright-allure-report
                           git add .
                           git commit -m "Update Allure Report for Build #${BUILD_NUMBER}" || echo "No changes to commit"
-                          git push origin gh-pages
+                          git push origin playwright-allure-report
                         """
                     }
                 }
