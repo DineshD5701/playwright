@@ -1,0 +1,10 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e8]:
+  - generic [ref=e9]:
+    - img "logo" [ref=e10]
+    - heading "Welcome to Kapture CRM!" [level=3] [ref=e11]
+    - heading "Kapture's all-in-one Customer Service platform has all the tools your teams need to deliver better and intelligent customer service." [level=6] [ref=e12]
+  - heading "LOGIN TO YOUR ACCOUNT" [level=6] [ref=e15]
+```
