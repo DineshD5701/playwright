@@ -37,6 +37,14 @@ pipeline {
             }
         }
         
+            stage('Ensure Allure PVC') {
+                steps{
+                sh """
+                    kubectl apply -f k8s/allure-pvc.yaml --namespace=${NAMESPACE}
+                """
+            }
+        }
+
         stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
@@ -115,7 +123,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Publish Allure Report in Jenkins') {
             steps {
                 allure([
