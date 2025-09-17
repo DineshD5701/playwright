@@ -1,0 +1,304 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e6]:
+    - banner [ref=e7]:
+      - generic [ref=e9]:
+        - paragraph [ref=e10]:
+          - generic [ref=e11]:
+            - generic [ref=e13]: Stable
+            - generic [ref=e14]: v5.2.52
+        - generic [ref=e15]:
+          - button "Report a bug" [ref=e16] [cursor=pointer]:
+            - img [ref=e19] [cursor=pointer]
+          - button "Give us a feedback" [ref=e22] [cursor=pointer]:
+            - img [ref=e24] [cursor=pointer]
+          - paragraph [ref=e31]: 17-09-2025 06:41:47 am +00:00
+    - banner [ref=e32]:
+      - generic [ref=e33]:
+        - button [ref=e34] [cursor=pointer]:
+          - generic [ref=e36] [cursor=pointer]: menu
+        - paragraph [ref=e39]: Tickets
+        - generic [ref=e40]:
+          - button "29" [ref=e41] [cursor=pointer]:
+            - generic [ref=e43] [cursor=pointer]:
+              - img [ref=e45] [cursor=pointer]
+              - generic [ref=e53] [cursor=pointer]: "29"
+          - button "KM Portal" [ref=e55] [cursor=pointer]:
+            - generic [ref=e58] [cursor=pointer]:
+              - img [ref=e59] [cursor=pointer]
+              - text: KM Portal
+          - button "close" [ref=e61] [cursor=pointer]:
+            - generic [ref=e63] [cursor=pointer]:
+              - img [ref=e65] [cursor=pointer]
+              - generic [ref=e69] [cursor=pointer]: close
+          - generic [ref=e75] [cursor=pointer]:
+            - checkbox "Available" [checked] [ref=e78] [cursor=pointer]
+            - generic [ref=e80] [cursor=pointer]: Available
+          - button "Kapture QA User" [ref=e82] [cursor=pointer]:
+            - generic [ref=e84] [cursor=pointer]:
+              - img [ref=e85] [cursor=pointer]
+              - generic [ref=e87] [cursor=pointer]:
+                - paragraph [ref=e88] [cursor=pointer]: Kapture QA User
+                - img [ref=e90] [cursor=pointer]
+          - button [ref=e94] [cursor=pointer]:
+            - img [ref=e97] [cursor=pointer]
+    - generic [ref=e111]:
+      - generic [ref=e112]:
+        - navigation [ref=e115]:
+          - generic [ref=e117]:
+            - generic [ref=e118]: Views
+            - img [ref=e121] [cursor=pointer]
+          - region "scrollable content" [ref=e130]:
+            - generic [ref=e133]:
+              - button "Overall" [expanded] [ref=e134] [cursor=pointer]:
+                - paragraph [ref=e136] [cursor=pointer]: Overall
+              - region [ref=e140]:
+                - generic [ref=e141]:
+                  - button "Unassigned" [ref=e142] [cursor=pointer]
+                  - button "All Pending" [ref=e146] [cursor=pointer]
+                  - button "All Complete" [ref=e150] [cursor=pointer]
+                  - button "All Junk" [active] [ref=e154] [cursor=pointer]:
+                    - generic [ref=e157] [cursor=pointer]: All Junk
+                  - button "Assigned to me" [ref=e158] [cursor=pointer]
+                  - button "Created by me" [ref=e162] [cursor=pointer]
+                  - button "Completed by me" [ref=e166] [cursor=pointer]
+        - button [ref=e170] [cursor=pointer]:
+          - img [ref=e172] [cursor=pointer]
+      - main [ref=e174]:
+        - generic [ref=e175]:
+          - generic [ref=e178]:
+            - generic [ref=e180]:
+              - generic [ref=e182] [cursor=pointer]:
+                - checkbox [ref=e183] [cursor=pointer]
+                - img [ref=e184] [cursor=pointer]
+              - generic: "0"
+            - generic [ref=e186]:
+              - generic [ref=e188]:
+                - button "Search" [ref=e189] [cursor=pointer]:
+                  - img [ref=e191] [cursor=pointer]
+                - textbox "Search tickets..." [ref=e194]
+              - generic [ref=e195]:
+                - generic [ref=e196]: Show
+                - generic [ref=e199]: of
+            - generic [ref=e201]:
+              - generic [ref=e202]:
+                - button [disabled]:
+                  - generic:
+                    - img
+                - button [disabled]:
+                  - generic:
+                    - img
+              - button "Sort the tickets" [ref=e205] [cursor=pointer]
+              - img [ref=e209] [cursor=pointer]
+              - generic [ref=e211]:
+                - button "Compact View" [ref=e212] [cursor=pointer]:
+                  - img [ref=e215] [cursor=pointer]
+                - button "Expanded View" [ref=e217] [cursor=pointer]:
+                  - img [ref=e220] [cursor=pointer]
+          - table [ref=e223]:
+            - rowgroup [ref=e224]:
+              - checkbox [ref=e225] [cursor=pointer]:
+                - cell [ref=e226] [cursor=pointer]
+                - cell [ref=e228] [cursor=pointer]
+                - cell [ref=e230] [cursor=pointer]
+                - cell [ref=e232] [cursor=pointer]
+                - cell [ref=e234] [cursor=pointer]
+                - cell [ref=e236] [cursor=pointer]
+                - cell [ref=e238] [cursor=pointer]
+              - checkbox [ref=e240] [cursor=pointer]:
+                - cell [ref=e241] [cursor=pointer]
+                - cell [ref=e243] [cursor=pointer]
+                - cell [ref=e245] [cursor=pointer]
+                - cell [ref=e247] [cursor=pointer]
+                - cell [ref=e249] [cursor=pointer]
+                - cell [ref=e251] [cursor=pointer]
+                - cell [ref=e253] [cursor=pointer]
+              - checkbox [ref=e255] [cursor=pointer]:
+                - cell [ref=e256] [cursor=pointer]
+                - cell [ref=e258] [cursor=pointer]
+                - cell [ref=e260] [cursor=pointer]
+                - cell [ref=e262] [cursor=pointer]
+                - cell [ref=e264] [cursor=pointer]
+                - cell [ref=e266] [cursor=pointer]
+                - cell [ref=e268] [cursor=pointer]
+              - checkbox [ref=e270] [cursor=pointer]:
+                - cell [ref=e271] [cursor=pointer]
+                - cell [ref=e273] [cursor=pointer]
+                - cell [ref=e275] [cursor=pointer]
+                - cell [ref=e277] [cursor=pointer]
+                - cell [ref=e279] [cursor=pointer]
+                - cell [ref=e281] [cursor=pointer]
+                - cell [ref=e283] [cursor=pointer]
+              - checkbox [ref=e285] [cursor=pointer]:
+                - cell [ref=e286] [cursor=pointer]
+                - cell [ref=e288] [cursor=pointer]
+                - cell [ref=e290] [cursor=pointer]
+                - cell [ref=e292] [cursor=pointer]
+                - cell [ref=e294] [cursor=pointer]
+                - cell [ref=e296] [cursor=pointer]
+                - cell [ref=e298] [cursor=pointer]
+              - checkbox [ref=e300] [cursor=pointer]:
+                - cell [ref=e301] [cursor=pointer]
+                - cell [ref=e303] [cursor=pointer]
+                - cell [ref=e305] [cursor=pointer]
+                - cell [ref=e307] [cursor=pointer]
+                - cell [ref=e309] [cursor=pointer]
+                - cell [ref=e311] [cursor=pointer]
+                - cell [ref=e313] [cursor=pointer]
+              - checkbox [ref=e315] [cursor=pointer]:
+                - cell [ref=e316] [cursor=pointer]
+                - cell [ref=e318] [cursor=pointer]
+                - cell [ref=e320] [cursor=pointer]
+                - cell [ref=e322] [cursor=pointer]
+                - cell [ref=e324] [cursor=pointer]
+                - cell [ref=e326] [cursor=pointer]
+                - cell [ref=e328] [cursor=pointer]
+              - checkbox [ref=e330] [cursor=pointer]:
+                - cell [ref=e331] [cursor=pointer]
+                - cell [ref=e333] [cursor=pointer]
+                - cell [ref=e335] [cursor=pointer]
+                - cell [ref=e337] [cursor=pointer]
+                - cell [ref=e339] [cursor=pointer]
+                - cell [ref=e341] [cursor=pointer]
+                - cell [ref=e343] [cursor=pointer]
+              - checkbox [ref=e345] [cursor=pointer]:
+                - cell [ref=e346] [cursor=pointer]
+                - cell [ref=e348] [cursor=pointer]
+                - cell [ref=e350] [cursor=pointer]
+                - cell [ref=e352] [cursor=pointer]
+                - cell [ref=e354] [cursor=pointer]
+                - cell [ref=e356] [cursor=pointer]
+                - cell [ref=e358] [cursor=pointer]
+              - checkbox [ref=e360] [cursor=pointer]:
+                - cell [ref=e361] [cursor=pointer]
+                - cell [ref=e363] [cursor=pointer]
+                - cell [ref=e365] [cursor=pointer]
+                - cell [ref=e367] [cursor=pointer]
+                - cell [ref=e369] [cursor=pointer]
+                - cell [ref=e371] [cursor=pointer]
+                - cell [ref=e373] [cursor=pointer]
+              - checkbox [ref=e375] [cursor=pointer]:
+                - cell [ref=e376] [cursor=pointer]
+                - cell [ref=e378] [cursor=pointer]
+                - cell [ref=e380] [cursor=pointer]
+                - cell [ref=e382] [cursor=pointer]
+                - cell [ref=e384] [cursor=pointer]
+                - cell [ref=e386] [cursor=pointer]
+                - cell [ref=e388] [cursor=pointer]
+              - checkbox [ref=e390] [cursor=pointer]:
+                - cell [ref=e391] [cursor=pointer]
+                - cell [ref=e393] [cursor=pointer]
+                - cell [ref=e395] [cursor=pointer]
+                - cell [ref=e397] [cursor=pointer]
+                - cell [ref=e399] [cursor=pointer]
+                - cell [ref=e401] [cursor=pointer]
+                - cell [ref=e403] [cursor=pointer]
+              - checkbox [ref=e405] [cursor=pointer]:
+                - cell [ref=e406] [cursor=pointer]
+                - cell [ref=e408] [cursor=pointer]
+                - cell [ref=e410] [cursor=pointer]
+                - cell [ref=e412] [cursor=pointer]
+                - cell [ref=e414] [cursor=pointer]
+                - cell [ref=e416] [cursor=pointer]
+                - cell [ref=e418] [cursor=pointer]
+              - checkbox [ref=e420] [cursor=pointer]:
+                - cell [ref=e421] [cursor=pointer]
+                - cell [ref=e423] [cursor=pointer]
+                - cell [ref=e425] [cursor=pointer]
+                - cell [ref=e427] [cursor=pointer]
+                - cell [ref=e429] [cursor=pointer]
+                - cell [ref=e431] [cursor=pointer]
+                - cell [ref=e433] [cursor=pointer]
+              - checkbox [ref=e435] [cursor=pointer]:
+                - cell [ref=e436] [cursor=pointer]
+                - cell [ref=e438] [cursor=pointer]
+                - cell [ref=e440] [cursor=pointer]
+                - cell [ref=e442] [cursor=pointer]
+                - cell [ref=e444] [cursor=pointer]
+                - cell [ref=e446] [cursor=pointer]
+                - cell [ref=e448] [cursor=pointer]
+              - checkbox [ref=e450] [cursor=pointer]:
+                - cell [ref=e451] [cursor=pointer]
+                - cell [ref=e453] [cursor=pointer]
+                - cell [ref=e455] [cursor=pointer]
+                - cell [ref=e457] [cursor=pointer]
+                - cell [ref=e459] [cursor=pointer]
+                - cell [ref=e461] [cursor=pointer]
+                - cell [ref=e463] [cursor=pointer]
+              - checkbox [ref=e465] [cursor=pointer]:
+                - cell [ref=e466] [cursor=pointer]
+                - cell [ref=e468] [cursor=pointer]
+                - cell [ref=e470] [cursor=pointer]
+                - cell [ref=e472] [cursor=pointer]
+                - cell [ref=e474] [cursor=pointer]
+                - cell [ref=e476] [cursor=pointer]
+                - cell [ref=e478] [cursor=pointer]
+              - checkbox [ref=e480] [cursor=pointer]:
+                - cell [ref=e481] [cursor=pointer]
+                - cell [ref=e483] [cursor=pointer]
+                - cell [ref=e485] [cursor=pointer]
+                - cell [ref=e487] [cursor=pointer]
+                - cell [ref=e489] [cursor=pointer]
+                - cell [ref=e491] [cursor=pointer]
+                - cell [ref=e493] [cursor=pointer]
+              - checkbox [ref=e495] [cursor=pointer]:
+                - cell [ref=e496] [cursor=pointer]
+                - cell [ref=e498] [cursor=pointer]
+                - cell [ref=e500] [cursor=pointer]
+                - cell [ref=e502] [cursor=pointer]
+                - cell [ref=e504] [cursor=pointer]
+                - cell [ref=e506] [cursor=pointer]
+                - cell [ref=e508] [cursor=pointer]
+              - checkbox [ref=e510] [cursor=pointer]:
+                - cell [ref=e511] [cursor=pointer]
+                - cell [ref=e513] [cursor=pointer]
+                - cell [ref=e515] [cursor=pointer]
+                - cell [ref=e517] [cursor=pointer]
+                - cell [ref=e519] [cursor=pointer]
+                - cell [ref=e521] [cursor=pointer]
+                - cell [ref=e523] [cursor=pointer]
+              - checkbox [ref=e525] [cursor=pointer]:
+                - cell [ref=e526] [cursor=pointer]
+                - cell [ref=e528] [cursor=pointer]
+                - cell [ref=e530] [cursor=pointer]
+                - cell [ref=e532] [cursor=pointer]
+                - cell [ref=e534] [cursor=pointer]
+                - cell [ref=e536] [cursor=pointer]
+                - cell [ref=e538] [cursor=pointer]
+              - checkbox [ref=e540] [cursor=pointer]:
+                - cell [ref=e541] [cursor=pointer]
+                - cell [ref=e543] [cursor=pointer]
+                - cell [ref=e545] [cursor=pointer]
+                - cell [ref=e547] [cursor=pointer]
+                - cell [ref=e549] [cursor=pointer]
+                - cell [ref=e551] [cursor=pointer]
+                - cell [ref=e553] [cursor=pointer]
+              - checkbox [ref=e555] [cursor=pointer]:
+                - cell [ref=e556] [cursor=pointer]
+                - cell [ref=e558] [cursor=pointer]
+                - cell [ref=e560] [cursor=pointer]
+                - cell [ref=e562] [cursor=pointer]
+                - cell [ref=e564] [cursor=pointer]
+                - cell [ref=e566] [cursor=pointer]
+                - cell [ref=e568] [cursor=pointer]
+              - checkbox [ref=e570] [cursor=pointer]:
+                - cell [ref=e571] [cursor=pointer]
+                - cell [ref=e573] [cursor=pointer]
+                - cell [ref=e575] [cursor=pointer]
+                - cell [ref=e577] [cursor=pointer]
+                - cell [ref=e579] [cursor=pointer]
+                - cell [ref=e581] [cursor=pointer]
+                - cell [ref=e583] [cursor=pointer]
+              - checkbox [ref=e585] [cursor=pointer]:
+                - cell [ref=e586] [cursor=pointer]
+                - cell [ref=e588] [cursor=pointer]
+                - cell [ref=e590] [cursor=pointer]
+                - cell [ref=e592] [cursor=pointer]
+                - cell [ref=e594] [cursor=pointer]
+                - cell [ref=e596] [cursor=pointer]
+                - cell [ref=e598] [cursor=pointer]
+  - tooltip "All Junk":
+    - generic: All Junk
+```
