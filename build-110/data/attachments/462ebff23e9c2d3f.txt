@@ -1,0 +1,207 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e6]:
+  - banner [ref=e7]:
+    - generic [ref=e9]:
+      - paragraph [ref=e10]:
+        - generic [ref=e11]:
+          - generic [ref=e13]: Stable
+          - generic [ref=e14]: v5.2.52
+      - generic [ref=e15]:
+        - button "Report a bug" [ref=e16] [cursor=pointer]:
+          - img [ref=e19] [cursor=pointer]
+        - button "Give us a feedback" [ref=e22] [cursor=pointer]:
+          - img [ref=e24] [cursor=pointer]
+        - paragraph [ref=e31]: 17-09-2025 09:37:00 am +00:00
+  - banner [ref=e32]:
+    - generic [ref=e33]:
+      - button [ref=e34] [cursor=pointer]:
+        - generic [ref=e36] [cursor=pointer]: menu
+      - paragraph [ref=e39]: Tickets
+      - generic [ref=e40]:
+        - button "29" [ref=e41] [cursor=pointer]:
+          - generic [ref=e43] [cursor=pointer]:
+            - img [ref=e45] [cursor=pointer]
+            - generic [ref=e53] [cursor=pointer]: "29"
+        - button "KM Portal" [ref=e55] [cursor=pointer]:
+          - generic [ref=e58] [cursor=pointer]:
+            - img [ref=e59] [cursor=pointer]
+            - text: KM Portal
+        - button "close" [ref=e61] [cursor=pointer]:
+          - generic [ref=e63] [cursor=pointer]:
+            - img [ref=e65] [cursor=pointer]
+            - generic [ref=e69] [cursor=pointer]: close
+        - generic [ref=e75] [cursor=pointer]:
+          - checkbox "Available" [checked] [ref=e78] [cursor=pointer]
+          - generic [ref=e80] [cursor=pointer]: Available
+        - button "Kapture QA User" [ref=e82] [cursor=pointer]:
+          - generic [ref=e84] [cursor=pointer]:
+            - img [ref=e85] [cursor=pointer]
+            - generic [ref=e87] [cursor=pointer]:
+              - paragraph [ref=e88] [cursor=pointer]: Kapture QA User
+              - img [ref=e90] [cursor=pointer]
+        - button [ref=e94] [cursor=pointer]:
+          - img [ref=e97] [cursor=pointer]
+  - generic [ref=e111]:
+    - generic [ref=e112]:
+      - navigation [ref=e115]:
+        - generic [ref=e117]:
+          - generic [ref=e118]: Views
+          - img [ref=e121] [cursor=pointer]
+        - region "scrollable content" [ref=e130]:
+          - generic [ref=e133]:
+            - button "Overall" [expanded] [ref=e134] [cursor=pointer]:
+              - paragraph [ref=e136] [cursor=pointer]: Overall
+            - region [ref=e140]:
+              - generic [ref=e141]:
+                - button "Unassigned" [ref=e142] [cursor=pointer]
+                - button "All Pending" [ref=e146] [cursor=pointer]
+                - button "All Complete" [ref=e150] [cursor=pointer]
+                - button "All Junk" [ref=e154] [cursor=pointer]
+                - button "Assigned to me" [ref=e158] [cursor=pointer]
+                - button "Created by me" [ref=e162] [cursor=pointer]
+                - button "Completed by me" [ref=e166] [cursor=pointer]
+      - button [ref=e170] [cursor=pointer]:
+        - img [ref=e172] [cursor=pointer]
+    - main [ref=e174]:
+      - generic [ref=e175]:
+        - generic [ref=e178]:
+          - generic [ref=e180]:
+            - generic [ref=e182] [cursor=pointer]:
+              - checkbox [ref=e183] [cursor=pointer]
+              - img [ref=e184] [cursor=pointer]
+            - generic: "0"
+          - generic [ref=e186]:
+            - generic [ref=e188]:
+              - button "Search" [ref=e189] [cursor=pointer]:
+                - img [ref=e191] [cursor=pointer]
+              - textbox "Search tickets..." [ref=e194]: "736149704013"
+              - button "Cancel" [ref=e195] [cursor=pointer]:
+                - generic [ref=e197] [cursor=pointer]: cancel
+            - button "Search in Archive" [ref=e198] [cursor=pointer]:
+              - img [ref=e201] [cursor=pointer]
+            - generic [ref=e209]:
+              - generic [ref=e210]: Show
+              - generic [ref=e211]:
+                - button "50" [ref=e212] [cursor=pointer]
+                - textbox: "50"
+                - img
+              - generic [ref=e213]: 1 - 2
+              - generic [ref=e214]: of
+              - generic [ref=e215]: "2"
+          - generic [ref=e216]:
+            - generic [ref=e217]:
+              - button [disabled]:
+                - generic:
+                  - img
+              - textbox "naked" [ref=e219]: "0"
+              - paragraph [ref=e220]:
+                - text: of
+                - generic [ref=e221]: "0"
+              - button [disabled]:
+                - generic:
+                  - img
+            - button "last conversation" [ref=e223] [cursor=pointer]:
+              - generic [ref=e225] [cursor=pointer]:
+                - img [ref=e227] [cursor=pointer]
+                - paragraph [ref=e229] [cursor=pointer]: last conversation
+                - img [ref=e230] [cursor=pointer]
+            - img [ref=e233] [cursor=pointer]
+            - generic [ref=e235]:
+              - button "Compact View" [ref=e236] [cursor=pointer]:
+                - img [ref=e239] [cursor=pointer]
+              - button "Expanded View" [active] [ref=e241] [cursor=pointer]:
+                - img [ref=e244] [cursor=pointer]
+        - table [ref=e249]:
+          - rowgroup [ref=e250]:
+            - generic [ref=e253]:
+              - 'checkbox "CUSTOMER SUPPORT Call Ticket : 736149704013 Kapture QA User SLA is violated Jan 08 S s l 736149704013 RS Resolved COMPLETE 6 06-01-2025 High Chat Queue" [ref=e255] [cursor=pointer]':
+                - generic [ref=e256] [cursor=pointer]:
+                  - generic [ref=e259] [cursor=pointer]:
+                    - checkbox [ref=e260] [cursor=pointer]
+                    - img [ref=e261] [cursor=pointer]
+                  - generic [ref=e265] [cursor=pointer]:
+                    - generic [ref=e267] [cursor=pointer]:
+                      - img [ref=e271] [cursor=pointer]
+                      - generic [ref=e275]: CUSTOMER SUPPORT
+                    - generic "Assigned To - Kapture QA User" [ref=e278] [cursor=pointer]:
+                      - img [ref=e280] [cursor=pointer]
+                      - paragraph [ref=e282] [cursor=pointer]: Kapture QA User
+                    - generic [ref=e283] [cursor=pointer]:
+                      - generic [ref=e284] [cursor=pointer]:
+                        - img [ref=e287] [cursor=pointer]
+                        - paragraph [ref=e291] [cursor=pointer]: SLA is violated
+                      - img [ref=e292] [cursor=pointer]
+                      - paragraph [ref=e296] [cursor=pointer]: Jan 08
+                    - generic [ref=e297] [cursor=pointer]:
+                      - generic [ref=e299] [cursor=pointer]:
+                        - generic [ref=e301]: S
+                        - generic [ref=e302] [cursor=pointer]: s l
+                      - img [ref=e303] [cursor=pointer]
+                      - generic "Ticket 736149704013" [ref=e305] [cursor=pointer]:
+                        - img [ref=e307] [cursor=pointer]
+                        - paragraph [ref=e310] [cursor=pointer]: "736149704013"
+                    - generic [ref=e312] [cursor=pointer]:
+                      - paragraph [ref=e313] [cursor=pointer]:
+                        - generic [ref=e315]: RS
+                        - generic [ref=e316] [cursor=pointer]: Resolved
+                      - img [ref=e317] [cursor=pointer]
+                      - generic [ref=e320]: COMPLETE
+                    - generic [ref=e321] [cursor=pointer]:
+                      - generic [ref=e324] [cursor=pointer]:
+                        - img [ref=e326] [cursor=pointer]
+                        - generic [ref=e328] [cursor=pointer]: "6"
+                      - img [ref=e334] [cursor=pointer]
+                      - paragraph [ref=e339] [cursor=pointer]:
+                        - img [ref=e340] [cursor=pointer]
+                        - text: 06-01-2025
+                    - generic [ref=e344] [cursor=pointer]:
+                      - img [ref=e346] [cursor=pointer]
+                      - generic [ref=e350] [cursor=pointer]: High
+                    - generic [ref=e353] [cursor=pointer]:
+                      - img [ref=e354] [cursor=pointer]
+                      - paragraph [ref=e357] [cursor=pointer]: Chat Queue
+              - checkbox "OTHER <Complaint Ticket> 736149761791 SLA is violated Jan 06 S s l 736149761791 RS Resolved COMPLETE 4 06-01-2025 Low CMS_Queue" [ref=e359] [cursor=pointer]:
+                - generic [ref=e360] [cursor=pointer]:
+                  - generic [ref=e363] [cursor=pointer]:
+                    - checkbox [ref=e364] [cursor=pointer]
+                    - img [ref=e365] [cursor=pointer]
+                  - generic [ref=e369] [cursor=pointer]:
+                    - generic [ref=e371] [cursor=pointer]:
+                      - img [ref=e375] [cursor=pointer]
+                      - generic [ref=e379]: OTHER
+                    - generic [ref=e382] [cursor=pointer]:
+                      - generic [ref=e383] [cursor=pointer]:
+                        - img [ref=e386] [cursor=pointer]
+                        - paragraph [ref=e390] [cursor=pointer]: SLA is violated
+                      - img [ref=e391] [cursor=pointer]
+                      - paragraph [ref=e395] [cursor=pointer]: Jan 06
+                    - generic [ref=e396] [cursor=pointer]:
+                      - generic [ref=e398] [cursor=pointer]:
+                        - generic [ref=e400]: S
+                        - generic [ref=e401] [cursor=pointer]: s l
+                      - img [ref=e402] [cursor=pointer]
+                      - generic "SubTicket 736149761791" [ref=e404] [cursor=pointer]:
+                        - img [ref=e406] [cursor=pointer]
+                        - paragraph [ref=e412] [cursor=pointer]: "736149761791"
+                    - generic [ref=e414] [cursor=pointer]:
+                      - paragraph [ref=e415] [cursor=pointer]:
+                        - generic [ref=e417]: RS
+                        - generic [ref=e418] [cursor=pointer]: Resolved
+                      - img [ref=e419] [cursor=pointer]
+                      - generic [ref=e422]: COMPLETE
+                    - generic [ref=e423] [cursor=pointer]:
+                      - generic [ref=e426] [cursor=pointer]:
+                        - img [ref=e428] [cursor=pointer]
+                        - generic [ref=e430] [cursor=pointer]: "4"
+                      - paragraph [ref=e433] [cursor=pointer]:
+                        - img [ref=e434] [cursor=pointer]
+                        - text: 06-01-2025
+                    - generic [ref=e438] [cursor=pointer]:
+                      - img [ref=e440] [cursor=pointer]
+                      - generic [ref=e443] [cursor=pointer]: Low
+                    - generic [ref=e446] [cursor=pointer]:
+                      - img [ref=e447] [cursor=pointer]
+                      - paragraph [ref=e450] [cursor=pointer]: CMS_Queue
+```

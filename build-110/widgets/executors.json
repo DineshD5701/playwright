@@ -1,0 +1,1 @@
+[{"name":"Jenkins","type":"jenkins","url":"http://localhost:8080/","buildOrder":110,"buildName":"scripted_pipeline #110","buildUrl":"http://localhost:8080/job/scripted_pipeline/110/","reportName":"AllureReport","reportUrl":"http://localhost:8080/job/scripted_pipeline/110/allure"}]
