@@ -14,16 +14,25 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                        sh '''
-                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-                            docker build -t $DOCKER_IMAGE .
-                            docker push $DOCKER_IMAGE
-                        '''
+                    // Check if there are any changes since last build
+                    def changes = sh(script: "git diff --name-only HEAD HEAD~1", returnStdout: true).trim()
+                    
+                    if (changes) {
+                        echo "Changes detected, building Docker image..."
+                        withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                            sh '''
+                                echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                                docker build -t $DOCKER_IMAGE .
+                                docker push $DOCKER_IMAGE
+                            '''
+                        }
+                    } else {
+                        echo "No changes in repo → skipping Docker build & push."
                     }
                 }
             }
         }
+
 
         stage('Set Kubeconfig') {
             steps {
