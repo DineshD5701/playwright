@@ -1,28 +1,23 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: playwright-test
+  name: playwright-test-{{SHARD_ID}}
 spec:
   template:
     spec:
-      containers:
-      - name: playwright
-        image: dinesh571/playwright:latest
-        command: ["npx", "playwright", "test"]
-        args:
-          - "--shard=$(SHARD_ID)/$(TOTAL_SHARDS)"
-          - "--workers=1"   # reduced from 4 → prevents overload
-        env:
-          - name: SHARD_ID
-            value: "1"
-          - name: TOTAL_SHARDS
-            value: "4"
-        resources:
-          requests:
-            cpu: "1"
-            memory: "2Gi"
-          limits:
-            cpu: "2"
-            memory: "3Gi"
       restartPolicy: Never
-  backoffLimit: 0
+      containers:
+        - name: playwright
+          image: {{DOCKER_IMAGE}}
+          env:
+            - name: SHARD_ID
+              value: "{{SHARD_ID}}"
+            - name: TOTAL_SHARDS
+              value: "{{TOTAL_SHARDS}}"
+          volumeMounts:
+            - name: allure-results
+              mountPath: {{PVC_MOUNT_PATH}}
+      volumes:
+        - name: allure-results
+          persistentVolumeClaim:
+            claimName: {{PVC_NAME}}
