@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     environment {
-        NAMESPACE     = "default"
-        TOTAL_SHARDS  = 4
-        DOCKER_IMAGE  = "dinesh571/playwright:latest"
-        PVC_NAME      = "allure-pvc"
-        GIT_REPO      = "dineshd5701/playwright"
+        NAMESPACE = "default"
+        TOTAL_SHARDS = 4
+        KUBECONFIG_CONTENT = credentials('KUBECONFIG_CONTENT')
+        DOCKER_IMAGE = "dinesh571/playwright:latest"
+        PVC_NAME = "allure-pvc"
     }
 
     stages {
@@ -24,11 +24,11 @@ pipeline {
 
         stage('Set Kubeconfig') {
             steps {
-                withCredentials([string(credentialsId: 'KUBECONFIG_CONTENT', variable: 'KUBECONFIG_CONTENT')]) {
-                    sh '''
-                        echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
-                        export KUBECONFIG=$PWD/kubeconfig
-                    '''
+                sh '''
+                    echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
+                '''
+                script {
+                    env.KUBECONFIG = "${pwd()}/kubeconfig"
                 }
                 sh 'kubectl get nodes'
             }
