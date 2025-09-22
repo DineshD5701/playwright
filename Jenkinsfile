@@ -152,7 +152,7 @@ pipeline {
             }
         }
 
-                stage('Publish to GitHub Pages') {
+        stage('Publish to GitHub Pages') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
