@@ -25,10 +25,10 @@ pipeline {
         stage('Set Kubeconfig') {
             steps {
                 withCredentials([string(credentialsId: 'KUBECONFIG_CONTENT', variable: 'KUBECONFIG_CONTENT')]) {
-                    sh """
+                    sh '''
                         echo "$KUBECONFIG_CONTENT" | base64 -d > kubeconfig
                         export KUBECONFIG=$PWD/kubeconfig
-                    """
+                    '''
                 }
                 sh 'kubectl get nodes'
             }
