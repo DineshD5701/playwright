@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     environment {
         NAMESPACE = "default"
         TOTAL_SHARDS = 4
@@ -8,9 +7,7 @@ pipeline {
         DOCKER_IMAGE = "dinesh571/playwright:latest"
         PVC_NAME = "allure-pvc"
     }
-
     stages {
-
         stage('Build & Push Docker Image') {
             steps {
                 script {
@@ -24,7 +21,6 @@ pipeline {
                 }
             }
         }
-
         stage('Set Kubeconfig') {
             steps {
                 sh '''
@@ -36,7 +32,6 @@ pipeline {
                 sh 'kubectl get nodes'
             }
         }
-        
         stage('Clean Allure PVC') {
             steps {
                 script {
@@ -77,7 +72,6 @@ pipeline {
             }
         }
         
-        
         stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
@@ -87,7 +81,6 @@ pipeline {
                             kubectl delete job playwright-test-$i --namespace=${NAMESPACE} --ignore-not-found
                         done
                     '''
-
                     // Launch shards
                     for (int i = 1; i <= env.TOTAL_SHARDS.toInteger(); i++) {
                         sh """
@@ -98,7 +91,6 @@ pipeline {
                 }
             }
         }
-
         stage('Wait for Jobs to Complete') {
             steps {
                 sh """
@@ -107,18 +99,15 @@ pipeline {
                 """
             }
         }
-
         stage('Copy Allure Results from K8s') {
             steps {
                 script {
                     sh """
                         # Clean old results in workspace
-                        rm -rf /app/allure-results
+                        rm -rf allure-results
                         mkdir -p allure-results/merged
-
                         # Delete old fetch pod if exists
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE} --ignore-not-found
-
                         # Start a temporary pod with PVC mounted
                         kubectl run allure-fetch --namespace=${NAMESPACE} \
                         --image=busybox:1.36 --restart=Never \
@@ -143,13 +132,10 @@ pipeline {
                             }]
                             }
                         }'
-
                         # Wait for pod ready
                         kubectl wait --for=condition=Ready pod/allure-fetch --namespace=${NAMESPACE} --timeout=60s
-
                         # Copy results from PVC via the fetch pod
                         kubectl cp ${NAMESPACE}/allure-fetch:/app/allure-results allure-results/merged
-
                         # Cleanup fetch pod
                         kubectl delete pod allure-fetch --namespace=${NAMESPACE}
                     """
@@ -166,7 +152,7 @@ pipeline {
             }
         }
 
-        stage('Publish to GitHub Pages') {
+                stage('Publish to GitHub Pages') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
