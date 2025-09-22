@@ -14,25 +14,16 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    // Check if there are any changes since last build
-                    def changes = sh(script: "git diff --name-only HEAD HEAD~1", returnStdout: true).trim()
-                    
-                    if (changes) {
-                        echo "Changes detected, building Docker image..."
-                        withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                            sh '''
-                                echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-                                docker build -t $DOCKER_IMAGE .
-                                docker push $DOCKER_IMAGE
-                            '''
-                        }
-                    } else {
-                        echo "No changes in repo → skipping Docker build & push."
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh '''
+                            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                            docker build -t $DOCKER_IMAGE .
+                            docker push $DOCKER_IMAGE
+                        '''
                     }
                 }
             }
         }
-
 
         stage('Set Kubeconfig') {
             steps {
@@ -46,14 +37,47 @@ pipeline {
             }
         }
         
-            stage('Ensure Allure PVC') {
-                steps{
-                sh """
-                    kubectl apply -f k8s/allure-pvc.yml --namespace=${NAMESPACE}
-                """
+        stage('Clean Allure PVC') {
+            steps {
+                script {
+                    sh """
+                    # Delete old results from PVC using a temporary pod
+                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --ignore-not-found
+                    kubectl run allure-clean --namespace=${NAMESPACE} \
+                        --image=busybox:1.36 --restart=Never \
+                        --overrides='
+                        {
+                            "apiVersion": "v1",
+                            "spec": {
+                                "containers": [{
+                                    "name": "allure-clean",
+                                    "image": "busybox:1.36",
+                                    "command": ["sh", "-c", "rm -rf /app/allure-results/*"],
+                                    "volumeMounts": [{
+                                        "mountPath": "/app/allure-results",
+                                        "name": "allure-results"
+                                    }]
+                                }],
+                                "volumes": [{
+                                    "name": "allure-results",
+                                    "persistentVolumeClaim": {
+                                        "claimName": "${PVC_NAME}"
+                                    }
+                                }]
+                            }
+                        }'
+        
+                    echo "Waiting for allure-clean pod to finish..."
+                    kubectl wait --for=condition=Succeeded pod/allure-clean --namespace=${NAMESPACE} --timeout=60s || true
+        
+                    echo "Ensure pod is fully terminated..."
+                    kubectl delete pod allure-clean --namespace=${NAMESPACE} --wait=true --ignore-not-found
+                    """
+                }
             }
         }
-
+        
+        
         stage('Run Playwright Jobs in K8s') {
             steps {
                 script {
@@ -89,7 +113,7 @@ pipeline {
                 script {
                     sh """
                         # Clean old results in workspace
-                        rm -rf allure-results
+                        rm -rf /app/allure-results
                         mkdir -p allure-results/merged
 
                         # Delete old fetch pod if exists
@@ -132,7 +156,6 @@ pipeline {
                 }
             }
         }
-
         stage('Publish Allure Report in Jenkins') {
             steps {
                 allure([
@@ -190,4 +213,3 @@ pipeline {
         }
     }
 }
-
