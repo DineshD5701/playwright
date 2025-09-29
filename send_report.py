@@ -40,25 +40,25 @@ print("✅ Allure report sent via email")
 
 
 
-#GCHAT Webhook Integration
-import os, requests
+# #GCHAT Webhook Integration
+# import os, requests
 
-GCHAT_WEBHOOK = os.getenv("GCHAT_WEBHOOK")
-with open("allure-report/index.html", "r") as f:
-    html_content = f.read()
+# GCHAT_WEBHOOK = os.getenv("GCHAT_WEBHOOK")
+# with open("allure-report/index.html", "r") as f:
+#     html_content = f.read()
 
-# Google Chat card with HTML content
-payload = {
-    "text": "Playwright Allure Report",
-    "cards": [
-        {
-            "header": {"title": "Allure Report"},
-            "sections": [
-                {"widgets": [{"textParagraph": {"text": html_content}}]}
-            ],
-        }
-    ],
-}
+# # Google Chat card with HTML content
+# payload = {
+#     "text": "Playwright Allure Report",
+#     "cards": [
+#         {
+#             "header": {"title": "Allure Report"},
+#             "sections": [
+#                 {"widgets": [{"textParagraph": {"text": html_content}}]}
+#             ],
+#         }
+#     ],
+# }
 
-requests.post(GCHAT_WEBHOOK, json=payload)
-print("✅ Allure report sent to Google Chat")
+# requests.post(GCHAT_WEBHOOK, json=payload)
+# print("✅ Allure report sent to Google Chat")
