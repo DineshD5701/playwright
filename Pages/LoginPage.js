@@ -7,6 +7,8 @@ import {
   usernametextFiled,
   passwordTextfield,
   loginButton,
+  loginButton1,
+  nextButtonForMeeshoSX,
 } from "../PageElements/LoginPageElements";
 class LoginPage {
   constructor(page) {
@@ -25,6 +27,8 @@ class LoginPage {
 
       await this.elementclass.waitAndFill(usernametextFiled, username);
 
+      await this.elementclass.waitAndClick(nextButtonForMeeshoSX);
+
       // Wait for password field to be visible
       console.log("Filling password...");
       //await this.page.fill(passwordTextfield, password);
@@ -33,7 +37,7 @@ class LoginPage {
       // Click login button
       console.log("Clicking login button...");
       // await this.page.click(loginButton);
-      await this.elementclass.waitAndClick(loginButton);
+      await this.elementclass.waitAndClick(loginButton1);
 
       // Navigate and validate login
       console.log("Navigating to NUI...");
